@@ -1,5 +1,25 @@
 @use './fonts.scss';
+@use './vendors/reset';
+@use './variables.scss';
 
 body {
   font-family: Inter, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+h2 {
+  font-size: 54px;
+  font-weight: 800;
+}
+
+h4 {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.menu-item {
+  font-size: 14px;
+  font-weight: 700;
 }
