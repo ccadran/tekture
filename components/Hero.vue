@@ -1,11 +1,82 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import gsap from 'gsap'
+import { onMounted, onUnmounted, ref } from 'vue'
+
+const images = ref([
+  { id: 1, src: '/images/1.png', style: {} },
+  { id: 2, src: '/images/2.png', style: {} },
+  { id: 3, src: '/images/3.png', style: {} },
+  { id: 4, src: '/images/4.png', style: {} },
+])
+
+const imageRefs = ref<HTMLImageElement[]>([])
+let currentX: number
+let previousX: number | null = null
+let distanceX: number
+let totalXdistance = 0
+let i = 0
+const handleMouseMove = (e: MouseEvent) => {
+  currentX = e.clientX
+
+  if (previousX !== null) {
+    distanceX = Math.abs(currentX - previousX)
+
+    totalXdistance += distanceX
+    console.log(totalXdistance)
+
+    if (totalXdistance > 150) {
+      console.log('yoooo')
+      const imageX = e.clientX
+      const imageY = e.clientY
+      const imagesTl = gsap.timeline()
+      imagesTl
+        .fromTo(
+          imageRefs.value[i],
+          {
+            x: imageX,
+            y: imageY + 50,
+            opacity: 0,
+          },
+          {
+            y: imageY,
+            opacity: 1,
+          }
+        )
+        .to(imageRefs.value[i], { y: imageY + 50, opacity: 0 }, 0.5)
+      totalXdistance = 0
+      if (i < imageRefs.value.length - 1) {
+        i++
+      } else {
+        i = 0
+      }
+    }
+  }
+  previousX = currentX
+}
+onMounted(() => {
+  window.addEventListener('mousemove', handleMouseMove)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('mousemove', handleMouseMove)
+})
+</script>
 
 <template>
   <div class="mousemove-images">
-    <img src="/images/1.png" alt="" />
-    <img src="/images/2.png" alt="" />
-    <img src="/images/3.png" alt="" />
-    <img src="/images/4.png" alt="" />
+    <img
+      v-for="(image, index) in images"
+      :key="image.id"
+      :src="image.src"
+      :alt="`Image ${image.id}`"
+      :style="image.style"
+      :ref="
+        (el) => {
+          if (el) imageRefs[index] = el as HTMLImageElement
+        }
+      "
+      class="floating-image"
+    />
   </div>
   <section class="hero">
     <div class="content">
@@ -39,5 +110,10 @@
   height: 100vh;
   width: 100vw;
   position: absolute;
+  pointer-events: none;
+  > img {
+    position: absolute;
+    opacity: 0.5;
+  }
 }
 </style>
