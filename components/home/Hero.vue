@@ -13,6 +13,7 @@ const images = ref([
 ])
 
 const imageRefs = ref<HTMLImageElement[]>([])
+const keyWordsRefs = ref<any[]>([])
 const DISTANCE_X_THRESHOLD = 350
 const DISTANCE_Y_THRESHOLD = 100
 
@@ -61,11 +62,35 @@ const animateImage = (imageIndex: number, x: number, y: number) => {
 }
 onMounted(() => {
   window.addEventListener('mousemove', handleMouseMove)
+  console.log(shuffleTextRef.value)
+  textShuffleLoop()
 })
 
 onUnmounted(() => {
   window.removeEventListener('mousemove', handleMouseMove)
 })
+const shuffleTextRef = ref()
+
+const handleClick = () => {
+  if (shuffleTextRef.value) {
+    shuffleTextRef.value.animate()
+  } else {
+    console.log('___________')
+  }
+}
+
+let currentTextIndex = 0
+const textShuffleLoop = () => {
+  if (currentTextIndex < keyWordsRefs.value.length) {
+    keyWordsRefs.value[currentTextIndex].animate()
+    setTimeout(() => {
+      currentTextIndex = (currentTextIndex + 1) % keyWordsRefs.value.length
+      console.log(currentTextIndex)
+
+      textShuffleLoop()
+    }, 1000)
+  }
+}
 </script>
 
 <template>
@@ -83,12 +108,40 @@ onUnmounted(() => {
       <img :src="image.src" :alt="`Image ${image.id}`" />
     </div>
   </div>
+  <div class="shuffle-keywords">
+    <UtilsTextShuffle
+      text="test"
+      :ref="
+        (el) => {
+          if (el) keyWordsRefs[0] = el as HTMLElement
+        }
+      "
+    />
+    <UtilsTextShuffle
+      text="test"
+      :ref="
+        (el) => {
+          if (el) keyWordsRefs[1] = el as HTMLElement
+        }
+      "
+    />
+    <UtilsTextShuffle
+      text="test"
+      :ref="
+        (el) => {
+          if (el) keyWordsRefs[2] = el as HTMLElement
+        }
+      "
+    />
+  </div>
   <section class="hero">
     <div class="content">
       <h1>TEKTURE</h1>
       <div class="baseline">
         <p>new gen architectural studio</p>
+        <UtilsTextShuffle text="HELLO" ref="shuffleTextRef" />
       </div>
+      <p @click="handleClick">YOOO</p>
     </div>
   </section>
 </template>
@@ -111,7 +164,17 @@ onUnmounted(() => {
     }
   }
 }
+.shuffle-keywords {
+  position: absolute;
+  z-index: -1;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
 .mousemove-images {
+  z-index: -1;
   height: 100vh;
   width: 100vw;
   position: absolute;
