@@ -57,7 +57,7 @@ const animateImage = (imageIndex: number, x: number, y: number) => {
   gsap.killTweensOf(image)
 
   const imagesTl = gsap.timeline()
-  imagesTl.fromTo(image, { x, y: y + 50, opacity: 0 }, { y, opacity: 1 }).to(image, { y: y + 50, opacity: 0 }, 0.5)
+  imagesTl.fromTo(image, { x: x - image.offsetWidth / 2, y: y + 50, opacity: 0 }, { y, opacity: 1 }).to(image, { y: y + 20, opacity: 0 }, '>')
 }
 onMounted(() => {
   window.addEventListener('mousemove', handleMouseMove)
