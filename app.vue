@@ -1,6 +1,6 @@
 <template>
   <div>
     <UiNavbar />
-    <Hero />
+    <HomeHero />
   </div>
 </template>
