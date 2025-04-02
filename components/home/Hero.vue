@@ -16,6 +16,7 @@ const imageRefs = ref<HTMLImageElement[]>([])
 const keyWordsRefs = ref<any[]>([])
 const DISTANCE_X_THRESHOLD = 350
 const DISTANCE_Y_THRESHOLD = 100
+const SHUFFLE_DURATION = 1
 
 const mouseTracking = ref({
   currentX: 0,
@@ -83,12 +84,12 @@ let currentTextIndex = 0
 const textShuffleLoop = () => {
   if (currentTextIndex < keyWordsRefs.value.length) {
     keyWordsRefs.value[currentTextIndex].animate()
-    setTimeout(() => {
-      currentTextIndex = (currentTextIndex + 1) % keyWordsRefs.value.length
-      console.log(currentTextIndex)
+    // setTimeout(() => {
+    //   currentTextIndex = (currentTextIndex + 1) % keyWordsRefs.value.length
+    //   console.log(currentTextIndex)
 
-      textShuffleLoop()
-    }, 1000)
+    //   textShuffleLoop()
+    // }, SHUFFLE_DURATION * 1000)
   }
 }
 </script>
@@ -110,6 +111,18 @@ const textShuffleLoop = () => {
   </div>
   <div class="shuffle-keywords">
     <UtilsTextShuffle
+      :duration="SHUFFLE_DURATION"
+      from="test"
+      to="YOOOO"
+      :ref="
+        (el) => {
+          if (el) keyWordsRefs[0] = el as HTMLElement
+        }
+      "
+      >YOOOO</UtilsTextShuffle
+    >
+    <!-- <UtilsTextShuffle
+      :duration="SHUFFLE_DURATION"
       text="test"
       :ref="
         (el) => {
@@ -118,28 +131,21 @@ const textShuffleLoop = () => {
       "
     />
     <UtilsTextShuffle
-      text="test"
-      :ref="
-        (el) => {
-          if (el) keyWordsRefs[1] = el as HTMLElement
-        }
-      "
-    />
-    <UtilsTextShuffle
+      :duration="SHUFFLE_DURATION"
       text="test"
       :ref="
         (el) => {
           if (el) keyWordsRefs[2] = el as HTMLElement
         }
       "
-    />
+    /> -->
   </div>
   <section class="hero">
     <div class="content">
       <h1>TEKTURE</h1>
       <div class="baseline">
         <p>new gen architectural studio</p>
-        <UtilsTextShuffle text="HELLO" ref="shuffleTextRef" />
+        <!-- <UtilsTextShuffle text="HELLO" ref="shuffleTextRef" /> -->
       </div>
       <p @click="handleClick">YOOO</p>
     </div>
