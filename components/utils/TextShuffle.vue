@@ -1,18 +1,20 @@
 <!-- components/ShuffleText.vue -->
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import gsap from 'gsap'
 import { TextPlugin } from 'gsap/TextPlugin'
 
 // Props
 interface Props {
-  from: string
-  to: string
+  from?: string // Maintenant optionnel
+  to?: string // Maintenant optionnel
   duration?: number
   steps?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  from: '', // Valeur par défaut vide
+  to: '', // Valeur par défaut vide
   duration: 1,
   steps: 10,
 })
@@ -22,11 +24,14 @@ gsap.registerPlugin(TextPlugin)
 
 // References
 const textElement = ref<HTMLElement | null>(null)
-const displayText = ref(props.from)
+const displayText = ref(props.from || '') // Utilisez une chaîne vide si from n'est pas défini
 
-// Animation function
-function animate() {
+// Animation function avec paramètres requis
+function animate(fromText: string, toText: string) {
   if (!textElement.value) return
+
+  // Met à jour le texte initial
+  displayText.value = fromText
 
   const tl = gsap.timeline()
   const interval = props.duration / props.steps
@@ -36,17 +41,16 @@ function animate() {
     tl.to(textElement.value, {
       duration: interval,
       text: {
-        value: getRandomText(),
+        value: getRandomText(fromText, toText),
       },
       ease: 'none',
     })
   }
 
-  // Étape finale avec le texte cible
   tl.to(textElement.value, {
     duration: interval,
     text: {
-      value: props.to,
+      value: toText,
     },
     ease: 'none',
   })
@@ -54,19 +58,22 @@ function animate() {
   return tl
 }
 
-// Génère un texte avec des caractères aléatoires
-function getRandomText() {
+function getRandomText(fromText: string, toText: string) {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+'
-  return Array(Math.max(props.from.length, props.to.length))
+
+  return Array(Math.max(fromText.length, toText.length))
     .fill(0)
     .map(() => chars[Math.floor(Math.random() * chars.length)])
     .join('')
 }
 
-// Expose la méthode d'animation
 defineExpose({ animate })
 </script>
 
 <template>
-  <span ref="textElement">{{ displayText }}</span>
+  <span ref="textElement"
+    ><slot>
+      {{ displayText }}
+    </slot>
+  </span>
 </template>

@@ -12,6 +12,9 @@ const images = ref([
   { id: 7, src: '/images/3.png' },
 ])
 
+const keyWords = ['innovation', 'expertise', 'sustainable', 'results', 'Strategy', 'fondation']
+const currentIndices = ref<number[]>([])
+
 const imageRefs = ref<HTMLImageElement[]>([])
 const keyWordsRefs = ref<any[]>([])
 const DISTANCE_X_THRESHOLD = 350
@@ -64,6 +67,8 @@ const animateImage = (imageIndex: number, x: number, y: number) => {
 onMounted(() => {
   window.addEventListener('mousemove', handleMouseMove)
   console.log(shuffleTextRef.value)
+  currentIndices.value = keyWords.map((_, i) => i)
+
   textShuffleLoop()
 })
 
@@ -81,16 +86,23 @@ const handleClick = () => {
 }
 
 let currentTextIndex = 0
-const textShuffleLoop = () => {
-  if (currentTextIndex < keyWordsRefs.value.length) {
-    keyWordsRefs.value[currentTextIndex].animate()
-    // setTimeout(() => {
-    //   currentTextIndex = (currentTextIndex + 1) % keyWordsRefs.value.length
-    //   console.log(currentTextIndex)
 
-    //   textShuffleLoop()
-    // }, SHUFFLE_DURATION * 1000)
+const textShuffleLoop = () => {
+  const ref = keyWordsRefs.value[currentTextIndex]
+  const currentWordIndex = currentIndices.value[currentTextIndex]
+  const nextWordIndex = (currentWordIndex + 1) % keyWords.length
+
+  if (ref && ref.animate) {
+    ref.animate(keyWords[currentWordIndex], keyWords[nextWordIndex])
   }
+
+  currentIndices.value[currentTextIndex] = nextWordIndex
+
+  currentTextIndex = (currentTextIndex + 1) % keyWordsRefs.value.length
+
+  setTimeout(() => {
+    textShuffleLoop()
+  }, SHUFFLE_DURATION * 5000)
 }
 </script>
 
@@ -111,9 +123,17 @@ const textShuffleLoop = () => {
   </div>
   <div class="shuffle-keywords">
     <UtilsTextShuffle
+      v-for="(word, index) in keyWords"
       :duration="SHUFFLE_DURATION"
-      from="test"
-      to="YOOOO"
+      :ref="
+        (el) => {
+          if (el) keyWordsRefs[index] = el
+        }
+      "
+      >{{ word }}</UtilsTextShuffle
+    >
+    <!-- <UtilsTextShuffle
+      :duration="SHUFFLE_DURATION"
       :ref="
         (el) => {
           if (el) keyWordsRefs[0] = el as HTMLElement
@@ -121,24 +141,27 @@ const textShuffleLoop = () => {
       "
       >YOOOO</UtilsTextShuffle
     >
-    <!-- <UtilsTextShuffle
-      :duration="SHUFFLE_DURATION"
-      text="test"
-      :ref="
-        (el) => {
-          if (el) keyWordsRefs[0] = el as HTMLElement
-        }
-      "
-    />
     <UtilsTextShuffle
       :duration="SHUFFLE_DURATION"
-      text="test"
+      from="IOCDZNSDCOIS"
+      to="YOOOO"
+      :ref="
+        (el) => {
+          if (el) keyWordsRefs[1] = el as HTMLElement
+        }
+      "
+      >NDLSNVDSKL</UtilsTextShuffle
+    >
+    <UtilsTextShuffle
+      :duration="SHUFFLE_DURATION"
+      from="NCODSLNCS"
+      to="YOOOO"
       :ref="
         (el) => {
           if (el) keyWordsRefs[2] = el as HTMLElement
         }
       "
-    /> -->
+    ></UtilsTextShuffle> -->
   </div>
   <section class="hero">
     <div class="content">
