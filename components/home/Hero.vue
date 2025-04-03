@@ -102,7 +102,7 @@ const textShuffleLoop = () => {
 
   setTimeout(() => {
     textShuffleLoop()
-  }, SHUFFLE_DURATION * 5000)
+  }, SHUFFLE_DURATION * 1000)
 }
 </script>
 
