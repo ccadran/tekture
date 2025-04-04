@@ -25,19 +25,16 @@ const mouseTracking = reactive({
 })
 let rafId: number | null = null
 
-// Fonction qui capture uniquement la position de la souris
 const handleMouseMove = (e: MouseEvent) => {
   mouseTracking.current.x = e.clientX
   mouseTracking.current.y = e.clientY
   mouseTracking.isMoving = true
 
-  // Démarrer la boucle RAF si elle n'est pas déjà en cours
   if (!rafId) {
     rafId = requestAnimationFrame(updateMouseAnimation)
   }
 }
 
-// Fonction d'animation exécutée dans requestAnimationFrame
 const updateMouseAnimation = () => {
   const m = mouseTracking
 
@@ -61,7 +58,6 @@ const updateMouseAnimation = () => {
   m.previous.y = m.current.y
   m.isMoving = false
 
-  // Continuer la boucle d'animation
   rafId = requestAnimationFrame(updateMouseAnimation)
 }
 
@@ -71,7 +67,9 @@ const animateImage = (imageIndex: number, x: number, y: number) => {
   gsap.killTweensOf(image)
 
   const imagesTl = gsap.timeline()
-  imagesTl.fromTo(image, { x: x - image.offsetWidth / 2, y: y + 50, opacity: 0 }, { y, opacity: 1 }).to(image, { y: y + 20, opacity: 0 }, '>')
+  imagesTl
+    .fromTo(image, { x: x - image.offsetWidth / 2, y: y + 50, opacity: 0 }, { y, opacity: 1, ease: 'power1.out' })
+    .to(image, { y: y + 20, opacity: 0, ease: 'power1.inOut' }, '>')
 }
 
 onMounted(() => {
