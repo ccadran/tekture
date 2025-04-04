@@ -21,13 +21,27 @@ const mouseTracking = reactive({
   distance: { x: 0, y: 0 },
   totalDistance: { x: 0, y: 0 },
   currentImageIndex: 0,
+  isMoving: false,
 })
+let rafId: number | null = null
 
+// Fonction qui capture uniquement la position de la souris
 const handleMouseMove = (e: MouseEvent) => {
+  mouseTracking.current.x = e.clientX
+  mouseTracking.current.y = e.clientY
+  mouseTracking.isMoving = true
+
+  // Démarrer la boucle RAF si elle n'est pas déjà en cours
+  if (!rafId) {
+    rafId = requestAnimationFrame(updateMouseAnimation)
+  }
+}
+
+// Fonction d'animation exécutée dans requestAnimationFrame
+const updateMouseAnimation = () => {
   const m = mouseTracking
-  m.current.x = e.clientX
-  m.current.y = e.clientY
-  if (m.previous.x !== null) {
+
+  if (m.isMoving && m.previous.x !== null) {
     m.distance.x = Math.abs(m.current.x - m.previous.x)
     m.distance.y = Math.abs(m.current.y - m.previous.y)
 
@@ -35,15 +49,20 @@ const handleMouseMove = (e: MouseEvent) => {
     m.totalDistance.y += m.distance.y
 
     if (m.totalDistance.x > DISTANCE_X_THRESHOLD || m.totalDistance.y > DISTANCE_Y_THRESHOLD) {
-      animateImage(m.currentImageIndex, e.clientX, e.clientY)
+      animateImage(m.currentImageIndex, m.current.x, m.current.y)
       m.totalDistance.x = 0
       m.totalDistance.y = 0
 
       m.currentImageIndex = (m.currentImageIndex + 1) % imageRefs.value.length
     }
   }
+
   m.previous.x = m.current.x
   m.previous.y = m.current.y
+  m.isMoving = false
+
+  // Continuer la boucle d'animation
+  rafId = requestAnimationFrame(updateMouseAnimation)
 }
 
 const animateImage = (imageIndex: number, x: number, y: number) => {
@@ -90,6 +109,7 @@ onMounted(() => {
     width: 200px;
     aspect-ratio: 3/4;
     overflow: hidden;
+    will-change: transform, opacity;
     > img {
       object-fit: cover;
       width: 100%;
