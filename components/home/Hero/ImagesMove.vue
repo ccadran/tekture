@@ -1,6 +1,10 @@
 <script lang="ts" setup>
 import gsap from 'gsap'
 
+const props = defineProps<{
+  heroElement: HTMLElement | null
+}>()
+
 const images = ref([
   { id: 1, src: '/images/1.png' },
   { id: 2, src: '/images/2.png' },
@@ -15,6 +19,8 @@ const imageRefs = ref<HTMLImageElement[]>([])
 const DISTANCE_X_THRESHOLD = 350
 const DISTANCE_Y_THRESHOLD = 100
 
+let rafId: number | null = null
+
 const mouseTracking = reactive({
   current: { x: 0, y: 0 },
   previous: { x: null as number | null, y: 0 },
@@ -23,7 +29,6 @@ const mouseTracking = reactive({
   currentImageIndex: 0,
   isMoving: false,
 })
-let rafId: number | null = null
 
 const handleMouseMove = (e: MouseEvent) => {
   mouseTracking.current.x = e.clientX
@@ -73,7 +78,18 @@ const animateImage = (imageIndex: number, x: number, y: number) => {
 }
 
 onMounted(() => {
-  window.addEventListener('mousemove', handleMouseMove)
+  if (props.heroElement) {
+    props.heroElement.addEventListener('mousemove', handleMouseMove)
+  }
+})
+
+onUnmounted(() => {
+  if (props.heroElement) {
+    props.heroElement.removeEventListener('mousemove', handleMouseMove)
+  }
+  if (rafId) {
+    cancelAnimationFrame(rafId)
+  }
 })
 </script>
 
@@ -100,7 +116,7 @@ onMounted(() => {
   height: 100vh;
   width: 100vw;
   position: absolute;
-  pointer-events: none;
+  // pointer-events: none;
   > .floating-image {
     position: absolute;
     opacity: 0.5;

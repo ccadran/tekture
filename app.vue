@@ -2,5 +2,6 @@
   <div>
     <UiNavbar />
     <HomeHero />
+    <HomeManifest />
   </div>
 </template>

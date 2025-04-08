@@ -1,9 +1,11 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const hero = ref<HTMLElement | null>(null)
+</script>
 
 <template>
-  <HomeHeroImagesMove />
+  <HomeHeroImagesMove :hero-element="hero" />
   <HomeHeroKeywords />
-  <section class="hero">
+  <section class="hero" ref="hero">
     <div class="content">
       <h1>TEKTURE</h1>
       <div class="baseline">
@@ -20,6 +22,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
   > .content {
     display: flex;
     flex-direction: column;
