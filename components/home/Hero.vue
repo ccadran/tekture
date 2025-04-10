@@ -24,9 +24,11 @@ const hero = ref<HTMLElement | null>(null)
   align-items: center;
   overflow: hidden;
   > .content {
+    z-index: 2;
     display: flex;
     flex-direction: column;
     align-items: center;
+    pointer-events: none;
     gap: 32px;
     > h1 {
       font-size: 124px;

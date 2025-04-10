@@ -15,6 +15,7 @@ const images = ref([
   { id: 7, src: '/images/3.png' },
 ])
 
+const imageContainerRef = ref<HTMLElement | null>(null)
 const imageRefs = ref<HTMLImageElement[]>([])
 const DISTANCE_X_THRESHOLD = 350
 const DISTANCE_Y_THRESHOLD = 100
@@ -31,8 +32,8 @@ const mouseTracking = reactive({
 })
 
 const handleMouseMove = (e: MouseEvent) => {
-  mouseTracking.current.x = e.clientX
-  mouseTracking.current.y = e.clientY
+  mouseTracking.current.x = e.pageX
+  mouseTracking.current.y = e.pageY
   mouseTracking.isMoving = true
 
   if (!rafId) {
@@ -80,14 +81,14 @@ const animateImage = (imageIndex: number, x: number, y: number) => {
 onMounted(async () => {
   await nextTick()
 
-  if (props.heroElement) {
-    props.heroElement.addEventListener('mousemove', handleMouseMove)
+  if (imageContainerRef.value) {
+    imageContainerRef.value.addEventListener('mousemove', handleMouseMove)
   }
 })
 
 onUnmounted(() => {
-  if (props.heroElement) {
-    props.heroElement.removeEventListener('mousemove', handleMouseMove)
+  if (imageContainerRef.value) {
+    imageContainerRef.value.removeEventListener('mousemove', handleMouseMove)
   }
   if (rafId) {
     cancelAnimationFrame(rafId)
@@ -96,7 +97,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="mousemove-images">
+  <div ref="imageContainerRef" class="mousemove-images">
     <div
       v-for="(image, index) in images"
       :key="image.id"
@@ -114,11 +115,9 @@ onUnmounted(() => {
 
 <style lang="scss">
 .mousemove-images {
-  z-index: -1;
   height: 100vh;
   width: 100vw;
   position: absolute;
-  // pointer-events: none;
   > .floating-image {
     position: absolute;
     opacity: 0.5;
