@@ -3,12 +3,12 @@
 <template>
   <section class="manifest">
     <div class="manifest-container">
-      <div class="manifest-1">
+      <div class="manifest-content">
         <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni asperiores molestiae obcaecati at quasi ex!</p>
         <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni asperiores molestiae obcaecati at quasi ex!</p>
         <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni asperiores molestiae obcaecati at quasi ex!</p>
       </div>
-      <div class="manifest-2">
+      <div class="manifest-content">
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere perspiciatis ab repudiandae omnis? Ducimus, fuga!</p>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere perspiciatis ab repudiandae omnis? Ducimus, fuga!</p>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere perspiciatis ab repudiandae omnis? Ducimus, fuga!</p>
@@ -19,6 +19,21 @@
 
 <style lang="scss">
 .manifest {
-  height: 100vh;
+  height: 200vh;
+  position: relative;
+  > .manifest-container {
+    height: 100vh;
+    width: 100vw;
+    position: sticky;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    > .manifest-content {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+    }
+  }
 }
 </style>
