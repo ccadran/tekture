@@ -77,7 +77,9 @@ const animateImage = (imageIndex: number, x: number, y: number) => {
     .to(image, { y: y + 20, opacity: 0, ease: 'power1.inOut' }, '>')
 }
 
-onMounted(() => {
+onMounted(async () => {
+  await nextTick()
+
   if (props.heroElement) {
     props.heroElement.addEventListener('mousemove', handleMouseMove)
   }
