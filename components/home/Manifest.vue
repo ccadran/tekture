@@ -4,14 +4,26 @@
   <section class="manifest">
     <div class="manifest-container">
       <div class="manifest-content">
-        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni asperiores molestiae obcaecati at quasi ex!</p>
-        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni asperiores molestiae obcaecati at quasi ex!</p>
-        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni asperiores molestiae obcaecati at quasi ex!</p>
+        <div class="sentence">
+          <p class="inner">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni asperiores molestiae obcaecati at quasi ex!</p>
+        </div>
+        <div class="sentence">
+          <p class="inner">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni asperiores molestiae obcaecati at quasi ex!</p>
+        </div>
+        <div class="sentence">
+          <p class="inner">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni asperiores molestiae obcaecati at quasi ex!</p>
+        </div>
       </div>
       <div class="manifest-content">
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere perspiciatis ab repudiandae omnis? Ducimus, fuga!</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere perspiciatis ab repudiandae omnis? Ducimus, fuga!</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere perspiciatis ab repudiandae omnis? Ducimus, fuga!</p>
+        <div class="sentence">
+          <p class="inner">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni asperiores molestiae obcaecati at quasi ex!</p>
+        </div>
+        <div class="sentence">
+          <p class="inner">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni asperiores molestiae obcaecati at quasi ex!</p>
+        </div>
+        <div class="sentence">
+          <p class="inner">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni asperiores molestiae obcaecati at quasi ex!</p>
+        </div>
       </div>
     </div>
   </section>
