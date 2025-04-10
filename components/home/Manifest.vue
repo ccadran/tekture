@@ -17,4 +17,8 @@
   </section>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.manifest {
+  height: 100vh;
+}
+</style>

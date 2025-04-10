@@ -32,6 +32,12 @@ const mouseTracking = reactive({
 })
 
 const handleMouseMove = (e: MouseEvent) => {
+  const rect = imageContainerRef.value!.getBoundingClientRect()
+
+  const isInBounds = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom
+
+  if (!isInBounds) return
+
   mouseTracking.current.x = e.pageX
   mouseTracking.current.y = e.pageY
   mouseTracking.isMoving = true
@@ -115,7 +121,7 @@ onUnmounted(() => {
 
 <style lang="scss">
 .mousemove-images {
-  height: 100vh;
+  height: 80vh;
   width: 100vw;
   position: absolute;
   > .floating-image {
