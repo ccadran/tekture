@@ -18,8 +18,8 @@ onMounted(() => {
     paused: true,
     scrollTrigger: {
       trigger: '.manifest',
-      start: 'top -=250vh',
-      end: 'top -=250vh',
+      start: 'top top-=75%',
+      end: 'top top-=75%',
       toggleActions: 'play none reverse none',
       markers: true,
     },
