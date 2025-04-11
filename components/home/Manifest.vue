@@ -18,14 +18,16 @@ onMounted(() => {
     paused: true,
     scrollTrigger: {
       trigger: '.manifest',
-      start: 'top top-=75%',
-      end: 'top top-=75%',
+      start: 'top top-=65%',
+      end: 'top top-=65%',
       toggleActions: 'play none reverse none',
       markers: true,
     },
   })
 
-  manifestTl.to(sentences1, { y: -20, opacity: 0 }).to(sentences2, { y: 0, opacity: 1 }, 0)
+  manifestTl
+    .to(sentences1, { y: -20, opacity: 0, ease: 'power1.out', duration: 0.5 })
+    .to(sentences2, { y: 0, opacity: 1, ease: 'power1.out', duration: 0.5 }, 0)
 })
 </script>
 
@@ -34,24 +36,24 @@ onMounted(() => {
     <div class="manifest-container">
       <div class="manifest-content" ref="manifestContent1">
         <div class="sentence">
-          <p class="inner">1Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni asperiores molestiae at quasi ex!</p>
+          <p class="inner">At Tekture, we are a dynamic team of architects,</p>
         </div>
         <div class="sentence">
-          <p class="inner">Lorem ipsum dotur, adipisicing elit. Magni asperiores molestiae obcaecati at quasi ex!</p>
+          <p class="inner">engineers, and designers committed to pushing the</p>
         </div>
         <div class="sentence">
-          <p class="inner">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni asperiores molestiae obcaecat quasi ex!</p>
+          <p class="inner">boundaries of modern architecture.</p>
         </div>
       </div>
       <div class="manifest-content" ref="manifestContent2">
         <div class="sentence">
-          <p class="inner">Lorem ipsum sit amet consectetur, adipisicing elit. Magni asperiores molestiae obcaecati at quasi ex!</p>
+          <p class="inner">Our focus is on creating innovative, sustainable designs that</p>
         </div>
         <div class="sentence">
-          <p class="inner">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni asperiores molestiae obcaecati quasi ex!</p>
+          <p class="inner">blend striking aesthetics with eco-friendly solutions, ensuring</p>
         </div>
         <div class="sentence">
-          <p class="inner">Lorem ipsum dolor , adipisicing elit. Magni asperiores molestiae obcaecati at quasi ex!</p>
+          <p class="inner">everye</p>
         </div>
       </div>
     </div>
@@ -74,9 +76,14 @@ onMounted(() => {
       position: absolute;
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 6px;
       > .sentence {
         overflow: hidden;
+        > .inner {
+          font-size: 24px;
+          text-align: center;
+          line-height: 130%;
+        }
       }
     }
   }
