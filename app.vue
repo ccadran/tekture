@@ -3,12 +3,8 @@
     <UiNavbar />
     <HomeHero />
     <HomeManifest />
-    <div class="div"></div>
+    <HomeProjectsIntro />
   </div>
 </template>
 
-<style>
-.div {
-  height: 200vh;
-}
-</style>
+<style></style>
