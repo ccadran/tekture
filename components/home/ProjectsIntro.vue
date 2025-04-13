@@ -1,4 +1,10 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import gsap from 'gsap'
+import SplitType from 'split-type'
+onMounted(() => {
+  const spliteProjectsText = new SplitType('.projects-intro-content .inner', { types: 'chars' })
+})
+</script>
 
 <template>
   <section class="projects-intro">
