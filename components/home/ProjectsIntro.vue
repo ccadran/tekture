@@ -1,8 +1,27 @@
 <script lang="ts" setup>
 import gsap from 'gsap'
 import SplitType from 'split-type'
+import ScrollTrigger from 'gsap/ScrollTrigger'
+gsap.registerPlugin(ScrollTrigger)
+
 onMounted(() => {
-  const spliteProjectsText = new SplitType('.projects-intro-content .inner', { types: 'chars' })
+  const splitProjectsText = new SplitType('.projects-intro-content .inner', { types: 'chars' })
+
+  const introProjectsTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: '.projects-intro',
+      start: 'top top',
+      end: 'bottom bottom+=10%',
+      scrub: 0.6,
+      markers: true,
+    },
+  })
+
+  gsap.set(splitProjectsText.chars, { y: '100%' })
+
+  introProjectsTl.to(splitProjectsText.chars, { y: 0, stagger: 0.5 })
+
+  console.log(splitProjectsText)
 })
 </script>
 
