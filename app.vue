@@ -1,3 +1,10 @@
+<script setup>
+import { useLenis } from '~/composables/useLenis'
+
+// Initialiser Lenis une seule fois au niveau du composant racine
+const { lenis } = useLenis()
+</script>
+
 <template>
   <div>
     <UiNavbar />

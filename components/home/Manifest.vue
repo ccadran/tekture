@@ -18,8 +18,8 @@ onMounted(() => {
     paused: true,
     scrollTrigger: {
       trigger: '.manifest',
-      start: 'top top-=65%',
-      end: 'top top-=65%',
+      start: 'top top-=80%',
+      end: 'top top-=80%',
       toggleActions: 'play none reverse none',
       markers: true,
     },
@@ -62,7 +62,7 @@ onMounted(() => {
 
 <style lang="scss">
 .manifest {
-  height: 200vh;
+  height: 300vh;
   position: relative;
   > .manifest-container {
     height: 100vh;

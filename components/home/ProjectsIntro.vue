@@ -19,7 +19,7 @@ onMounted(() => {
 
   gsap.set(splitProjectsText.chars, { y: '100%' })
 
-  introProjectsTl.to(splitProjectsText.chars, { y: 0, stagger: 0.5 })
+  introProjectsTl.to(splitProjectsText.chars, { y: 0, stagger: 1 })
 
   console.log(splitProjectsText)
 })
@@ -35,7 +35,7 @@ onMounted(() => {
 
 <style lang="scss">
 .projects-intro {
-  height: 200vh;
+  height: 300vh;
   position: relative;
   > .projects-intro-content {
     height: 100vh;
