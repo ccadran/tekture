@@ -30,6 +30,13 @@ onMounted(() => {
     <div class="projects-intro-content">
       <p class="inner">PROJECTS</p>
     </div>
+    <div class="projects-intro-images">
+      <div class="images-1">
+        <div class="image-1">
+          <img src="/images/3.png" alt="" />
+        </div>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -47,6 +54,26 @@ onMounted(() => {
     > .inner {
       font-size: 18.5vw;
       font-weight: 800;
+    }
+  }
+  > .projects-intro-images {
+    width: 100%;
+    height: 100%;
+    > .images-1 {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: repeat(12, 1fr);
+      width: 100%;
+      height: 100%;
+      > .image-1 {
+        grid-column: 2 / 4;
+        grid-row: 2 / 4;
+        > img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
     }
   }
 }
