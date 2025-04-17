@@ -22,6 +22,19 @@ onMounted(() => {
   introProjectsTl.to(splitProjectsText.chars, { y: 0, stagger: 1 })
 
   console.log(splitProjectsText)
+
+  gsap.utils.toArray('.grid-image').forEach((el: any, i: any) => {
+    gsap.to(el, {
+      y: i % 2 === 0 ? '-5vw' : '5vw',
+      ease: 'none',
+      scrollTrigger: {
+        trigger: el,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: true,
+      },
+    })
+  })
 })
 </script>
 
@@ -33,13 +46,13 @@ onMounted(() => {
     <div class="projects-intro-images">
       <div class="grid-images">
         <div class="grid-image" data-image="1">
-          <img src="/images/1.png" alt="" />
+          <img class="inner" src="/images/1.png" alt="" />
         </div>
         <div class="grid-image" data-image="2">
-          <img src="/images/2.png" alt="" />
+          <img class="inner" src="/images/2.png" alt="" />
         </div>
         <div class="grid-image" data-image="3">
-          <img src="/images/3.png" alt="" />
+          <img class="inner" src="/images/3.png" alt="" />
         </div>
       </div>
     </div>
@@ -72,6 +85,7 @@ onMounted(() => {
       width: 100%;
       height: 100%;
       > .grid-image {
+        overflow: hidden;
         > img {
           width: 100%;
           height: 100%;
