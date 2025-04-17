@@ -31,8 +31,14 @@ onMounted(() => {
       <p class="inner">PROJECTS</p>
     </div>
     <div class="projects-intro-images">
-      <div class="images-1">
-        <div class="image-1">
+      <div class="grid-images">
+        <div class="grid-image" data-image="1">
+          <img src="/images/1.png" alt="" />
+        </div>
+        <div class="grid-image" data-image="2">
+          <img src="/images/2.png" alt="" />
+        </div>
+        <div class="grid-image" data-image="3">
           <img src="/images/3.png" alt="" />
         </div>
       </div>
@@ -59,19 +65,29 @@ onMounted(() => {
   > .projects-intro-images {
     width: 100%;
     height: 100%;
-    > .images-1 {
+    > .grid-images {
       display: grid;
       grid-template-columns: repeat(12, 1fr);
-      grid-template-rows: repeat(12, 1fr);
+      grid-template-rows: repeat(24, 1fr);
       width: 100%;
       height: 100%;
-      > .image-1 {
-        grid-column: 2 / 4;
-        grid-row: 2 / 4;
+      > .grid-image {
         > img {
           width: 100%;
           height: 100%;
           object-fit: cover;
+        }
+        &[data-image='1'] {
+          grid-column: 2/4;
+          grid-row: 1/4;
+        }
+        &[data-image='2'] {
+          grid-column: 6/12;
+          grid-row: 3/6;
+        }
+        &[data-image='3'] {
+          grid-column: 3/6;
+          grid-row: 8/12;
         }
       }
     }
