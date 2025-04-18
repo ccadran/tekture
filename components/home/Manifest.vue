@@ -64,6 +64,7 @@ onMounted(() => {
 .manifest {
   height: 300vh;
   position: relative;
+  margin-bottom: 50vh;
   > .manifest-container {
     height: 100vh;
     width: 100vw;
