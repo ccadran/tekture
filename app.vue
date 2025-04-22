@@ -11,6 +11,7 @@ const { lenis } = useLenis()
     <HomeHero />
     <HomeManifest />
     <HomeProjectsIntro />
+    <HomeProjects />
     <div class="div"></div>
   </div>
 </template>
