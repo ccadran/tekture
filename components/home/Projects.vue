@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import gsap from 'gsap'
+
 const projects = [
   {
     name: 'BNIM',
@@ -29,15 +31,32 @@ const projects = [
 
 const activeProjectIndex = ref<number>(0)
 
+const projectText = ref<HTMLElement | null>(null)
+const leftImage = ref<HTMLElement | null>(null)
+const rightImage = ref<HTMLElement | null>(null)
+
+const projectFadeTl = ref<gsap.core.Timeline>()
+
+onMounted(() => {
+  projectFadeTl.value = gsap
+    .timeline({ paused: true })
+    .to(projectText.value, { opacity: 0, duration: 0.5, ease: 'power1.out' })
+    .to(leftImage.value, { opacity: 0, duration: 0.5, ease: 'power1.out' }, 0)
+    .to(rightImage.value, { opacity: 0, duration: 0.5, ease: 'power1.out' }, 0)
+})
+
 const changeProject = (index: number) => {
-  activeProjectIndex.value = index
+  projectFadeTl.value!.play()
+  setTimeout(() => {
+    activeProjectIndex.value = index
+  }, 500)
 }
 </script>
 
 <template>
   <section class="projects">
     <div class="project-layout">
-      <div class="project-text">
+      <div class="project-text" ref="projectText">
         <h2>{{ projects[activeProjectIndex].name }}</h2>
         <p>{{ projects[activeProjectIndex].description }}</p>
       </div>
@@ -50,12 +69,12 @@ const changeProject = (index: number) => {
         </ul>
       </nav>
 
-      <div class="left-images">
+      <div class="left-images" ref="leftImage">
         <div class="project-image" :class="activeProjectIndex % 2 === 0 ? 'top' : 'bottom'">
           <img :src="projects[activeProjectIndex].images[0]" alt="" />
         </div>
       </div>
-      <div class="right-images">
+      <div class="right-images" ref="rightImage">
         <div class="project-image" :class="activeProjectIndex % 2 === 0 ? 'bottom' : 'top'">
           <img :src="projects[activeProjectIndex].images[1]" alt="" />
         </div>
