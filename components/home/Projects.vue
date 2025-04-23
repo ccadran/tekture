@@ -51,12 +51,12 @@ const changeProject = (index: number) => {
       </nav>
 
       <div class="left-images">
-        <div class="top">
+        <div class="project-image" :class="activeProjectIndex % 2 === 0 ? 'top' : 'bottom'">
           <img :src="projects[activeProjectIndex].images[0]" alt="" />
         </div>
       </div>
       <div class="right-images">
-        <div class="bottom">
+        <div class="project-image" :class="activeProjectIndex % 2 === 0 ? 'bottom' : 'top'">
           <img :src="projects[activeProjectIndex].images[1]" alt="" />
         </div>
       </div>
@@ -77,7 +77,7 @@ const changeProject = (index: number) => {
     gap: 8px;
     text-align: center;
     max-width: 600px;
-    margin-top: 72px;
+    margin-top: 14vh;
   }
   > .projects-navigation {
     position: absolute;
@@ -90,32 +90,42 @@ const changeProject = (index: number) => {
       text-align: center;
     }
   }
+  .project-image {
+    position: absolute;
+    > img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
   > .left-images {
     .top {
-      position: absolute;
       left: 72px;
       top: 10vh;
       width: 254px;
       aspect-ratio: 254/317;
-      > img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
+    }
+    .bottom {
+      left: 72px;
+      bottom: 10vh;
+      width: 394px;
+      aspect-ratio: 394/277;
     }
   }
   > .right-images {
+    .top {
+      position: absolute;
+      right: 72px;
+      top: 10vh;
+      width: 254px;
+      aspect-ratio: 254/317;
+    }
     .bottom {
       position: absolute;
       right: 72px;
       bottom: 10vh;
       width: 394px;
       aspect-ratio: 394/277;
-      > img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
     }
   }
 }
