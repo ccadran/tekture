@@ -1,31 +1,63 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const projects = [
+  {
+    name: 'BNIM',
+    description: 'Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.',
+    images: ['/images/1.png', '/images/2.png'],
+  },
+  {
+    name: 'CENTRE POMPIDOU',
+    description: 'Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.',
+    images: ['/images/3.png', '/images/4.png'],
+  },
+  {
+    name: '23 DESIGN',
+    description: 'Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.',
+    images: ['/images/2.png', '/images/3.png'],
+  },
+  {
+    name: 'ELARCH',
+    description: 'Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.',
+    images: ['/images/3.png', '/images/1.png'],
+  },
+  {
+    name: 'STUSSY STORE',
+    description: 'Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.',
+    images: ['/images/4.png', '/images/2.png'],
+  },
+]
+
+const activeProjectIndex = ref<number>(0)
+
+const changeProject = (index: number) => {
+  activeProjectIndex.value = index
+}
+</script>
 
 <template>
   <section class="projects">
     <div class="project-layout">
       <div class="project-text">
-        <h2>23 design</h2>
-        <p>Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.</p>
+        <h2>{{ projects[activeProjectIndex].name }}</h2>
+        <p>{{ projects[activeProjectIndex].description }}</p>
       </div>
       <nav class="projects-navigation">
         <div class="markers"></div>
         <ul>
-          <li><h4>BNIM</h4></li>
-          <li><h4>CENTRE POMPIDOU</h4></li>
-          <li><h4>23 DESIGN</h4></li>
-          <li><h4>ELARCH</h4></li>
-          <li><h4>STUSSY STORE</h4></li>
+          <li v-for="(project, index) in projects" @click="changeProject(index)">
+            <h4>{{ project.name }}</h4>
+          </li>
         </ul>
       </nav>
 
       <div class="left-images">
         <div class="top">
-          <img src="/images/1.png" alt="" />
+          <img :src="projects[activeProjectIndex].images[0]" alt="" />
         </div>
       </div>
       <div class="right-images">
         <div class="bottom">
-          <img src="/images/2.png" alt="" />
+          <img :src="projects[activeProjectIndex].images[1]" alt="" />
         </div>
       </div>
     </div>
