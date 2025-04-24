@@ -35,21 +35,40 @@ const projectText = ref<HTMLElement | null>(null)
 const leftImage = ref<HTMLElement | null>(null)
 const rightImage = ref<HTMLElement | null>(null)
 
-const projectFadeTl = ref<gsap.core.Timeline>()
+const projectOutTl = ref<gsap.core.Timeline>()
+const projectInTl = ref<gsap.core.Timeline>()
 
 onMounted(() => {
-  projectFadeTl.value = gsap
-    .timeline({ paused: true })
+  projectOutTl.value = gsap
+    .timeline({ paused: true, onComplete: () => {} })
     .to(projectText.value, { opacity: 0, duration: 0.5, ease: 'power1.out' })
     .to(leftImage.value, { opacity: 0, duration: 0.5, ease: 'power1.out' }, 0)
     .to(rightImage.value, { opacity: 0, duration: 0.5, ease: 'power1.out' }, 0)
+
+  projectInTl.value = gsap
+    .timeline({ paused: true })
+    .to(projectText.value, { opacity: 1, duration: 0.5, ease: 'power1.out' })
+    .to(leftImage.value, { opacity: 1, duration: 0.5, ease: 'power1.out' }, 0)
+    .to(rightImage.value, { opacity: 1, duration: 0.5, ease: 'power1.out' }, 0)
 })
 
 const changeProject = (index: number) => {
-  projectFadeTl.value!.play()
+  if (index === activeProjectIndex.value) return
+
+  resetTimelines()
   setTimeout(() => {
     activeProjectIndex.value = index
+    projectInTl.value!.play()
   }, 500)
+}
+
+const resetTimelines = () => {
+  projectOutTl.value!.progress(0)
+  projectInTl.value!.progress(0)
+
+  projectOutTl.value!.pause()
+  projectInTl.value!.pause()
+  projectOutTl.value!.play()
 }
 </script>
 
