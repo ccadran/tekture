@@ -39,11 +39,15 @@ const titleChars = ref<NodeListOf<Element> | null>(null)
 const descriptionLines = ref<NodeListOf<Element> | null>(null)
 const leftImage = ref<HTMLElement | null>(null)
 const rightImage = ref<HTMLElement | null>(null)
+const projectsNav = ref<HTMLElement | null>(null)
+const navMarkers = ref<HTMLElement | null>(null)
 
 onMounted(() => {
   new SplitType('.description ', { types: 'lines' })
   new SplitType('.title ', { types: 'chars' })
   wrapLinesWithInner()
+  projectsNav.value = document.querySelector('.projects-navigation')
+  navMarkers.value = document.querySelector('.markers')
 })
 
 const projectOut = (index: number) => {
@@ -85,11 +89,20 @@ const wrapLinesWithInner = () => {
   })
 }
 
+const moveMarkers = (index: number) => {
+  const currentNavItemRect = document.querySelector(`.nav-project--${index}`)?.getBoundingClientRect()
+  const projectsNavRect = projectsNav.value?.getBoundingClientRect()
+  const relativeTop = currentNavItemRect!.top - projectsNavRect!.top
+  const currentNavItemWidth = currentNavItemRect!.width
+
+  gsap.to(navMarkers.value, { top: relativeTop, width: currentNavItemWidth + 40 })
+}
 const changeProject = (index: number) => {
   if (index === activeProjectIndex.value) return
   projectOut(activeProjectIndex.value)
   projectIn(index)
   activeProjectIndex.value = index
+  moveMarkers(index)
 }
 </script>
 
@@ -97,9 +110,12 @@ const changeProject = (index: number) => {
   <section class="projects">
     <div class="project-layout">
       <nav class="projects-navigation">
-        <div class="markers"></div>
+        <div class="markers">
+          <img class="left" src="/icons/marker.svg" alt="" />
+          <img class="right" src="/icons/marker.svg" alt="" />
+        </div>
         <ul>
-          <li v-for="(project, index) in projects" @click="changeProject(index)">
+          <li :class="'nav-project--' + index" v-for="(project, index) in projects" @click="changeProject(index)">
             <h4>{{ project.name }}</h4>
           </li>
         </ul>
@@ -137,11 +153,25 @@ const changeProject = (index: number) => {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+    > .markers {
+      position: absolute;
+      display: flex;
+      justify-content: space-between;
+      left: 50%;
+      transform: translateX(-50%);
+      > .right {
+        transform: rotate(180deg);
+      }
+    }
     > ul {
       display: flex;
       flex-direction: column;
       gap: 12px;
       text-align: center;
+      align-items: center;
+      > li {
+        width: fit-content;
+      }
     }
   }
   > .project-content {
