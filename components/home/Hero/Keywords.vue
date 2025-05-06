@@ -18,7 +18,7 @@ const textShuffleLoop = () => {
   const nextWordIndex = (currentWordIndex + 1) % keyWords.length
 
   if (ref && ref.animate) {
-    ref.animate(keyWords[currentWordIndex], keyWords[nextWordIndex])
+    ref.animate({ fromText: keyWords[currentWordIndex], toText: keyWords[nextWordIndex] })
   }
 
   currentIndices.value[currentTextIndex] = nextWordIndex

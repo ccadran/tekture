@@ -1,10 +1,8 @@
-<!-- components/ShuffleText.vue -->
 <script setup lang="ts">
 import { ref } from 'vue'
 import gsap from 'gsap'
 import { TextPlugin } from 'gsap/TextPlugin'
 
-// Props
 interface Props {
   from?: string // Maintenant optionnel
   to?: string // Maintenant optionnel
@@ -14,10 +12,12 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   from: '', // Valeur par défaut vide
-  to: '', // Valeur par défaut vide
+  to: '', // Valeur par défaut vide  z
   duration: 1,
   steps: 10,
 })
+
+console.log(props.from, '________')
 
 // Register GSAP plugin
 gsap.registerPlugin(TextPlugin)
@@ -26,8 +26,7 @@ gsap.registerPlugin(TextPlugin)
 const textElement = ref<HTMLElement | null>(null)
 const displayText = ref(props.from || '') // Utilisez une chaîne vide si from n'est pas défini
 
-// Animation function avec paramètres requis
-function animate(fromText: string, toText: string) {
+function animate({ fromText = props.from, toText = props.to }: { fromText?: string; toText?: string } = {}) {
   if (!textElement.value) return
 
   // Met à jour le texte initial

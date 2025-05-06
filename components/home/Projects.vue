@@ -31,6 +31,7 @@ const projects = [
 ]
 
 const activeProjectIndex = ref<number>(0)
+const navItemsRefs = ref<any[]>([])
 
 /**
  * ANIMATE ELEMENT
@@ -59,8 +60,6 @@ const projectsEnter = (index: number) => {
       scrollTrigger: {
         trigger: projectsSection,
         start: 'top center-=20%',
-        // markers: true,
-        // toggleActions: 'restart reset restart reset',
         once: true,
       },
     })
@@ -77,7 +76,7 @@ const projectsEnter = (index: number) => {
         },
       }
     )
-    .add(projectIn(index), 0.15)
+    .add(projectIn(index, true), 0.05)
     .fromTo(
       navMarkers.value,
       { opacity: 0 },
@@ -99,7 +98,7 @@ const projectOut = (index: number) => {
     .to(targetProject, { opacity: 0, duration: 0.5, ease: 'power1.out' })
     .set(targetProject, { zIndex: projects.length - 1 })
 }
-const projectIn = (index: number) => {
+const projectIn = (index: number, isProjectsEnter?: boolean) => {
   const targetProject = document.querySelector(`.project--${index} `) as HTMLElement
   titleChars.value = targetProject?.querySelectorAll('.title .char')
   descriptionLines.value = targetProject?.querySelectorAll('.description .line .inner')
@@ -118,6 +117,11 @@ const projectIn = (index: number) => {
     .fromTo(titleChars.value, { opacity: 0, y: 100 }, { opacity: 1, y: 0, stagger: { each: 0.025, from: 'random' }, duration: 0.75, ease: 'power1.inOut' }, 0.2)
     .fromTo(leftImage.value, { opacity: 0 }, { opacity: 1, duration: 0.75, ease: 'power1.inOut' }, 0.6)
     .fromTo(rightImage.value, { opacity: 0 }, { opacity: 1, duration: 0.75, ease: 'power1.inOut' }, 0.65)
+
+  if (!isProjectsEnter) {
+    tl.add(navItemsRefs.value[index].animate(), 0)
+  }
+
   return tl
 }
 
@@ -158,7 +162,19 @@ const changeProject = (index: number) => {
         </div>
         <ul>
           <li :class="'nav-item nav-project--' + index" v-for="(project, index) in projects" @click="changeProject(index)">
-            <h4>{{ project.name }}</h4>
+            <h4>
+              <UtilsTextShuffle
+                :from="project.name"
+                :to="project.name"
+                :duration="0.6"
+                :steps="10"
+                :ref="
+                  (el) => {
+                    if (el) navItemsRefs[index] = el
+                  }
+                "
+              />
+            </h4>
           </li>
         </ul>
       </nav>
