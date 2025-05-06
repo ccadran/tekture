@@ -49,20 +49,47 @@ onMounted(() => {
   projectsNav.value = document.querySelector('.projects-navigation')
   navMarkers.value = document.querySelector('.markers')
   projectsEnter(activeProjectIndex.value)
+  moveMarkers(activeProjectIndex.value)
 })
 
 const projectsEnter = (index: number) => {
   const projectsSection = document.querySelector('.projects')
-  gsap.timeline({
-    scrollTrigger: {
-      trigger: projectsSection,
-      start: 'top center',
-      once: true,
-      onEnter: () => {
-        projectIn(index)
+  gsap
+    .timeline({
+      scrollTrigger: {
+        trigger: projectsSection,
+        start: 'top center-=20%',
+        // markers: true,
+        // toggleActions: 'restart reset restart reset',
+        once: true,
       },
-    },
-  })
+    })
+    .fromTo(
+      '.nav-item h4',
+      { y: '100%', opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        stagger: {
+          from: 'end',
+          each: 0.05,
+          ease: 'power1',
+        },
+      }
+    )
+    .add(projectIn(index), 0.15)
+    .fromTo(
+      navMarkers.value,
+      { opacity: 0 },
+      {
+        opacity: 1,
+        duration: 0.25,
+        repeat: 2,
+        yoyo: true,
+        ease: 'power1.inOut',
+      },
+      '>-=0.5'
+    )
 }
 
 const projectOut = (index: number) => {
@@ -80,18 +107,18 @@ const projectIn = (index: number) => {
   rightImage.value = targetProject?.querySelector('.right-images .project-image')
   console.log(leftImage.value)
 
-  gsap
+  const tl = gsap
     .timeline()
     .set(targetProject, { zIndex: projects.length, opacity: 1 })
-    .fromTo(titleChars.value, { opacity: 0, y: 100 }, { opacity: 1, y: 0, stagger: { each: 0.025, from: 'random' }, duration: 0.5, ease: 'power1.inOut' })
     .fromTo(
       descriptionLines.value,
       { opacity: 0, y: 100 },
-      { opacity: 1, y: 0, stagger: { each: 0.025, from: 'random' }, duration: 0.5, ease: 'power1.inOut' },
-      0.2
+      { opacity: 1, y: 0, stagger: { each: 0.025, from: 'random' }, duration: 0.75, ease: 'power1.inOut' }
     )
-    .fromTo(leftImage.value, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'power1.inOut' }, 0.3)
-    .fromTo(rightImage.value, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'power1.inOut' }, 0.35)
+    .fromTo(titleChars.value, { opacity: 0, y: 100 }, { opacity: 1, y: 0, stagger: { each: 0.025, from: 'random' }, duration: 0.75, ease: 'power1.inOut' }, 0.2)
+    .fromTo(leftImage.value, { opacity: 0 }, { opacity: 1, duration: 0.75, ease: 'power1.inOut' }, 0.6)
+    .fromTo(rightImage.value, { opacity: 0 }, { opacity: 1, duration: 0.75, ease: 'power1.inOut' }, 0.65)
+  return tl
 }
 
 const wrapLinesWithInner = () => {
@@ -130,7 +157,7 @@ const changeProject = (index: number) => {
           <img class="right" src="/icons/marker.svg" alt="" />
         </div>
         <ul>
-          <li :class="'nav-project--' + index" v-for="(project, index) in projects" @click="changeProject(index)">
+          <li :class="'nav-item nav-project--' + index" v-for="(project, index) in projects" @click="changeProject(index)">
             <h4>{{ project.name }}</h4>
           </li>
         </ul>
@@ -158,9 +185,13 @@ const changeProject = (index: number) => {
 </template>
 
 <style lang="scss">
+.projects {
+  height: 300vh;
+}
 .project-layout {
   height: 100vh;
-  position: relative;
+  position: sticky;
+  top: 0;
 
   > .projects-navigation {
     position: absolute;
@@ -184,8 +215,9 @@ const changeProject = (index: number) => {
       gap: 12px;
       text-align: center;
       align-items: center;
-      > li {
+      > .nav-item {
         width: fit-content;
+        overflow: hidden;
       }
     }
   }
@@ -196,13 +228,7 @@ const changeProject = (index: number) => {
     position: absolute;
     height: 100%;
     width: 100%;
-    // visibility: hidden;
     opacity: 0;
-    &.project--0 {
-      opacity: 0;
-      z-index: 5;
-      // visibility: visible;
-    }
     > .project-text {
       display: flex;
       flex-direction: column;
