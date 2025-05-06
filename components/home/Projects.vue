@@ -48,7 +48,22 @@ onMounted(() => {
   wrapLinesWithInner()
   projectsNav.value = document.querySelector('.projects-navigation')
   navMarkers.value = document.querySelector('.markers')
+  projectsEnter(activeProjectIndex.value)
 })
+
+const projectsEnter = (index: number) => {
+  const projectsSection = document.querySelector('.projects')
+  gsap.timeline({
+    scrollTrigger: {
+      trigger: projectsSection,
+      start: 'top center',
+      once: true,
+      onEnter: () => {
+        projectIn(index)
+      },
+    },
+  })
+}
 
 const projectOut = (index: number) => {
   const targetProject = document.querySelector(`.project--${index} `)
@@ -184,7 +199,7 @@ const changeProject = (index: number) => {
     // visibility: hidden;
     opacity: 0;
     &.project--0 {
-      opacity: 1;
+      opacity: 0;
       z-index: 5;
       // visibility: visible;
     }
