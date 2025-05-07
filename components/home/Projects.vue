@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import gsap from 'gsap'
 import SplitType from 'split-type'
+import ScrollTrigger from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const projects = [
   {
@@ -51,7 +54,28 @@ onMounted(() => {
   navMarkers.value = document.querySelector('.markers')
   projectsEnter(activeProjectIndex.value)
   moveMarkers(activeProjectIndex.value)
+  changeProjectOnScroll()
 })
+
+const changeProjectOnScroll = () => {
+  const projectsSection = document.querySelector('.projects')
+  let lastStep = -1
+  let step = 1 / projects.length
+
+  ScrollTrigger.create({
+    trigger: projectsSection,
+    start: 'top top',
+    end: 'bottom bottom',
+    onUpdate: (self) => {
+      const currentStep = Math.floor(self.progress / step)
+      if (currentStep !== lastStep && currentStep < projects.length) {
+        lastStep = currentStep
+
+        changeProject(lastStep)
+      }
+    },
+  })
+}
 
 const projectsEnter = (index: number) => {
   const projectsSection = document.querySelector('.projects')
@@ -202,7 +226,7 @@ const changeProject = (index: number) => {
 
 <style lang="scss">
 .projects {
-  height: 300vh;
+  height: 600vh;
 }
 .project-layout {
   height: 100vh;
