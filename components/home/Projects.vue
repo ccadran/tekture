@@ -2,36 +2,9 @@
 import gsap from 'gsap'
 import SplitType from 'split-type'
 import ScrollTrigger from 'gsap/ScrollTrigger'
+import projectsData from '~/assets/data/projects.json'
 
 gsap.registerPlugin(ScrollTrigger)
-
-const projects = [
-  {
-    name: 'BNIM',
-    description: 'Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.',
-    images: ['/images/1.jpg', '/images/2.jpg'],
-  },
-  {
-    name: 'CENTRE POMPIDOU',
-    description: '2Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.',
-    images: ['/images/3.jpg', '/images/4.jpg'],
-  },
-  {
-    name: '23 DESIGN',
-    description: '3Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.',
-    images: ['/images/5.jpg', '/images/6.jpg'],
-  },
-  {
-    name: 'ELARCH',
-    description: '4Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.',
-    images: ['/images/7.jpg', '/images/8.jpg'],
-  },
-  {
-    name: 'STUSSY STORE',
-    description: '5Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.',
-    images: ['/images/9.jpg', '/images/10.jpg'],
-  },
-]
 
 const activeProjectIndex = ref<number>(0)
 const navItemsRefs = ref<any[]>([])
@@ -39,10 +12,6 @@ const navItemsRefs = ref<any[]>([])
 /**
  * ANIMATE ELEMENT
  */
-const titleChars = ref<NodeListOf<Element> | null>(null)
-const descriptionLines = ref<NodeListOf<Element> | null>(null)
-const leftImage = ref<HTMLElement | null>(null)
-const rightImage = ref<HTMLElement | null>(null)
 const projectsNav = ref<HTMLElement | null>(null)
 const navMarkers = ref<HTMLElement | null>(null)
 
@@ -56,25 +25,6 @@ onMounted(() => {
   moveMarkers(activeProjectIndex.value)
   changeProjectOnScroll()
 })
-
-const changeProjectOnScroll = () => {
-  const projectsSection = document.querySelector('.projects')
-  let lastStep = -1
-  let step = 1 / projects.length
-
-  ScrollTrigger.create({
-    trigger: projectsSection,
-    start: 'top top',
-    end: 'bottom bottom',
-    onUpdate: (self) => {
-      const currentStep = Math.floor(self.progress / step)
-      if (currentStep !== lastStep && currentStep < projects.length) {
-        lastStep = currentStep
-        changeProject(lastStep)
-      }
-    },
-  })
-}
 
 const projectsEnter = (index: number) => {
   const projectsSection = document.querySelector('.projects')
@@ -114,38 +64,58 @@ const projectsEnter = (index: number) => {
     )
 }
 
-const projectOut = (index: number) => {
-  const targetProject = document.querySelector(`.project--${index} `)
-  gsap
-    .timeline()
-    .to(targetProject, { opacity: 0, duration: 0.5, ease: 'power1.out' })
-    .set(targetProject, { zIndex: projects.length - 1 })
+const changeProjectOnScroll = () => {
+  const projectsSection = document.querySelector('.projects')
+  let lastStep = -1
+  let step = 1 / projectsData.length
+
+  ScrollTrigger.create({
+    trigger: projectsSection,
+    start: 'top top',
+    end: 'bottom bottom',
+    onUpdate: (self) => {
+      const currentStep = Math.floor(self.progress / step)
+      if (currentStep !== lastStep && currentStep < projectsData.length) {
+        lastStep = currentStep
+        changeProject(lastStep)
+      }
+    },
+  })
 }
+
 const projectIn = (index: number, isProjectsEnter?: boolean) => {
-  const targetProject = document.querySelector(`.project--${index} `) as HTMLElement
-  titleChars.value = targetProject?.querySelectorAll('.title .char')
-  descriptionLines.value = targetProject?.querySelectorAll('.description .line .inner')
-  leftImage.value = targetProject?.querySelector('.left-images .project-image')
-  rightImage.value = targetProject?.querySelector('.right-images .project-image')
-  console.log(leftImage.value)
+  const { targetProject, titleChars, descriptionLines, leftImage, rightImage } = getProjectElements(index)
 
   const tl = gsap
     .timeline()
-    .set(targetProject, { zIndex: projects.length, opacity: 1 })
-    .fromTo(
-      descriptionLines.value,
-      { opacity: 0, y: 100 },
-      { opacity: 1, y: 0, stagger: { each: 0.025, from: 'random' }, duration: 0.75, ease: 'power1.inOut' }
-    )
-    .fromTo(titleChars.value, { opacity: 0, y: 100 }, { opacity: 1, y: 0, stagger: { each: 0.025, from: 'random' }, duration: 0.75, ease: 'power1.inOut' }, 0.2)
-    .fromTo(leftImage.value, { opacity: 0 }, { opacity: 1, duration: 0.75, ease: 'power1.inOut' }, 0.6)
-    .fromTo(rightImage.value, { opacity: 0 }, { opacity: 1, duration: 0.75, ease: 'power1.inOut' }, 0.65)
+    .set(targetProject, { zIndex: projectsData.length, opacity: 1 })
+    .fromTo(descriptionLines, { opacity: 0, y: 100 }, { opacity: 1, y: 0, stagger: { each: 0.025, from: 'random' }, duration: 0.75, ease: 'power1.inOut' })
+    .fromTo(titleChars, { opacity: 0, y: 100 }, { opacity: 1, y: 0, stagger: { each: 0.025, from: 'random' }, duration: 0.75, ease: 'power1.inOut' }, 0.2)
+    .fromTo(leftImage, { opacity: 0 }, { opacity: 1, duration: 0.75, ease: 'power1.inOut' }, 0.6)
+    .fromTo(rightImage, { opacity: 0 }, { opacity: 1, duration: 0.75, ease: 'power1.inOut' }, 0.65)
 
   if (!isProjectsEnter) {
     tl.add(navItemsRefs.value[index].animate(), 0)
   }
 
   return tl
+}
+
+const projectOut = (index: number) => {
+  const { targetProject } = getProjectElements(index)
+  gsap
+    .timeline()
+    .to(targetProject, { opacity: 0, duration: 0.5, ease: 'power1.out' })
+    .set(targetProject, { zIndex: projectsData.length - 1 })
+}
+
+const moveMarkers = (index: number) => {
+  const currentNavItemRect = document.querySelector(`.nav-project--${index}`)?.getBoundingClientRect()
+  const projectsNavRect = projectsNav.value?.getBoundingClientRect()
+  const relativeTop = currentNavItemRect!.top - projectsNavRect!.top
+  const currentNavItemWidth = currentNavItemRect!.width
+
+  gsap.to(navMarkers.value, { top: relativeTop, width: currentNavItemWidth + 40 })
 }
 
 const wrapLinesWithInner = () => {
@@ -158,13 +128,15 @@ const wrapLinesWithInner = () => {
   })
 }
 
-const moveMarkers = (index: number) => {
-  const currentNavItemRect = document.querySelector(`.nav-project--${index}`)?.getBoundingClientRect()
-  const projectsNavRect = projectsNav.value?.getBoundingClientRect()
-  const relativeTop = currentNavItemRect!.top - projectsNavRect!.top
-  const currentNavItemWidth = currentNavItemRect!.width
-
-  gsap.to(navMarkers.value, { top: relativeTop, width: currentNavItemWidth + 40 })
+const getProjectElements = (index: number) => {
+  const targetProject = document.querySelector(`.project--${index}`) as HTMLElement
+  return {
+    targetProject,
+    titleChars: targetProject?.querySelectorAll('.title .char'),
+    descriptionLines: targetProject?.querySelectorAll('.description .line .inner'),
+    leftImage: targetProject?.querySelector('.left-images .project-image'),
+    rightImage: targetProject?.querySelector('.right-images .project-image'),
+  }
 }
 const changeProject = (index: number) => {
   if (index === activeProjectIndex.value) return
@@ -184,7 +156,7 @@ const changeProject = (index: number) => {
           <img class="right" src="/icons/marker.svg" alt="" />
         </div>
         <ul>
-          <li :class="'nav-item nav-project--' + index" v-for="(project, index) in projects" @click="changeProject(index)">
+          <li :class="'nav-item nav-project--' + index" v-for="(project, index) in projectsData" @click="changeProject(index)">
             <h4>
               <UtilsTextShuffle
                 :from="project.name"
@@ -201,24 +173,7 @@ const changeProject = (index: number) => {
           </li>
         </ul>
       </nav>
-      <div :class="'project-content project--' + index" v-for="(project, index) in projects">
-        <div class="project-text">
-          <h2 class="title">{{ project.name }}</h2>
-
-          <p class="description">{{ project.description }}</p>
-        </div>
-
-        <div class="left-images">
-          <div class="project-image" :class="index % 2 === 0 ? 'top' : 'bottom'">
-            <img :src="project.images[0]" alt="" />
-          </div>
-        </div>
-        <div class="right-images">
-          <div class="project-image" :class="index % 2 === 0 ? 'bottom' : 'top'">
-            <img :src="project.images[1]" alt="" />
-          </div>
-        </div>
-      </div>
+      <HomeProjectsItem v-for="(project, index) in projectsData" :project="project" :index="index" />
     </div>
   </section>
 </template>
@@ -257,79 +212,6 @@ const changeProject = (index: number) => {
       > .nav-item {
         width: fit-content;
         overflow: hidden;
-      }
-    }
-  }
-  > .project-content {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    opacity: 0;
-    > .project-text {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      text-align: center;
-      align-items: center;
-      max-width: 600px;
-      margin-top: 14vh;
-      > .title {
-        width: fit-content;
-        height: fit-content;
-        overflow: hidden;
-        > .char {
-        }
-      }
-      > .description {
-        > .line {
-          height: fit-content;
-          width: fit-content;
-          overflow: hidden;
-          > .inner {
-          }
-        }
-      }
-    }
-
-    .project-image {
-      position: absolute;
-      > img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-    }
-    > .left-images {
-      .top {
-        left: 72px;
-        top: 10vh;
-        width: 254px;
-        aspect-ratio: 254/317;
-      }
-      .bottom {
-        left: 72px;
-        bottom: 10vh;
-        width: 394px;
-        aspect-ratio: 394/277;
-      }
-    }
-    > .right-images {
-      .top {
-        position: absolute;
-        right: 72px;
-        top: 10vh;
-        width: 254px;
-        aspect-ratio: 254/317;
-      }
-      .bottom {
-        position: absolute;
-        right: 72px;
-        bottom: 10vh;
-        width: 394px;
-        aspect-ratio: 394/277;
       }
     }
   }
