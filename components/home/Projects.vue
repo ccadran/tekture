@@ -9,27 +9,27 @@ const projects = [
   {
     name: 'BNIM',
     description: 'Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.',
-    images: ['/images/1.png', '/images/2.png'],
+    images: ['/images/1.jpg', '/images/2.jpg'],
   },
   {
     name: 'CENTRE POMPIDOU',
     description: '2Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.',
-    images: ['/images/3.png', '/images/4.png'],
+    images: ['/images/3.jpg', '/images/4.jpg'],
   },
   {
     name: '23 DESIGN',
     description: '3Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.',
-    images: ['/images/2.png', '/images/3.png'],
+    images: ['/images/5.jpg', '/images/6.jpg'],
   },
   {
     name: 'ELARCH',
     description: '4Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.',
-    images: ['/images/3.png', '/images/1.png'],
+    images: ['/images/7.jpg', '/images/8.jpg'],
   },
   {
     name: 'STUSSY STORE',
     description: '5Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.',
-    images: ['/images/4.png', '/images/2.png'],
+    images: ['/images/9.jpg', '/images/10.jpg'],
   },
 ]
 
@@ -70,7 +70,6 @@ const changeProjectOnScroll = () => {
       const currentStep = Math.floor(self.progress / step)
       if (currentStep !== lastStep && currentStep < projects.length) {
         lastStep = currentStep
-
         changeProject(lastStep)
       }
     },

@@ -49,22 +49,22 @@ onMounted(() => {
     <div class="projects-intro-images">
       <div class="grid-images">
         <div class="grid-image" data-image="1">
-          <img class="inner" src="/images/1.png" alt="" />
+          <img class="inner" src="/images/12.jpg" alt="" />
         </div>
         <div class="grid-image" data-image="2">
-          <img class="inner" src="/images/2.png" alt="" />
+          <img class="inner" src="/images/11.jpg" alt="" />
         </div>
         <div class="grid-image" data-image="3">
-          <img class="inner" src="/images/3.png" alt="" />
+          <img class="inner" src="/images/10.jpg" alt="" />
         </div>
         <div class="grid-image" data-image="4">
-          <img class="inner" src="/images/4.png" alt="" />
+          <img class="inner" src="/images/9.jpg" alt="" />
         </div>
         <div class="grid-image" data-image="5">
-          <img class="inner" src="/images/2.png" alt="" />
+          <img class="inner" src="/images/8.jpg" alt="" />
         </div>
         <div class="grid-image" data-image="6">
-          <img class="inner" src="/images/1.png" alt="" />
+          <img class="inner" src="/images/7.jpg" alt="" />
         </div>
       </div>
     </div>
