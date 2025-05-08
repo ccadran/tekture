@@ -17,8 +17,6 @@ const props = withDefaults(defineProps<Props>(), {
   steps: 10,
 })
 
-console.log(props.from, '________')
-
 // Register GSAP plugin
 gsap.registerPlugin(TextPlugin)
 

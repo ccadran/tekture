@@ -12,7 +12,6 @@ onMounted(() => {
   sentences1 = manifestContent1.value!.querySelectorAll('.sentence .inner')
   sentences2 = manifestContent2.value!.querySelectorAll('.sentence .inner')
   gsap.set(sentences2, { y: 20, opacity: 0 })
-  console.log(sentences1)
 
   const manifestTl = gsap.timeline({
     paused: true,

@@ -2,9 +2,10 @@
 import gsap from 'gsap'
 import SplitType from 'split-type'
 import ScrollTrigger from 'gsap/ScrollTrigger'
+import ScrollToPlugin from 'gsap/ScrollToPlugin'
 import projectsData from '~/assets/data/projects.json'
 
-gsap.registerPlugin(ScrollTrigger)
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
 
 const activeProjectIndex = ref<number>(0)
 const navItemsRefs = ref<any[]>([])
@@ -28,11 +29,28 @@ onMounted(() => {
 
 const projectsEnter = (index: number) => {
   const projectsSection = document.querySelector('.projects')
+  const projectsContent = document.querySelector('.project-layout') as HTMLElement
+
+  if (!projectsSection || !projectsContent) return
+
+  //snap section
+  ScrollTrigger.create({
+    trigger: projectsSection,
+    start: 'top bottom-=10%',
+    onEnter: () => {
+      window.lenis?.scrollTo(projectsContent, {
+        offset: 0,
+        duration: 1.2,
+        lock: true,
+      })
+    },
+  })
+
   gsap
     .timeline({
       scrollTrigger: {
-        trigger: projectsSection,
-        start: 'top center-=20%',
+        trigger: projectsContent,
+        start: 'top center',
         once: true,
       },
     })
@@ -180,9 +198,12 @@ const changeProject = (index: number) => {
 
 <style lang="scss">
 .projects {
+  // margin-top: 50vh;
   height: 600vh;
+  border: 1px red;
 }
 .project-layout {
+  border: 1px red;
   height: 100vh;
   position: sticky;
   top: 0;
