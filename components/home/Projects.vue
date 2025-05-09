@@ -163,6 +163,21 @@ const changeProject = (index: number) => {
   activeProjectIndex.value = index
   moveMarkers(index)
 }
+
+const scrollToProject = (index: number) => {
+  const projectsSection = document.querySelector('.projects') as HTMLElement
+
+  const sectionStart = projectsSection!.offsetTop
+  const totalScrollable = projectsSection!.scrollHeight - window.innerHeight
+  const step = totalScrollable / (projectsData.length - 1)
+  const targetScroll = sectionStart + step * index
+  console.log(step)
+
+  window.lenis!.scrollTo(targetScroll, {
+    lock: true,
+    immediate: true,
+  })
+}
 </script>
 
 <template>
@@ -174,7 +189,7 @@ const changeProject = (index: number) => {
           <img class="right" src="/icons/marker.svg" alt="" />
         </div>
         <ul>
-          <li :class="'nav-item nav-project--' + index" v-for="(project, index) in projectsData" @click="changeProject(index)">
+          <li :class="'nav-item nav-project--' + index" v-for="(project, index) in projectsData" @click="scrollToProject(index)">
             <h4>
               <UtilsTextShuffle
                 :from="project.name"
@@ -198,12 +213,9 @@ const changeProject = (index: number) => {
 
 <style lang="scss">
 .projects {
-  // margin-top: 50vh;
   height: 600vh;
-  border: 1px red;
 }
 .project-layout {
-  border: 1px red;
   height: 100vh;
   position: sticky;
   top: 0;
