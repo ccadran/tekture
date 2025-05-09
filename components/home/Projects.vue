@@ -9,6 +9,7 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
 
 const activeProjectIndex = ref<number>(0)
 const navItemsRefs = ref<any[]>([])
+const projectsSection = ref<HTMLElement | null>(null)
 
 /**
  * ANIMATE ELEMENT
@@ -22,6 +23,8 @@ onMounted(() => {
   wrapLinesWithInner()
   projectsNav.value = document.querySelector('.projects-navigation')
   navMarkers.value = document.querySelector('.markers')
+  projectsSection.value = document.querySelector('.projects')
+
   projectsEnter(activeProjectIndex.value)
   moveMarkers(activeProjectIndex.value)
   changeProjectOnScroll()
@@ -165,13 +168,10 @@ const changeProject = (index: number) => {
 }
 
 const scrollToProject = (index: number) => {
-  const projectsSection = document.querySelector('.projects') as HTMLElement
-
-  const sectionStart = projectsSection!.offsetTop
-  const totalScrollable = projectsSection!.scrollHeight - window.innerHeight
-  const step = totalScrollable / (projectsData.length - 1)
+  const sectionStart = projectsSection.value!.offsetTop
+  const totalScrollable = projectsSection.value!.scrollHeight - window.innerHeight
+  const step = totalScrollable / projectsData.length + 1
   const targetScroll = sectionStart + step * index
-  console.log(step)
 
   window.lenis!.scrollTo(targetScroll, {
     lock: true,

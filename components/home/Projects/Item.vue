@@ -53,8 +53,6 @@ const props = defineProps({
       width: fit-content;
       height: fit-content;
       overflow: hidden;
-      > .char {
-      }
     }
     > .description {
       > .line {
