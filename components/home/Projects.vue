@@ -117,7 +117,10 @@ const projectIn = (index: number, isProjectsEnter?: boolean) => {
 
   if (!isProjectsEnter) {
     tl.add(navItemsRefs.value[index].animate(), 0)
+    navItemsRefs.value[index]
   }
+  const navItemActive = document.querySelector(`.nav-project--${index}`)
+  navItemActive?.classList.add('active')
 
   return tl
 }
@@ -129,13 +132,15 @@ const projectOut = (index: number) => {
     .to(targetProject, { opacity: 0, duration: 0.5, ease: 'power1.out' })
     .set(targetProject, { zIndex: projectsData.length - 1 })
     .set(targetProject, { display: 'none' })
+  const navItemActive = document.querySelector(`.nav-project--${index}`)
+  navItemActive?.classList.remove('active')
 }
 
 const moveMarkers = (index: number) => {
-  const currentNavItemRect = document.querySelector(`.nav-project--${index}`)?.getBoundingClientRect()
+  const currentNavItem = document.querySelector(`.nav-project--${index}`)?.getBoundingClientRect()
   const projectsNavRect = projectsNav.value?.getBoundingClientRect()
-  const relativeTop = currentNavItemRect!.top - projectsNavRect!.top
-  const currentNavItemWidth = currentNavItemRect!.width
+  const relativeTop = currentNavItem!.top - projectsNavRect!.top
+  const currentNavItemWidth = currentNavItem!.width
 
   gsap.to(navMarkers.value, { top: relativeTop, width: currentNavItemWidth + 40 })
 }
@@ -246,6 +251,11 @@ const scrollToProject = (index: number) => {
       > .nav-item {
         width: fit-content;
         overflow: hidden;
+        opacity: 0.5;
+        transition: opacity 0.2s ease-in-out;
+        &.active {
+          opacity: 1;
+        }
       }
     }
   }
