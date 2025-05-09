@@ -1,19 +1,13 @@
 <script setup>
 import { useLenis } from '~/composables/useLenis'
 
-// Initialiser Lenis une seule fois au niveau du composant racine
 const { lenis } = useLenis()
 </script>
 
 <template>
-  <div>
-    <UiNavbar />
-    <HomeHero />
-    <HomeManifest />
-    <HomeProjectsIntro />
-    <HomeProjects />
-    <div class="div"></div>
-  </div>
+  <NuxtPage />
+
+  <!-- <div class="div"></div> -->
 </template>
 
 <style>
