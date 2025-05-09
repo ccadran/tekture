@@ -109,7 +109,7 @@ const projectIn = (index: number, isProjectsEnter?: boolean) => {
 
   const tl = gsap
     .timeline()
-    .set(targetProject, { zIndex: projectsData.length, opacity: 1 })
+    .set(targetProject, { zIndex: projectsData.length, opacity: 1, display: 'flex' })
     .fromTo(descriptionLines, { opacity: 0, y: 100 }, { opacity: 1, y: 0, stagger: { each: 0.025, from: 'random' }, duration: 0.75, ease: 'power1.inOut' })
     .fromTo(titleChars, { opacity: 0, y: 100 }, { opacity: 1, y: 0, stagger: { each: 0.025, from: 'random' }, duration: 0.75, ease: 'power1.inOut' }, 0.2)
     .fromTo(leftImage, { opacity: 0 }, { opacity: 1, duration: 0.75, ease: 'power1.inOut' }, 0.6)
@@ -128,6 +128,7 @@ const projectOut = (index: number) => {
     .timeline()
     .to(targetProject, { opacity: 0, duration: 0.5, ease: 'power1.out' })
     .set(targetProject, { zIndex: projectsData.length - 1 })
+    .set(targetProject, { display: 'none' })
 }
 
 const moveMarkers = (index: number) => {

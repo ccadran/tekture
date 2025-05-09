@@ -41,6 +41,7 @@ const props = defineProps({
   height: 100%;
   width: 100%;
   opacity: 0;
+  display: none;
   > .project-text {
     display: flex;
     flex-direction: column;
@@ -59,8 +60,6 @@ const props = defineProps({
         height: fit-content;
         width: fit-content;
         overflow: hidden;
-        > .inner {
-        }
       }
     }
   }
@@ -102,6 +101,9 @@ const props = defineProps({
       width: 394px;
       aspect-ratio: 394/277;
     }
+  }
+  &.--project-1 {
+    display: flex;
   }
 }
 </style>
