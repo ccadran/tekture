@@ -1,6 +1,8 @@
 <script lang="ts" setup>
+import projectsData from '~/assets/data/projects.json'
+
 const route = useRoute()
-console.log(route.params.slug)
+const index = route.params.slug
 </script>
 
 <template>

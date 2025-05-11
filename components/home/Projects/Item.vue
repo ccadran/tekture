@@ -15,6 +15,7 @@ const props = defineProps({
   <div :class="'project-content project--' + index">
     <div class="project-text">
       <h2 class="title">{{ project.name }}</h2>
+      <NuxtLink :to="'/projects/' + index">Test</NuxtLink>
 
       <p class="description">{{ project.description }}</p>
     </div>
