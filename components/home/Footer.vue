@@ -1,26 +1,87 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import gsap from 'gsap'
+import ScrollTrigger from 'gsap/ScrollTrigger'
+gsap.registerPlugin(ScrollTrigger)
+
+onMounted(() => {
+  gsap.fromTo(
+    '.title',
+    { transform: 'scaleY(0.0)' },
+    {
+      transform: 'scaleY(1.0)',
+      scrollTrigger: {
+        trigger: '.projects',
+        start: 'bottom bottom',
+        end: 'bottom bottom-=40%',
+        scrub: true,
+      },
+    }
+  )
+  gsap.fromTo(
+    '.contact',
+    { opacity: 0 },
+    {
+      opacity: 1,
+      duration: 0.5,
+      scrollTrigger: {
+        trigger: '.projects',
+        start: 'bottom bottom-=50%',
+        toggleActions: 'play reverse restart reverse',
+        onEnter: () => {
+          gsap.fromTo(
+            '.marker',
+            { opacity: 0 },
+            {
+              opacity: 1,
+              duration: 0.25,
+              repeat: 2,
+              yoyo: true,
+              ease: 'power1.inOut',
+            }
+          )
+        },
+      },
+    }
+  )
+  gsap.fromTo(
+    '.location',
+    { opacity: 0 },
+    {
+      opacity: 1,
+      duration: 0.5,
+      scrollTrigger: {
+        trigger: '.projects',
+        start: 'bottom bottom-=59%',
+        toggleActions: 'play reverse restart reverse',
+      },
+    }
+  )
+})
+</script>
 
 <template>
   <footer>
     <p class="location">Prinsengracht 315 . 1016 GZ Amsterdam</p>
     <div class="contact">
-      <img src="/icons/marker.svg" alt="" />
+      <img class="marker" src="/icons/marker.svg" alt="" />
       <h4>Contact us</h4>
-      <img src="/icons/marker.svg" alt="" />
+      <img class="marker" src="/icons/marker.svg" alt="" />
     </div>
-    <h2>TEKTURE</h2>
+    <h2 class="title">TEKTURE</h2>
   </footer>
 </template>
 
 <style lang="scss">
 footer {
-  margin-top: 20vh;
-  height: 80vh;
+  z-index: -1;
+  height: 60vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   overflow: hidden;
+  position: sticky;
+  bottom: 0;
   > .location {
     margin-top: 98px;
     font-size: 18px;
@@ -37,10 +98,11 @@ footer {
       transform: rotate(180deg);
     }
   }
-  > h2 {
+  > .title {
     font-size: 21.5vw;
     font-weight: 800;
     line-height: 70%;
+    transform-origin: bottom;
   }
 }
 </style>

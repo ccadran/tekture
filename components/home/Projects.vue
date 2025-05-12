@@ -220,6 +220,7 @@ const scrollToProject = (index: number) => {
 <style lang="scss">
 .projects {
   height: 600vh;
+  background-color: white;
 }
 .project-layout {
   height: 100vh;
