@@ -5,7 +5,9 @@ const { lenis } = useLenis()
 </script>
 
 <template>
+  <AppNavbar />
   <NuxtPage />
+  <AppFooter />
 
   <!-- <div class="div"></div> -->
 </template>

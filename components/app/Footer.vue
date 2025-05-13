@@ -5,12 +5,12 @@ gsap.registerPlugin(ScrollTrigger)
 
 onMounted(() => {
   gsap.fromTo(
-    '.title',
+    'footer .title',
     { transform: 'scaleY(0.0)' },
     {
       transform: 'scaleY(1.0)',
       scrollTrigger: {
-        trigger: '.projects',
+        trigger: '.main',
         start: 'bottom bottom',
         end: 'bottom bottom-=40%',
         scrub: true,
@@ -24,7 +24,7 @@ onMounted(() => {
       opacity: 1,
       duration: 0.5,
       scrollTrigger: {
-        trigger: '.projects',
+        trigger: '.main',
         start: 'bottom bottom-=50%',
         toggleActions: 'play reverse restart reverse',
         onEnter: () => {
@@ -50,7 +50,7 @@ onMounted(() => {
       opacity: 1,
       duration: 0.5,
       scrollTrigger: {
-        trigger: '.projects',
+        trigger: '.main',
         start: 'bottom bottom-=59%',
         toggleActions: 'play reverse restart reverse',
       },

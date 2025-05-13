@@ -1,14 +1,12 @@
 <script setup></script>
 
 <template>
-  <div>
-    <UiNavbar />
+  <main class="main">
     <HomeHero />
     <HomeManifest />
     <HomeProjectsIntro />
     <HomeProjects />
-    <HomeFooter />
-  </div>
+  </main>
 </template>
 
 <style></style>

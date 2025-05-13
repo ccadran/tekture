@@ -11,12 +11,19 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <div>
-    <img :src="currentProject!.images[0]" alt="" />
-  </div>
+  <main class="main">
+    <div class="project-page">
+      <div>
+        <img :src="currentProject!.images[0]" alt="" />
+      </div>
+    </div>
+  </main>
 </template>
 
 <style lang="scss" scoped>
+.project-page {
+  height: 100vh;
+}
 img {
   position: absolute;
   top: 50%;
