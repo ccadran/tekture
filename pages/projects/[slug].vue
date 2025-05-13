@@ -16,11 +16,15 @@ onBeforeMount(() => {
       <div class="focused-image">
         <img :src="currentProject?.images[0]" alt="" />
       </div>
-      <div class="project-informations">
+      <div class="utils-project-informations">
         <p class="location">{{ currentProject?.location }}</p>
         <img src="/icons/square.svg" alt="" />
         <a :href="currentProject?.author.link" class="author">{{ currentProject?.author.name }}</a>
       </div>
+    </div>
+    <div class="project-informations">
+      <h1 class="title">{{ currentProject?.name }}</h1>
+      <p class="counter title">5/8</p>
     </div>
   </main>
 </template>
@@ -48,7 +52,7 @@ onBeforeMount(() => {
         object-fit: cover;
       }
     }
-    > .project-informations {
+    > .utils-project-informations {
       display: flex;
       gap: 8px;
       align-items: center;
@@ -60,6 +64,19 @@ onBeforeMount(() => {
       > .author {
         text-decoration: underline;
       }
+    }
+  }
+  > .project-informations {
+    position: absolute;
+    display: flex;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    justify-content: space-between;
+    padding: 0 30px;
+    > .title,
+    .counter {
+      max-width: 20%;
     }
   }
 }
