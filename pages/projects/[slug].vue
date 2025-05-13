@@ -12,25 +12,55 @@ onBeforeMount(() => {
 
 <template>
   <main class="main">
-    <div class="project-page">
-      <div>
-        <img :src="currentProject!.images[0]" alt="" />
+    <div class="focused-content">
+      <div class="focused-image">
+        <img :src="currentProject?.images[0]" alt="" />
+      </div>
+      <div class="project-informations">
+        <p class="location">{{ currentProject?.location }}</p>
+        <img src="/icons/square.svg" alt="" />
+        <a :href="currentProject?.author.link" class="author">{{ currentProject?.author.name }}</a>
       </div>
     </div>
   </main>
 </template>
 
 <style lang="scss" scoped>
-.project-page {
+.main {
   height: 100vh;
-}
-img {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 500px;
-  height: 500px;
-  object-fit: cover;
+  > .focused-content {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -30%);
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    > .focused-image {
+      aspect-ratio: 362/484;
+      max-height: 60vh;
+
+      > img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+    }
+    > .project-informations {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 14px;
+      > .location {
+        font-style: italic;
+        font-weight: 300;
+      }
+      > .author {
+        text-decoration: underline;
+      }
+    }
+  }
 }
 </style>
