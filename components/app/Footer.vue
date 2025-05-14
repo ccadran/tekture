@@ -12,7 +12,7 @@ onMounted(() => {
       scrollTrigger: {
         trigger: '.main',
         start: 'bottom bottom',
-        end: 'bottom bottom-=40%',
+        end: 'bottom bottom-=30%',
         scrub: true,
       },
     }
@@ -25,7 +25,7 @@ onMounted(() => {
       duration: 0.5,
       scrollTrigger: {
         trigger: '.main',
-        start: 'bottom bottom-=50%',
+        start: 'bottom bottom-=40%',
         toggleActions: 'play reverse restart reverse',
         onEnter: () => {
           gsap.fromTo(
@@ -51,7 +51,7 @@ onMounted(() => {
       duration: 0.5,
       scrollTrigger: {
         trigger: '.main',
-        start: 'bottom bottom-=59%',
+        start: 'bottom bottom-=49%',
         toggleActions: 'play reverse restart reverse',
       },
     }
@@ -60,7 +60,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <footer>
+  <footer class="footer">
     <p class="location">Prinsengracht 315 . 1016 GZ Amsterdam</p>
     <div class="contact">
       <img class="marker" src="/icons/marker.svg" alt="" />
@@ -74,7 +74,7 @@ onMounted(() => {
 <style lang="scss">
 footer {
   z-index: -1;
-  height: 60vh;
+  height: 50vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -82,8 +82,8 @@ footer {
   overflow: hidden;
   position: sticky;
   bottom: 0;
+  padding-top: 24px;
   > .location {
-    margin-top: 98px;
     font-size: 18px;
     font-weight: 400;
   }
