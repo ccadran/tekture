@@ -44,7 +44,7 @@ onMounted(() => {
     }
   )
   gsap.fromTo(
-    '.location',
+    'footer .location',
     { opacity: 0 },
     {
       opacity: 1,

@@ -20,7 +20,6 @@ onMounted(() => {
       start: 'top top-=80%',
       end: 'top top-=80%',
       toggleActions: 'play none reverse none',
-      markers: true,
     },
   })
 

@@ -14,7 +14,6 @@ onMounted(() => {
       start: 'top top',
       end: 'bottom bottom+=10%',
       scrub: 0.6,
-      markers: true,
     },
   })
 
