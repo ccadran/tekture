@@ -5,47 +5,35 @@ import type { Project } from '~/types'
 
 const route = useRoute()
 const currentProject = ref<Project>()
-const currentFocusedImage = ref<number>(0)
+const currentFocusedImage = ref<number>(-1)
 const previousFocusedImage = ref<number>(0)
 const projectImages = ref<string[]>([])
+const imageRefs = shallowRef<HTMLElement[]>([])
 
-onMounted(async () => {
+onMounted(() => {
   currentProject.value = projectsData.find((project) => project.slug == route.params.slug)
   projectImages.value = currentProject.value!.images
   previousFocusedImage.value = projectImages.value.length - 1
 
-  await nextTick()
   enterAnim()
 })
 
 const enterAnim = () => {
-  const targetedImage = document.querySelector(`.image-slider.image--${currentFocusedImage.value}`)
-  targetedImage?.classList.add('active')
+  currentFocusedImage.value = 0
 }
 
 const nextImage = () => {
-  previousFocusedImage.value = currentFocusedImage.value
   currentFocusedImage.value = (currentFocusedImage.value + 1) % projectImages!.value.length
-  animateSliderImages()
+  changeActiveImage(currentFocusedImage.value)
 }
 const prevImage = () => {
-  previousFocusedImage.value = currentFocusedImage.value
   currentFocusedImage.value = (currentFocusedImage.value - 1 + projectImages!.value.length) % projectImages!.value.length
-  animateSliderImages()
+  changeActiveImage(currentFocusedImage.value)
 }
 
-const animateSliderImages = (targetImageIndex?: number) => {
-  const targetIndex = targetImageIndex ? targetImageIndex : currentFocusedImage.value
-  const targetedImage = document.querySelector(`.image-slider.image--${targetIndex}`)
-  const currentImage = document.querySelector(`.image-slider.active`)
-
-  targetedImage?.classList.add('active')
-
-  currentImage?.classList.remove('active')
-  if (targetImageIndex) {
-    currentFocusedImage.value = targetImageIndex
-    previousFocusedImage.value = (currentFocusedImage.value - 1 + projectImages!.value.length) % projectImages!.value.length
-  }
+const changeActiveImage = (targetImageIndex: number) => {
+  previousFocusedImage.value = currentFocusedImage.value
+  currentFocusedImage.value = targetImageIndex
 }
 </script>
 
@@ -68,7 +56,12 @@ const animateSliderImages = (targetImageIndex?: number) => {
     <div class="slider">
       <p @click="prevImage" class="slider-navigation prev">prev</p>
       <div class="slider-images">
-        <div v-for="(image, index) in currentProject?.images" :class="'image-slider image--' + index" @click="animateSliderImages(index)">
+        <div
+          v-for="(image, index) in currentProject?.images"
+          :ref="(el) => (imageRefs[index] = el as HTMLElement)"
+          :class="['image-slider', { active: index === currentFocusedImage }]"
+          @click="changeActiveImage(index)"
+        >
           <img :src="image" alt="" />
         </div>
       </div>
