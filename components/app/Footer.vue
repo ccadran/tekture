@@ -72,7 +72,7 @@ onMounted(() => {
 </template>
 
 <style lang="scss">
-footer {
+.footer {
   z-index: -1;
   height: 50vh;
   display: flex;

@@ -10,16 +10,33 @@ const previousFocusedImage = ref<number>(0)
 const projectImages = ref<string[]>([])
 const imageRefs = shallowRef<HTMLElement[]>([])
 
-onMounted(() => {
+onMounted(async () => {
   currentProject.value = projectsData.find((project) => project.slug == route.params.slug)
   projectImages.value = currentProject.value!.images
   previousFocusedImage.value = projectImages.value.length - 1
-
+  await nextTick()
   enterAnim()
 })
 
 const enterAnim = () => {
-  currentFocusedImage.value = 0
+  const enterTl = gsap.timeline({
+    onComplete() {
+      currentFocusedImage.value = 0
+    },
+  })
+  const images = imageRefs.value.map((el) => el.querySelector('img'))
+  enterTl.fromTo(
+    images,
+    { transform: 'translateX(-100%)', opacity: 0 },
+    {
+      transform: 'translateX(0%)',
+      opacity: 1,
+      stagger: {
+        each: 0.085,
+        ease: 'power1.in',
+      },
+    }
+  )
 }
 
 const nextImage = () => {
@@ -146,6 +163,7 @@ const changeActiveImage = (targetImageIndex: number) => {
         transform-origin: center bottom;
         height: 100%;
         aspect-ratio: 82/104;
+        overflow: hidden;
         &.active {
           transform: scale(1);
         }
