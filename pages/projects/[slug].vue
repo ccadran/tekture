@@ -68,7 +68,14 @@ const changeActiveImage = (targetImageIndex: number) => {
     </div>
     <div class="project-informations">
       <h1 class="title">{{ currentProject?.name }}</h1>
-      <p class="counter title">1/8</p>
+      <div class="counter title">
+        <div class="index-container">
+          <span class="prev-index">{{ ((currentFocusedImage - 1 + imageRefs.length) % imageRefs.length) + 1 }}</span>
+          <span class="current-index">{{ currentFocusedImage + 1 }}</span>
+          <span class="next-index">{{ ((currentFocusedImage + 1) % imageRefs.length) + 1 }}</span>
+        </div>
+        <span class="length">/ {{ imageRefs.length }}</span>
+      </div>
     </div>
     <div class="slider">
       <p @click="prevImage" class="slider-navigation prev">prev</p>
@@ -135,6 +142,10 @@ const changeActiveImage = (targetImageIndex: number) => {
     > .title,
     .counter {
       max-width: 20%;
+      display: flex;
+      > .index-container {
+        display: flex;
+      }
     }
   }
   > .slider {
