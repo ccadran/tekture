@@ -6,16 +6,19 @@ import type { Project } from '~/types'
 const route = useRoute()
 const currentProject = ref<Project>()
 const currentFocusedImage = ref<number>(-1)
-const previousFocusedImage = ref<number>(0)
+
 const projectImages = ref<string[]>([])
 const imageRefs = shallowRef<HTMLElement[]>([])
 
 onMounted(async () => {
   currentProject.value = projectsData.find((project) => project.slug == route.params.slug)
   projectImages.value = currentProject.value!.images
-  previousFocusedImage.value = projectImages.value.length - 1
+
   await nextTick()
   enterAnim()
+  setTimeout(() => {
+    // animateIndexChange()
+  }, 200)
 })
 
 const enterAnim = () => {
@@ -40,17 +43,40 @@ const enterAnim = () => {
 }
 
 const nextImage = () => {
-  currentFocusedImage.value = (currentFocusedImage.value + 1) % projectImages!.value.length
-  changeActiveImage(currentFocusedImage.value)
+  const newImage = (currentFocusedImage.value + 1) % projectImages!.value.length
+  changeActiveImage(newImage)
 }
 const prevImage = () => {
-  currentFocusedImage.value = (currentFocusedImage.value - 1 + projectImages!.value.length) % projectImages!.value.length
-  changeActiveImage(currentFocusedImage.value)
+  const newImage = (currentFocusedImage.value - 1 + projectImages!.value.length) % projectImages!.value.length
+  changeActiveImage(newImage)
 }
 
 const changeActiveImage = (targetImageIndex: number) => {
-  previousFocusedImage.value = currentFocusedImage.value
+  animateIndexChange(currentFocusedImage.value, targetImageIndex)
   currentFocusedImage.value = targetImageIndex
+}
+
+const animateIndexChange = (previousIndex: number, targetIndex: number) => {
+  const indexWrapper = document.querySelector('.index-wrapper')
+  const allIndexes = indexWrapper?.querySelectorAll('.index')
+
+  if (!allIndexes || allIndexes.length === 0) return
+
+  let isProgressing = targetIndex > previousIndex
+  if (Math.abs(targetIndex - previousIndex) > 1) {
+    if (targetIndex - previousIndex > 1) {
+      isProgressing = true
+    } else {
+      isProgressing = false
+    }
+  }
+  console.log(targetIndex - previousIndex)
+
+  const indexTl = gsap.timeline({ defaults: { duration: 0.3, ease: 'power1.inOut' } })
+
+  indexTl
+    .to(allIndexes[previousIndex], { x: isProgressing ? '-100%' : '100%' })
+    .fromTo(allIndexes[targetIndex], { x: isProgressing ? '100%' : '-100%' }, { x: '0%' }, 0.1)
 }
 </script>
 
@@ -70,9 +96,11 @@ const changeActiveImage = (targetImageIndex: number) => {
       <h1 class="title">{{ currentProject?.name }}</h1>
       <div class="counter title">
         <div class="index-container">
-          <span class="prev-index">{{ ((currentFocusedImage - 1 + imageRefs.length) % imageRefs.length) + 1 }}</span>
-          <span class="current-index">{{ currentFocusedImage + 1 }}</span>
-          <span class="next-index">{{ ((currentFocusedImage + 1) % imageRefs.length) + 1 }}</span>
+          <div class="index-wrapper">
+            <span class="index" v-for="i in imageRefs.length" :key="i" :class="{ active: i - 1 === currentFocusedImage }">
+              {{ i }}
+            </span>
+          </div>
         </div>
         <span class="length">/ {{ imageRefs.length }}</span>
       </div>
@@ -144,7 +172,25 @@ const changeActiveImage = (targetImageIndex: number) => {
       max-width: 20%;
       display: flex;
       > .index-container {
-        display: flex;
+        width: 40px;
+        overflow: hidden;
+        position: relative;
+        margin-right: 6px;
+        > .index-wrapper {
+          position: relative;
+          display: flex;
+          > .index {
+            width: 40px;
+
+            text-align: center;
+            position: absolute;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            &.active {
+              opacity: 1;
+            }
+          }
+        }
       }
     }
   }
