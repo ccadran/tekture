@@ -21,7 +21,7 @@ onMounted(async () => {
   }, 200)
 })
 
-const enterAnim = () => {
+function enterAnim() {
   const enterTl = gsap.timeline({
     onComplete() {
       currentFocusedImage.value = 0
@@ -42,21 +42,21 @@ const enterAnim = () => {
   )
 }
 
-const nextImage = () => {
+function nextImage() {
   const newImage = (currentFocusedImage.value + 1) % projectImages!.value.length
   changeActiveImage(newImage)
 }
-const prevImage = () => {
+function prevImage() {
   const newImage = (currentFocusedImage.value - 1 + projectImages!.value.length) % projectImages!.value.length
   changeActiveImage(newImage)
 }
 
-const changeActiveImage = (targetImageIndex: number) => {
+function changeActiveImage(targetImageIndex: number) {
   animateIndexChange(currentFocusedImage.value, targetImageIndex)
   currentFocusedImage.value = targetImageIndex
 }
 
-const animateIndexChange = (previousIndex: number, targetIndex: number) => {
+function animateIndexChange(previousIndex: number, targetIndex: number) {
   const indexWrapper = document.querySelector('.index-wrapper')
   const allIndexes = indexWrapper?.querySelectorAll('.index')
 
@@ -75,8 +75,8 @@ const animateIndexChange = (previousIndex: number, targetIndex: number) => {
   const indexTl = gsap.timeline({ defaults: { duration: 0.3, ease: 'power1.inOut' } })
 
   indexTl
-    .to(allIndexes[previousIndex], { x: isProgressing ? '-100%' : '100%' })
-    .fromTo(allIndexes[targetIndex], { x: isProgressing ? '100%' : '-100%' }, { x: '0%' }, 0.1)
+    .to(allIndexes[previousIndex], { x: isProgressing ? '100%' : '-100%' })
+    .fromTo(allIndexes[targetIndex], { x: isProgressing ? '-100%' : '100%' }, { x: '0%' }, 0.1)
 }
 </script>
 
@@ -97,12 +97,12 @@ const animateIndexChange = (previousIndex: number, targetIndex: number) => {
       <div class="counter title">
         <div class="index-container">
           <div class="index-wrapper">
-            <span class="index" v-for="i in imageRefs.length" :key="i" :class="{ active: i - 1 === currentFocusedImage }">
+            <span class="index" v-for="i in projectImages.length" :key="i" :class="{ active: i - 1 === currentFocusedImage }">
               {{ i }}
             </span>
           </div>
         </div>
-        <span class="length">/ {{ imageRefs.length }}</span>
+        <span class="length">/ {{ projectImages.length }}</span>
       </div>
     </div>
     <div class="slider">

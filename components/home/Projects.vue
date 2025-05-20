@@ -30,7 +30,7 @@ onMounted(() => {
   changeProjectOnScroll()
 })
 
-const projectsEnter = (index: number) => {
+function projectsEnter(index: number) {
   const projectsSection = document.querySelector('.projects')
   const projectsContent = document.querySelector('.project-layout') as HTMLElement
 
@@ -85,7 +85,7 @@ const projectsEnter = (index: number) => {
     )
 }
 
-const changeProjectOnScroll = () => {
+function changeProjectOnScroll() {
   const projectsSection = document.querySelector('.projects')
   let lastStep = -1
   let step = 1 / projectsData.length
@@ -104,7 +104,7 @@ const changeProjectOnScroll = () => {
   })
 }
 
-const projectIn = (index: number, isProjectsEnter?: boolean) => {
+function projectIn(index: number, isProjectsEnter?: boolean) {
   const { targetProject, titleChars, descriptionLines, leftImage, rightImage } = getProjectElements(index)
 
   const tl = gsap
@@ -125,7 +125,7 @@ const projectIn = (index: number, isProjectsEnter?: boolean) => {
   return tl
 }
 
-const projectOut = (index: number) => {
+function projectOut(index: number) {
   const { targetProject } = getProjectElements(index)
   gsap
     .timeline()
@@ -136,7 +136,7 @@ const projectOut = (index: number) => {
   navItemActive?.classList.remove('active')
 }
 
-const moveMarkers = (index: number) => {
+function moveMarkers(index: number) {
   const currentNavItem = document.querySelector(`.nav-project--${index}`)?.getBoundingClientRect()
   const projectsNavRect = projectsNav.value?.getBoundingClientRect()
   const relativeTop = currentNavItem!.top - projectsNavRect!.top
@@ -145,7 +145,7 @@ const moveMarkers = (index: number) => {
   gsap.to(navMarkers.value, { top: relativeTop, width: currentNavItemWidth + 40 })
 }
 
-const wrapLinesWithInner = () => {
+function wrapLinesWithInner() {
   const lineElements = document.querySelectorAll('.line')
 
   lineElements.forEach((line) => {
@@ -155,7 +155,7 @@ const wrapLinesWithInner = () => {
   })
 }
 
-const getProjectElements = (index: number) => {
+function getProjectElements(index: number) {
   const targetProject = document.querySelector(`.project--${index}`) as HTMLElement
   return {
     targetProject,
@@ -165,7 +165,7 @@ const getProjectElements = (index: number) => {
     rightImage: targetProject?.querySelector('.right-images .project-image'),
   }
 }
-const changeProject = (index: number) => {
+function changeProject(index: number) {
   if (index === activeProjectIndex.value) return
   projectOut(activeProjectIndex.value)
   projectIn(index)
@@ -173,7 +173,7 @@ const changeProject = (index: number) => {
   moveMarkers(index)
 }
 
-const scrollToProject = (index: number) => {
+function scrollToProject(index: number) {
   const sectionStart = projectsSection.value!.offsetTop
   const totalScrollable = projectsSection.value!.scrollHeight - window.innerHeight
   const step = totalScrollable / projectsData.length + 1

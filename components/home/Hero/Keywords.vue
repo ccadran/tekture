@@ -12,7 +12,7 @@ onMounted(() => {
 
 let currentTextIndex = 0
 
-const textShuffleLoop = () => {
+function textShuffleLoop() {
   const ref = keyWordsRefs.value[currentTextIndex]
   const currentWordIndex = currentIndices.value[currentTextIndex]
   const nextWordIndex = (currentWordIndex + 1) % keyWords.length

@@ -31,7 +31,7 @@ const mouseTracking = reactive({
   isMoving: false,
 })
 
-const handleMouseMove = (e: MouseEvent) => {
+function handleMouseMove(e: MouseEvent) {
   const rect = imageContainerRef.value!.getBoundingClientRect()
 
   const isInBounds = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom
@@ -47,7 +47,7 @@ const handleMouseMove = (e: MouseEvent) => {
   }
 }
 
-const updateMouseAnimation = () => {
+function updateMouseAnimation() {
   const m = mouseTracking
 
   if (m.isMoving && m.previous.x !== null) {

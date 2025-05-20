@@ -4,36 +4,32 @@ import gsap from 'gsap'
 import { TextPlugin } from 'gsap/TextPlugin'
 
 interface Props {
-  from?: string // Maintenant optionnel
-  to?: string // Maintenant optionnel
+  from?: string
+  to?: string
   duration?: number
   steps?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  from: '', // Valeur par défaut vide
-  to: '', // Valeur par défaut vide  z
+  from: '',
+  to: '',
   duration: 1,
   steps: 10,
 })
 
-// Register GSAP plugin
 gsap.registerPlugin(TextPlugin)
 
-// References
 const textElement = ref<HTMLElement | null>(null)
-const displayText = ref(props.from || '') // Utilisez une chaîne vide si from n'est pas défini
+const displayText = ref(props.from || '')
 
 function animate({ fromText = props.from, toText = props.to }: { fromText?: string; toText?: string } = {}) {
   if (!textElement.value) return
 
-  // Met à jour le texte initial
   displayText.value = fromText
 
   const tl = gsap.timeline()
   const interval = props.duration / props.steps
 
-  // Animation intermédiaire avec caractères aléatoires
   for (let i = 0; i < props.steps - 1; i++) {
     tl.to(textElement.value, {
       duration: interval,
