@@ -212,7 +212,7 @@ function scrollToProject(index: number) {
           </li>
         </ul>
       </nav>
-      <HomeProjectsItem v-for="(project, index) in projectsData" :project="project" :index="index" />
+      <HomeProjectsItem v-for="(project, index) in projectsData" :project="project" :index="index" :activeProject="activeProjectIndex" />
     </div>
   </section>
 </template>

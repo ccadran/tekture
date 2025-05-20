@@ -9,12 +9,15 @@ const currentFocusedImage = ref<number>(-1)
 
 const projectImages = ref<string[]>([])
 const imageRefs = shallowRef<HTMLElement[]>([])
+const focusedContent = ref<HTMLElement>()
+const focusedImage = ref<HTMLElement>()
 
 onMounted(async () => {
   currentProject.value = projectsData.find((project) => project.slug == route.params.slug)
   projectImages.value = currentProject.value!.images
 
   await nextTick()
+  currentFocusedImage.value = 0
   enterAnim()
   setTimeout(() => {
     // animateIndexChange()
@@ -24,22 +27,36 @@ onMounted(async () => {
 function enterAnim() {
   const enterTl = gsap.timeline({
     onComplete() {
-      currentFocusedImage.value = 0
+      // currentFocusedImage.value = 0
     },
   })
   const images = imageRefs.value.map((el) => el.querySelector('img'))
-  enterTl.fromTo(
-    images,
-    { transform: 'translateX(-100%)', opacity: 0 },
-    {
-      transform: 'translateX(0%)',
-      opacity: 1,
-      stagger: {
-        each: 0.085,
-        ease: 'power1.in',
+  enterTl
+    .fromTo(focusedImage.value!, { scale: 1.3 }, { scale: 1, delay: 1 })
+    .fromTo(
+      focusedContent.value!,
+      {
+        transform: 'translate(-50%,-50%)',
+        top: '50%',
       },
-    }
-  )
+      {
+        transform: 'translate(-50%,-30%)',
+        top: '30%',
+      },
+      '<'
+    )
+    .fromTo(
+      images,
+      { transform: 'translateX(-100%)', opacity: 0 },
+      {
+        transform: 'translateX(0%)',
+        opacity: 1,
+        stagger: {
+          each: 0.085,
+          ease: 'power1.in',
+        },
+      }
+    )
 }
 
 function nextImage() {
@@ -82,8 +99,8 @@ function animateIndexChange(previousIndex: number, targetIndex: number) {
 
 <template>
   <main class="main">
-    <div class="focused-content">
-      <div class="focused-image">
+    <div ref="focusedContent" class="focused-content">
+      <div ref="focusedImage" class="focused-image">
         <img :src="currentProject?.images[currentFocusedImage]" alt="" />
       </div>
       <div class="utils-project-informations">
@@ -130,7 +147,8 @@ function animateIndexChange(previousIndex: number, targetIndex: number) {
     position: absolute;
     top: 30%;
     left: 50%;
-    transform: translate(-50%, -30%);
+    // transform: translate(-50%, -30%);
+
     width: 30%;
     display: flex;
     flex-direction: column;

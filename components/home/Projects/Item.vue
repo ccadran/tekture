@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import gsap from 'gsap'
 const props = defineProps({
   project: {
     type: Object,
@@ -8,7 +9,41 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  activeProject: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
 })
+
+const leftImage = ref<HTMLElement>()
+const rightImage = ref<HTMLElement>()
+onMounted(() => {
+  leftImage.value = document.querySelector(`.project-content.project--${props.activeProject} .left-images .project-image`) as HTMLElement
+  rightImage.value = document.querySelector(`.project-content.project--${props.activeProject} .right-images .project-image`) as HTMLElement
+})
+
+watch(
+  () => props.activeProject,
+  () => {
+    leftImage.value = document.querySelector(`.project-content.project--${props.activeProject} .left-images .project-image`) as HTMLElement
+    rightImage.value = document.querySelector(`.project-content.project--${props.activeProject} .right-images .project-image`) as HTMLElement
+    console.log(leftImage.value.querySelector('img'))
+  }
+)
+function exitTransition() {
+  const extiTl = gsap.timeline()
+  const focusedImage = leftImage.value!.querySelector('img')
+
+  extiTl
+    .to(leftImage.value!, { height: '60vh', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', ease: 'power1.inOut' })
+    .to(rightImage.value!, { top: '50%', left: '50%', transform: 'translate(-50%,-50%)', ease: 'power1.inOut' }, 0)
+    .to(focusedImage, { scale: 1.3 }, 0)
+}
+
+setTimeout(() => {
+  exitTransition()
+}, 2000)
 </script>
 
 <template>
@@ -77,29 +112,31 @@ const props = defineProps({
     .top {
       left: 72px;
       top: 10vh;
-      width: 254px;
+      height: 317px;
       aspect-ratio: 254/317;
     }
     .bottom {
       left: 72px;
       bottom: 10vh;
-      width: 394px;
+
+      height: 277px;
       aspect-ratio: 394/277;
     }
   }
   > .right-images {
+    z-index: -1;
     .top {
       position: absolute;
       right: 72px;
       top: 10vh;
-      width: 254px;
       aspect-ratio: 254/317;
+      height: 317px;
     }
     .bottom {
       position: absolute;
       right: 72px;
       bottom: 10vh;
-      width: 394px;
+      height: 277px;
       aspect-ratio: 394/277;
     }
   }
