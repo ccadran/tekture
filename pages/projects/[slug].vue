@@ -55,6 +55,10 @@ function enterAnim() {
           each: 0.085,
           ease: 'power1.in',
         },
+        onComplete() {
+          const informations = document.querySelector('.utils-project-informations') as HTMLElement
+          informations!.style.display = 'flex'
+        },
       }
     )
 }
@@ -145,9 +149,9 @@ function animateIndexChange(previousIndex: number, targetIndex: number) {
   background-color: white;
   > .focused-content {
     position: absolute;
-    top: 30%;
+    top: 50%;
     left: 50%;
-    // transform: translate(-50%, -30%);
+    transform: translate(-50%, -50%);
 
     width: 30%;
     display: flex;
@@ -156,6 +160,8 @@ function animateIndexChange(previousIndex: number, targetIndex: number) {
     align-items: center;
     > .focused-image {
       height: 60vh;
+      aspect-ratio: 254/317;
+      transform: scale(1.3);
 
       > img {
         height: 100%;
@@ -165,6 +171,7 @@ function animateIndexChange(previousIndex: number, targetIndex: number) {
     }
     > .utils-project-informations {
       display: flex;
+      display: none;
       gap: 8px;
       align-items: center;
       font-size: 14px;
