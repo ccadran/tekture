@@ -11,10 +11,18 @@ const projectImages = ref<string[]>([])
 const imageRefs = shallowRef<HTMLElement[]>([])
 const focusedContent = ref<HTMLElement>()
 const focusedImage = ref<HTMLElement>()
-
+const currentProjectIndex = computed(() => projectsData.findIndex((project) => project.slug === route.params.slug))
+const isEven = currentProjectIndex.value % 2 === 0
 onMounted(async () => {
-  currentProject.value = projectsData.find((project) => project.slug == route.params.slug)
-  projectImages.value = currentProject.value!.images
+  console.log('even', isEven)
+
+  currentProject.value = projectsData[currentProjectIndex.value]
+
+  // invert first two pictures
+  projectImages.value = [...currentProject.value!.images]
+  if (projectImages.value.length > 1 && !isEven) {
+    ;[projectImages.value[0], projectImages.value[1]] = [projectImages.value[1], projectImages.value[0]]
+  }
 
   await nextTick()
   currentFocusedImage.value = 0
@@ -22,11 +30,7 @@ onMounted(async () => {
 })
 
 function enterAnim() {
-  const enterTl = gsap.timeline({
-    onComplete() {
-      // currentFocusedImage.value = 0
-    },
-  })
+  const enterTl = gsap.timeline({})
   const images = imageRefs.value.map((el) => el.querySelector('img'))
   enterTl
     .fromTo(focusedImage.value!, { scale: 1.3 }, { scale: 1, delay: 1 })
@@ -102,7 +106,7 @@ function animateIndexChange(previousIndex: number, targetIndex: number) {
   <main class="main">
     <div ref="focusedContent" class="focused-content">
       <div ref="focusedImage" class="focused-image">
-        <img :src="currentProject?.images[currentFocusedImage]" alt="" />
+        <img :src="projectImages[currentFocusedImage]" alt="" />
       </div>
       <div class="utils-project-informations">
         <p class="location">{{ currentProject?.location }}</p>
@@ -127,7 +131,7 @@ function animateIndexChange(previousIndex: number, targetIndex: number) {
       <p @click="prevImage" class="slider-navigation prev">prev</p>
       <div class="slider-images">
         <div
-          v-for="(image, index) in currentProject?.images"
+          v-for="(image, index) in projectImages"
           :ref="(el) => (imageRefs[index] = el as HTMLElement)"
           :class="['image-slider', { active: index === currentFocusedImage }]"
           @click="changeActiveImage(index)"

@@ -1,70 +1,57 @@
 <script lang="ts" setup>
 import gsap from 'gsap'
-const props = defineProps({
-  project: {
-    type: Object,
-    required: true,
-  },
-  index: {
-    type: Number,
-    required: true,
-  },
-  activeProject: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
+import type { Project } from '~/types'
+
+interface ProjectItem {
+  project: Project
+  index: number
+  activeProject: number
+}
+const props = withDefaults(defineProps<ProjectItem>(), {
+  activeProject: 0,
 })
 
 const leftImage = ref<HTMLElement>()
 const rightImage = ref<HTMLElement>()
-onMounted(() => {
-  leftImage.value = document.querySelector(`.project-content.project--${props.activeProject} .left-images .project-image`) as HTMLElement
-  rightImage.value = document.querySelector(`.project-content.project--${props.activeProject} .right-images .project-image`) as HTMLElement
-})
 
-watch(
-  () => props.activeProject,
-  () => {
-    leftImage.value = document.querySelector(`.project-content.project--${props.activeProject} .left-images .project-image`) as HTMLElement
-    rightImage.value = document.querySelector(`.project-content.project--${props.activeProject} .right-images .project-image`) as HTMLElement
-    console.log(leftImage.value.querySelector('img'))
-  }
-)
+const isEven = computed(() => props.index % 2 === 0)
+
 function exitTransition(destination: string) {
   const extiTl = gsap.timeline({
     onComplete() {
-      console.log('yoo')
-
       navigateTo(`/projects/${destination}`)
     },
   })
-  const focusedImage = leftImage.value!.querySelector('img')
 
-  extiTl
-    .to(leftImage.value!, { height: '60vh', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', scale: 1.3, ease: 'power1.inOut' })
-    .to(rightImage.value!, { top: '50%', left: '50%', transform: 'translate(-50%,-50%)', ease: 'power1.inOut' }, 0)
-  // .to(focusedImage, { scale: 1.3 }, 0)
+  if (isEven.value) {
+    extiTl
+      .to(leftImage.value!, { height: '60vh', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', scale: 1.3, ease: 'power1.inOut' })
+      .to(rightImage.value!, { top: '50%', left: '50%', transform: 'translate(-50%,-50%)', ease: 'power1.inOut' }, 0)
+  } else {
+    extiTl
+      .to(rightImage.value!, { height: '60vh', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', scale: 1.3, ease: 'power1.inOut' })
+      .to(leftImage.value!, { top: '50%', left: '50%', transform: 'translate(-50%,-50%)', ease: 'power1.inOut' }, 0)
+  }
 }
 </script>
 
 <template>
-  <div :class="'project-content project--' + index">
+  <div :class="['project-content', `project--${index}`]">
     <div class="project-text">
       <h2 class="title">{{ project.name }}</h2>
-      <!-- <NuxtLink :to="'/projects/' + project.slug">Test</NuxtLink> -->
+
       <h4 @click="exitTransition(project.slug)">NAVIGUE</h4>
 
       <p class="description">{{ project.description }}</p>
     </div>
 
-    <div class="left-images">
-      <div class="project-image" :class="index % 2 === 0 ? 'top' : 'bottom'">
+    <div class="left-images" :class="{ '-even': isEven }">
+      <div ref="leftImage" class="project-image" :class="isEven ? 'top' : 'bottom'">
         <img :src="project.images[0]" alt="" />
       </div>
     </div>
-    <div class="right-images">
-      <div class="project-image" :class="index % 2 === 0 ? 'bottom' : 'top'">
+    <div class="right-images" :class="{ '-even': isEven }">
+      <div ref="rightImage" class="project-image" :class="isEven ? 'bottom' : 'top'">
         <img :src="project.images[1]" alt="" />
       </div>
     </div>
@@ -112,6 +99,7 @@ function exitTransition(destination: string) {
     }
   }
   > .left-images {
+    z-index: -1;
     .top {
       left: 72px;
       top: 10vh;
@@ -125,9 +113,11 @@ function exitTransition(destination: string) {
       height: 277px;
       aspect-ratio: 394/277;
     }
+    &.-even {
+      z-index: 0;
+    }
   }
   > .right-images {
-    z-index: -1;
     .top {
       position: absolute;
       right: 72px;
@@ -141,6 +131,9 @@ function exitTransition(destination: string) {
       bottom: 10vh;
       height: 277px;
       aspect-ratio: 394/277;
+    }
+    &.-even {
+      z-index: -1;
     }
   }
 }

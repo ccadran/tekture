@@ -27,6 +27,7 @@ export function useProjectAnimation() {
 
   function projectIn(index: number, isProjectsEnter: boolean, navigationRef?: Ref) {
     const { targetProject, descriptionLines, titleChars, leftImage, rightImage } = getElement(index)
+
     const tl = gsap
       .timeline()
       .set(targetProject, { zIndex: projectsData.length, opacity: 1, display: 'flex' })
@@ -109,7 +110,6 @@ export function useProjectAnimation() {
   function moveMarkers(index: number) {
     const { projectsNav, navMarkers } = getElement(index)
     const currentNavItem = document.querySelector(`.nav-project--${index}`)?.getBoundingClientRect()
-    console.log(currentNavItem, index)
 
     const projectsNavRect = projectsNav.getBoundingClientRect()
     const relativeTop = currentNavItem!.top - projectsNavRect!.top

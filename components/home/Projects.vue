@@ -7,14 +7,14 @@ import projectsData from '~/assets/data/projects.json'
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
 
-const { projectsEnter, projectIn, projectOut, moveMarkers, scrollToProject, wrapLinesWithInner } = useProjectAnimation()
 const activeProjectIndex = ref<number>(0)
 
 const projectsSection = ref<HTMLElement | null>(null)
 
 const navigationRef = ref()
 
-onMounted(() => {
+const { projectsEnter, projectIn, projectOut, moveMarkers, scrollToProject, wrapLinesWithInner } = useProjectAnimation()
+onMounted(async () => {
   new SplitType('.description ', { types: 'lines' })
   new SplitType('.title ', { types: 'chars' })
 
