@@ -19,9 +19,6 @@ onMounted(async () => {
   await nextTick()
   currentFocusedImage.value = 0
   enterAnim()
-  setTimeout(() => {
-    // animateIndexChange()
-  }, 200)
 })
 
 function enterAnim() {

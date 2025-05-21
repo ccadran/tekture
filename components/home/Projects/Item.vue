@@ -46,10 +46,6 @@ function exitTransition(destination: string) {
     .to(rightImage.value!, { top: '50%', left: '50%', transform: 'translate(-50%,-50%)', ease: 'power1.inOut' }, 0)
   // .to(focusedImage, { scale: 1.3 }, 0)
 }
-
-// setTimeout(() => {
-//   exitTransition()
-// }, 2000)
 </script>
 
 <template>
