@@ -7,30 +7,20 @@ import projectsData from '~/assets/data/projects.json'
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
 
+const { projectsEnter, projectIn, projectOut, moveMarkers, scrollToProject, wrapLinesWithInner } = useProjectAnimation()
 const activeProjectIndex = ref<number>(0)
 
 const projectsSection = ref<HTMLElement | null>(null)
-const projectsContent = ref<HTMLElement | null>(null)
-const navigationRef = ref()
 
-/**
- * ANIMATE ELEMENT
- */
-const projectsNav = ref<HTMLElement | null>(null)
-const navMarkers = ref<HTMLElement | null>(null)
+const navigationRef = ref()
 
 onMounted(() => {
   new SplitType('.description ', { types: 'lines' })
   new SplitType('.title ', { types: 'chars' })
-  const { wrapLinesWithInner } = useProjectAnimation()
 
   wrapLinesWithInner()
-  projectsNav.value = document.querySelector('.projects-navigation')
-  navMarkers.value = document.querySelector('.markers')
-  projectsSection.value = document.querySelector('.projects')
-  projectsContent.value = document.querySelector('.project-layout')
 
-  const { projectsEnter, moveMarkers } = useProjectAnimation()
+  projectsSection.value = document.querySelector('.projects')
 
   projectsEnter(activeProjectIndex.value)
   moveMarkers(activeProjectIndex.value)
@@ -57,8 +47,6 @@ function changeProjectOnScroll() {
 }
 
 function changeProject(index: number) {
-  const { projectIn, moveMarkers } = useProjectAnimation()
-  const { projectOut } = useProjectAnimation()
   if (index === activeProjectIndex.value) return
   projectOut(activeProjectIndex.value)
   projectIn(index, false, navigationRef)
@@ -67,7 +55,6 @@ function changeProject(index: number) {
 }
 
 function handleScrollToProject(index: number) {
-  const { scrollToProject } = useProjectAnimation()
   scrollToProject(index)
 }
 </script>
