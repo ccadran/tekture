@@ -22,16 +22,18 @@ const navMarkers = ref<HTMLElement | null>(null)
 onMounted(() => {
   new SplitType('.description ', { types: 'lines' })
   new SplitType('.title ', { types: 'chars' })
+  const { wrapLinesWithInner } = useProjectAnimation()
+
   wrapLinesWithInner()
   projectsNav.value = document.querySelector('.projects-navigation')
   navMarkers.value = document.querySelector('.markers')
   projectsSection.value = document.querySelector('.projects')
   projectsContent.value = document.querySelector('.project-layout')
 
-  const { projectsEnter, moveMarkers } = useProjectAnimation(activeProjectIndex.value)
+  const { projectsEnter, moveMarkers } = useProjectAnimation()
 
-  projectsEnter()
-  moveMarkers()
+  projectsEnter(activeProjectIndex.value)
+  moveMarkers(activeProjectIndex.value)
   changeProjectOnScroll()
 })
 
@@ -54,24 +56,14 @@ function changeProjectOnScroll() {
   })
 }
 
-function wrapLinesWithInner() {
-  const lineElements = document.querySelectorAll('.line')
-
-  lineElements.forEach((line) => {
-    const content = line.innerHTML
-
-    line.innerHTML = `<div class="inner">${content}</div>`
-  })
-}
-
 function changeProject(index: number) {
-  const { projectIn, moveMarkers } = useProjectAnimation(index)
-  const { projectOut } = useProjectAnimation(activeProjectIndex.value)
+  const { projectIn, moveMarkers } = useProjectAnimation()
+  const { projectOut } = useProjectAnimation()
   if (index === activeProjectIndex.value) return
   projectOut(activeProjectIndex.value)
-  projectIn(false, navigationRef)
+  projectIn(index, false, navigationRef)
   activeProjectIndex.value = index
-  moveMarkers()
+  moveMarkers(index)
 }
 
 function handleScrollToProject(index: number) {

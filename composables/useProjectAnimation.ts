@@ -4,8 +4,8 @@ gsap.registerPlugin(ScrollTrigger)
 
 import projectsData from '~/assets/data/projects.json'
 
-export function useProjectAnimation(index?: number) {
-  const element = computed(() => {
+export function useProjectAnimation() {
+  function getElement(index?: number) {
     const targetProject = document.querySelector(`.project--${index}`) as HTMLElement
     const projectsSection = document.querySelector('.projects') as HTMLElement
     const projectsContent = document.querySelector('.project-layout') as HTMLElement
@@ -23,10 +23,10 @@ export function useProjectAnimation(index?: number) {
       navMarkers,
       projectsNav,
     }
-  })
+  }
 
-  function projectIn(isProjectsEnter: boolean, navigationRef?: Ref) {
-    const { targetProject, descriptionLines, titleChars, leftImage, rightImage } = element.value
+  function projectIn(index: number, isProjectsEnter: boolean, navigationRef?: Ref) {
+    const { targetProject, descriptionLines, titleChars, leftImage, rightImage } = getElement(index)
     const tl = gsap
       .timeline()
       .set(targetProject, { zIndex: projectsData.length, opacity: 1, display: 'flex' })
@@ -45,7 +45,7 @@ export function useProjectAnimation(index?: number) {
   }
 
   function projectOut(index: number) {
-    const { targetProject } = element.value
+    const { targetProject } = getElement(index)
     gsap
       .timeline()
       .to(targetProject, { opacity: 0, duration: 0.5, ease: 'power1.out' })
@@ -55,8 +55,8 @@ export function useProjectAnimation(index?: number) {
     navItemActive?.classList.remove('active')
   }
 
-  function projectsEnter() {
-    const { projectsSection, projectsContent, navMarkers } = element.value
+  function projectsEnter(index: number) {
+    const { projectsSection, projectsContent, navMarkers } = getElement()
     ScrollTrigger.create({
       trigger: projectsSection,
       start: 'top bottom-=10%',
@@ -91,7 +91,7 @@ export function useProjectAnimation(index?: number) {
         }
       )
 
-      .add(projectIn(true), 0.05)
+      .add(projectIn(index, true), 0.05)
       .fromTo(
         navMarkers,
         { opacity: 0 },
@@ -106,9 +106,11 @@ export function useProjectAnimation(index?: number) {
       )
   }
 
-  function moveMarkers() {
-    const { projectsNav, navMarkers } = element.value
+  function moveMarkers(index: number) {
+    const { projectsNav, navMarkers } = getElement(index)
     const currentNavItem = document.querySelector(`.nav-project--${index}`)?.getBoundingClientRect()
+    console.log(currentNavItem, index)
+
     const projectsNavRect = projectsNav.getBoundingClientRect()
     const relativeTop = currentNavItem!.top - projectsNavRect!.top
     const currentNavItemWidth = currentNavItem!.width
@@ -117,7 +119,7 @@ export function useProjectAnimation(index?: number) {
   }
 
   function scrollToProject(index: number) {
-    const { projectsSection } = element.value
+    const { projectsSection } = getElement()
     const sectionStart = projectsSection.offsetTop
     const totalScrollable = projectsSection.scrollHeight - window.innerHeight
     const step = totalScrollable / projectsData.length + 1
@@ -129,5 +131,15 @@ export function useProjectAnimation(index?: number) {
     })
   }
 
-  return { projectIn, projectOut, projectsEnter, moveMarkers, scrollToProject }
+  function wrapLinesWithInner() {
+    const lineElements = document.querySelectorAll('.line')
+
+    lineElements.forEach((line) => {
+      const content = line.innerHTML
+
+      line.innerHTML = `<div class="inner">${content}</div>`
+    })
+  }
+
+  return { projectIn, projectOut, projectsEnter, moveMarkers, scrollToProject, wrapLinesWithInner }
 }
