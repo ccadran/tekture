@@ -4,6 +4,11 @@ import SplitType from 'split-type'
 import projectsData from '~/assets/data/projects.json'
 import type { Project } from '~/types'
 
+import { SplitText } from 'gsap/SplitText'
+import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin'
+gsap.registerPlugin(ScrambleTextPlugin)
+
+gsap.registerPlugin(SplitText)
 const route = useRoute()
 const currentProject = ref<Project>()
 const currentFocusedImage = ref<number>(-1)
@@ -13,6 +18,7 @@ const projectImages = ref<string[]>([])
 const imageRefs = shallowRef<HTMLElement[]>([])
 const focusedContent = ref<HTMLElement>()
 const focusedImage = ref<HTMLElement>()
+const splitedText = ref()
 const prevNavigation = ref()
 const nextNavigation = ref()
 
@@ -30,15 +36,34 @@ onMounted(async () => {
 
   await nextTick()
 
+  splitedText.value = new SplitText('.project-name', { type: 'words', autoSplit: true, wordsClass: 'word++' })
+
   currentFocusedImage.value = 0
   enterAnim()
 })
 
 function enterAnim() {
-  const enterTl = gsap.timeline({})
+  const projectNameTl = gsap.timeline()
+
+  //timeline of the anim of each word of the project name
+  splitedText.value.words.forEach((word: HTMLElement) => {
+    projectNameTl.to(
+      word,
+      {
+        duration: 1,
+        scrambleText: {
+          text: word.textContent as string,
+          tweenLength: true,
+        },
+      },
+      0
+    )
+  })
+
+  const enterTl = gsap.timeline({ delay: 1 })
   const images = imageRefs.value.map((el) => el.querySelector('img'))
   enterTl
-    .fromTo(focusedImage.value!, { scale: 1.3 }, { scale: 1, delay: 1 })
+    .fromTo(focusedImage.value!, { scale: 1.3 }, { scale: 1 })
     .fromTo(
       focusedContent.value!,
       {
@@ -52,31 +77,53 @@ function enterAnim() {
           gsap.set('.utils-project-informations', { display: 'flex' })
         },
       },
-      '<'
+      0
     )
+    .add(projectNameTl, 0)
     .fromTo(
       projectTitle.value,
       { opacity: 0 },
       {
         opacity: 1,
+        duration: 1.5,
+        onComplete() {
+          currentFocusedSliderImage.value = 0
+        },
       },
-      '<'
+      0
+    )
+    .fromTo(
+      images,
+      { transform: 'translateX(-100%)', opacity: 0 },
+      {
+        transform: 'translateX(0%)',
+        opacity: 1,
+        duration: 1.25,
+        stagger: {
+          each: 0.085,
+          ease: 'power1.in',
+        },
+      },
+      0.15
     )
     .fromTo(
       '.counter',
       { opacity: 0 },
       {
         opacity: 1,
+        duration: 1.5,
       },
-      '<'
+      0.75
     )
+    .add(prevNavigation.value.animate(), 1)
+    .add(nextNavigation.value.animate(), 1.15)
     .fromTo(
       '.slider-navigation.prev',
       { opacity: 0 },
       {
         opacity: 1,
       },
-      '<'
+      1
     )
     .fromTo(
       '.slider-navigation.next',
@@ -84,7 +131,7 @@ function enterAnim() {
       {
         opacity: 1,
       },
-      '<'
+      1.15
     )
     .fromTo(
       '.utils-project-informations',
@@ -92,24 +139,9 @@ function enterAnim() {
       {
         opacity: 1,
         y: '0%',
-      }
-    )
-    .add(prevNavigation.value.animate())
-    .add(nextNavigation.value.animate())
-    .fromTo(
-      images,
-      { transform: 'translateX(-100%)', opacity: 0 },
-      {
-        transform: 'translateX(0%)',
-        opacity: 1,
-        stagger: {
-          each: 0.085,
-          ease: 'power1.in',
-        },
-        onComplete() {
-          currentFocusedSliderImage.value = 0
-        },
-      }
+      },
+
+      1.25
     )
 }
 
@@ -180,7 +212,7 @@ function animateIndexChange(previousIndex: number, targetIndex: number) {
       </div>
     </div>
     <div class="slider">
-      <p @click="prevImage" class="slider-navigation prev"><UtilsTextShuffle from="prev" to="prev" ref="prevNavigation" /></p>
+      <p @click="prevImage" class="slider-navigation prev"><UtilsTextShuffle from="prev" to="prev" :duration="0.5" :step="5" ref="prevNavigation" /></p>
       <div class="slider-images">
         <div
           v-for="(image, index) in projectImages"
@@ -191,7 +223,7 @@ function animateIndexChange(previousIndex: number, targetIndex: number) {
           <img :src="image" alt="" />
         </div>
       </div>
-      <p @click="nextImage" class="slider-navigation next"><UtilsTextShuffle from="next" to="next" ref="nextNavigation" /></p>
+      <p @click="nextImage" class="slider-navigation next"><UtilsTextShuffle from="next" to="next" :duration="0.5" :step="5" ref="nextNavigation" /></p>
     </div>
   </main>
 </template>
@@ -244,6 +276,9 @@ function animateIndexChange(previousIndex: number, targetIndex: number) {
     width: 100%;
     justify-content: space-between;
     padding: 0 30px;
+    > .project-name {
+      flex-direction: column;
+    }
     > .project-name,
     .counter {
       max-width: 20%;
