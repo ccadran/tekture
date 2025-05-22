@@ -1,21 +1,25 @@
 <script lang="ts" setup>
 import gsap from 'gsap'
+import SplitType from 'split-type'
 import projectsData from '~/assets/data/projects.json'
 import type { Project } from '~/types'
 
 const route = useRoute()
 const currentProject = ref<Project>()
 const currentFocusedImage = ref<number>(-1)
+const currentFocusedSliderImage = ref<number>(-1)
 
 const projectImages = ref<string[]>([])
 const imageRefs = shallowRef<HTMLElement[]>([])
 const focusedContent = ref<HTMLElement>()
 const focusedImage = ref<HTMLElement>()
+const prevNavigation = ref()
+const nextNavigation = ref()
+
+const projectTitle = ref()
 const currentProjectIndex = computed(() => projectsData.findIndex((project) => project.slug === route.params.slug))
 const isEven = currentProjectIndex.value % 2 === 0
 onMounted(async () => {
-  console.log('even', isEven)
-
   currentProject.value = projectsData[currentProjectIndex.value]
 
   // invert first two pictures
@@ -25,6 +29,7 @@ onMounted(async () => {
   }
 
   await nextTick()
+
   currentFocusedImage.value = 0
   enterAnim()
 })
@@ -43,9 +48,54 @@ function enterAnim() {
       {
         transform: 'translate(-50%,-30%)',
         top: '30%',
+        onComplete() {
+          gsap.set('.utils-project-informations', { display: 'flex' })
+        },
       },
       '<'
     )
+    .fromTo(
+      projectTitle.value,
+      { opacity: 0 },
+      {
+        opacity: 1,
+      },
+      '<'
+    )
+    .fromTo(
+      '.counter',
+      { opacity: 0 },
+      {
+        opacity: 1,
+      },
+      '<'
+    )
+    .fromTo(
+      '.slider-navigation.prev',
+      { opacity: 0 },
+      {
+        opacity: 1,
+      },
+      '<'
+    )
+    .fromTo(
+      '.slider-navigation.next',
+      { opacity: 0 },
+      {
+        opacity: 1,
+      },
+      '<'
+    )
+    .fromTo(
+      '.utils-project-informations',
+      { opacity: 0, y: '-100%' },
+      {
+        opacity: 1,
+        y: '0%',
+      }
+    )
+    .add(prevNavigation.value.animate())
+    .add(nextNavigation.value.animate())
     .fromTo(
       images,
       { transform: 'translateX(-100%)', opacity: 0 },
@@ -57,8 +107,7 @@ function enterAnim() {
           ease: 'power1.in',
         },
         onComplete() {
-          const informations = document.querySelector('.utils-project-informations') as HTMLElement
-          informations!.style.display = 'flex'
+          currentFocusedSliderImage.value = 0
         },
       }
     )
@@ -76,6 +125,7 @@ function prevImage() {
 function changeActiveImage(targetImageIndex: number) {
   animateIndexChange(currentFocusedImage.value, targetImageIndex)
   currentFocusedImage.value = targetImageIndex
+  currentFocusedSliderImage.value = targetImageIndex
 }
 
 function animateIndexChange(previousIndex: number, targetIndex: number) {
@@ -115,7 +165,9 @@ function animateIndexChange(previousIndex: number, targetIndex: number) {
       </div>
     </div>
     <div class="project-informations">
-      <h1 class="title">{{ currentProject?.name }}</h1>
+      <h1 class="project-name title" ref="projectTitle">
+        {{ currentProject?.name }}
+      </h1>
       <div class="counter title">
         <div class="index-container">
           <div class="index-wrapper">
@@ -128,18 +180,18 @@ function animateIndexChange(previousIndex: number, targetIndex: number) {
       </div>
     </div>
     <div class="slider">
-      <p @click="prevImage" class="slider-navigation prev">prev</p>
+      <p @click="prevImage" class="slider-navigation prev"><UtilsTextShuffle from="prev" to="prev" ref="prevNavigation" /></p>
       <div class="slider-images">
         <div
           v-for="(image, index) in projectImages"
           :ref="(el) => (imageRefs[index] = el as HTMLElement)"
-          :class="['image-slider', { active: index === currentFocusedImage }]"
+          :class="['image-slider', { active: index === currentFocusedSliderImage }]"
           @click="changeActiveImage(index)"
         >
           <img :src="image" alt="" />
         </div>
       </div>
-      <p @click="nextImage" class="slider-navigation next">next</p>
+      <p @click="nextImage" class="slider-navigation next"><UtilsTextShuffle from="next" to="next" ref="nextNavigation" /></p>
     </div>
   </main>
 </template>
@@ -171,7 +223,6 @@ function animateIndexChange(previousIndex: number, targetIndex: number) {
       }
     }
     > .utils-project-informations {
-      display: flex;
       display: none;
       gap: 8px;
       align-items: center;
@@ -193,10 +244,11 @@ function animateIndexChange(previousIndex: number, targetIndex: number) {
     width: 100%;
     justify-content: space-between;
     padding: 0 30px;
-    > .title,
+    > .project-name,
     .counter {
       max-width: 20%;
       display: flex;
+      opacity: 0;
       > .index-container {
         width: 40px;
         overflow: hidden;
@@ -235,6 +287,14 @@ function animateIndexChange(previousIndex: number, targetIndex: number) {
     > .slider-navigation {
       font-weight: 600;
       font-size: 18px;
+      width: 48px;
+      position: relative;
+      opacity: 0;
+
+      > span {
+        position: absolute;
+        bottom: 0;
+      }
     }
     > .slider-images {
       display: flex;
