@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import gsap from 'gsap'
-import SplitType from 'split-type'
+
 import projectsData from '~/assets/data/projects.json'
 import type { Project } from '~/types'
 
@@ -25,6 +25,11 @@ const nextNavigation = ref()
 const projectTitle = ref()
 const currentProjectIndex = computed(() => projectsData.findIndex((project) => project.slug === route.params.slug))
 const isEven = currentProjectIndex.value % 2 === 0
+
+const activeIndex = computed(() => {
+  return document.querySelector('.index-container .index')
+})
+
 onMounted(async () => {
   currentProject.value = projectsData[currentProjectIndex.value]
 
@@ -35,10 +40,10 @@ onMounted(async () => {
   }
 
   await nextTick()
-
   splitedText.value = new SplitText('.project-name', { type: 'words', autoSplit: true, wordsClass: 'word++' })
 
   currentFocusedImage.value = 0
+
   enterAnim()
 })
 
@@ -111,6 +116,18 @@ function enterAnim() {
       { opacity: 0 },
       {
         opacity: 1,
+        duration: 1.5,
+      },
+      0.75
+    )
+    .to(
+      activeIndex.value,
+      {
+        scrambleText: {
+          text: '1',
+          chars: '0123456789',
+          speed: 1,
+        },
         duration: 1.5,
       },
       0.75
@@ -203,7 +220,7 @@ function animateIndexChange(previousIndex: number, targetIndex: number) {
       <div class="counter title">
         <div class="index-container">
           <div class="index-wrapper">
-            <span class="index" v-for="i in projectImages.length" :key="i" :class="{ active: i - 1 === currentFocusedImage }">
+            <span ref="activeIndex" class="index" v-for="i in projectImages.length" :key="i" :class="{ active: i - 1 === currentFocusedImage }">
               {{ i }}
             </span>
           </div>
