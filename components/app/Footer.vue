@@ -4,6 +4,26 @@ import ScrollTrigger from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
 onMounted(() => {
+  ScrollTrigger.create({
+    trigger: '.main',
+    start: 'bottom bottom-=1%',
+    onEnter() {
+      window.lenis?.scrollTo('.footer', { offset: 0, duration: 1, lock: true })
+    },
+  })
+  ScrollTrigger.create({
+    trigger: '.main',
+    start: 'bottom bottom-=49%', // Ajustez selon vos besoins
+    onLeaveBack() {
+      window.lenis?.scrollTo('.main', {
+        offset: document.querySelector('.main')!.scrollHeight - window.innerHeight, // Assure que le bas du .main est visible
+        duration: 1,
+        lock: true,
+        immediate: false,
+      })
+    },
+  })
+
   gsap.fromTo(
     'footer .title',
     { transform: 'scaleY(0.0)' },
