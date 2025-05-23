@@ -4,39 +4,7 @@ import ScrollTrigger from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
 onMounted(() => {
-  const footerTl = gsap
-    .timeline({ paused: true })
-    .fromTo(
-      '.contact',
-      { opacity: 0 },
-      {
-        opacity: 1,
-        duration: 0.5,
-        delay: 0.35,
-        onStart() {
-          gsap.fromTo(
-            '.marker',
-            { opacity: 0 },
-            {
-              opacity: 1,
-              duration: 0.25,
-              repeat: 2,
-              yoyo: true,
-              ease: 'power1.inOut',
-            }
-          )
-        },
-      }
-    )
-    .fromTo(
-      'footer .location',
-      { opacity: 0 },
-      {
-        opacity: 1,
-        duration: 0.5,
-      },
-      0.75
-    )
+  const footerTl = initFooterTl()
   ScrollTrigger.create({
     trigger: '.main',
     start: 'bottom bottom-=1%',
@@ -72,12 +40,42 @@ onMounted(() => {
       },
     }
   )
-
-  // footerTl()
 })
-// function footerTl() {
-
-// }
+function initFooterTl() {
+  return gsap
+    .timeline({ paused: true })
+    .fromTo(
+      '.contact',
+      { opacity: 0 },
+      {
+        opacity: 1,
+        duration: 0.5,
+        delay: 0.35,
+        onStart() {
+          gsap.fromTo(
+            '.marker',
+            { opacity: 0 },
+            {
+              opacity: 1,
+              duration: 0.25,
+              repeat: 2,
+              yoyo: true,
+              ease: 'power1.inOut',
+            }
+          )
+        },
+      }
+    )
+    .fromTo(
+      'footer .location',
+      { opacity: 0 },
+      {
+        opacity: 1,
+        duration: 0.5,
+      },
+      0.75
+    )
+}
 </script>
 
 <template>
