@@ -4,17 +4,52 @@ import ScrollTrigger from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
 onMounted(() => {
+  const footerTl = gsap
+    .timeline({ paused: true })
+    .fromTo(
+      '.contact',
+      { opacity: 0 },
+      {
+        opacity: 1,
+        duration: 0.5,
+        delay: 0.35,
+        onStart() {
+          gsap.fromTo(
+            '.marker',
+            { opacity: 0 },
+            {
+              opacity: 1,
+              duration: 0.25,
+              repeat: 2,
+              yoyo: true,
+              ease: 'power1.inOut',
+            }
+          )
+        },
+      }
+    )
+    .fromTo(
+      'footer .location',
+      { opacity: 0 },
+      {
+        opacity: 1,
+        duration: 0.5,
+      },
+      0.75
+    )
   ScrollTrigger.create({
     trigger: '.main',
     start: 'bottom bottom-=1%',
     onEnter() {
       window.lenis?.scrollTo('.footer', { offset: 0, duration: 1, lock: true })
+      footerTl.play()
     },
   })
   ScrollTrigger.create({
     trigger: '.main',
-    start: 'bottom bottom-=49%', // Ajustez selon vos besoins
+    start: 'bottom bottom-=49%',
     onLeaveBack() {
+      footerTl.reverse()
       window.lenis?.scrollTo('.main', {
         offset: document.querySelector('.main')!.scrollHeight - window.innerHeight, // Assure que le bas du .main est visible
         duration: 1,
@@ -37,46 +72,12 @@ onMounted(() => {
       },
     }
   )
-  gsap.fromTo(
-    '.contact',
-    { opacity: 0 },
-    {
-      opacity: 1,
-      duration: 0.5,
-      scrollTrigger: {
-        trigger: '.main',
-        start: 'bottom bottom-=40%',
-        toggleActions: 'play reverse restart reverse',
-        onEnter: () => {
-          gsap.fromTo(
-            '.marker',
-            { opacity: 0 },
-            {
-              opacity: 1,
-              duration: 0.25,
-              repeat: 2,
-              yoyo: true,
-              ease: 'power1.inOut',
-            }
-          )
-        },
-      },
-    }
-  )
-  gsap.fromTo(
-    'footer .location',
-    { opacity: 0 },
-    {
-      opacity: 1,
-      duration: 0.5,
-      scrollTrigger: {
-        trigger: '.main',
-        start: 'bottom bottom-=49%',
-        toggleActions: 'play reverse restart reverse',
-      },
-    }
-  )
+
+  // footerTl()
 })
+// function footerTl() {
+
+// }
 </script>
 
 <template>
