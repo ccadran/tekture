@@ -19,7 +19,7 @@ export const useLenis = () => {
       gsap.registerPlugin(ScrollTrigger)
 
       const lenis = new Lenis({
-        wheelMultiplier: 1,
+        wheelMultiplier: 0.5,
         infinite: false,
         gestureOrientation: 'vertical',
         lerp: 0.3,
