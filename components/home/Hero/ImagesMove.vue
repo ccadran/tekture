@@ -1,10 +1,6 @@
 <script lang="ts" setup>
 import gsap from 'gsap'
 
-const props = defineProps<{
-  heroElement: HTMLElement | null
-}>()
-
 const images = ref([
   { id: 1, src: '/images/1.jpg' },
   { id: 2, src: '/images/2.jpg' },

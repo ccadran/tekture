@@ -16,7 +16,7 @@ const navigationRef = ref()
 const { projectsEnter, projectIn, projectOut, moveMarkers, scrollToProject, wrapLinesWithInner } = useProjectAnimation()
 onMounted(async () => {
   new SplitType('.description ', { types: 'lines' })
-  new SplitType('.title ', { types: 'chars' })
+  new SplitType('.project-text .title ', { types: 'chars' })
 
   wrapLinesWithInner()
 
