@@ -9,7 +9,7 @@ export function useProjectAnimation() {
     const targetProject = document.querySelector(`.project--${index}`) as HTMLElement
     const projectsSection = document.querySelector('.projects') as HTMLElement
     const projectsContent = document.querySelector('.project-layout') as HTMLElement
-    const navMarkers = document.querySelector('.markers') as HTMLElement
+    const navMarkers = document.querySelector('projects-navigation .markers') as HTMLElement
     const projectsNav = document.querySelector('.projects-navigation') as HTMLElement
 
     return {
