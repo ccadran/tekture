@@ -24,7 +24,7 @@ onMounted(() => {
 
 <template>
   <!-- <HomeHeroImagesMove /> -->
-  <!-- <HomeHeroKeywords /> -->
+  <HomeHeroKeywords />
 
   <section class="hero" ref="hero">
     <div class="content">
