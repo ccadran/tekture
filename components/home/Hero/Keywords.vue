@@ -1,13 +1,41 @@
 <script lang="ts" setup>
+import gsap from 'gsap'
+
 const keyWords = ['innovation', 'expertise', 'sustainable', 'results', 'Strategy', 'fondation']
 const currentIndices = ref<number[]>([])
 const keyWordsRefs = ref<any[]>([])
 const SHUFFLE_DURATION = 1
 
-onMounted(() => {
+onMounted(async () => {
   currentIndices.value = keyWords.map((_, i) => i)
+  await nextTick()
+  const domElements = keyWordsRefs.value.map((componentRef) => componentRef.$el)
+  console.log(domElements)
 
-  textShuffleLoop()
+  const keyWordsTl = gsap.timeline({ delay: 0.8 })
+
+  keyWordsTl.fromTo(
+    domElements,
+    { opacity: 0 },
+    {
+      opacity: 0.8,
+      stagger: {
+        amount: 1,
+        onStart() {
+          const currentElement = this.targets()[0]
+          const index = domElements.indexOf(currentElement)
+          console.log(domElements)
+
+          console.log(domElements[index].textContent)
+
+          keyWordsRefs.value[index].animate({ fromText: domElements[index].textContent, toText: domElements[index].textContent, duration: 0.5, steps: 5 })
+        },
+      },
+      onComplete() {
+        textShuffleLoop()
+      },
+    }
+  )
 })
 
 let currentTextIndex = 0

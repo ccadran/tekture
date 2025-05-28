@@ -22,13 +22,18 @@ gsap.registerPlugin(TextPlugin)
 const textElement = ref<HTMLElement | null>(null)
 const displayText = ref(props.from || '')
 
-function animate({ fromText = props.from, toText = props.to }: { fromText?: string; toText?: string } = {}) {
+function animate({
+  fromText = props.from,
+  toText = props.to,
+  duration = props.duration,
+  steps = props.steps,
+}: { fromText?: string; toText?: string; duration?: number; steps?: number } = {}) {
   if (!textElement.value) return
 
   displayText.value = fromText
 
   const tl = gsap.timeline()
-  const interval = props.duration / props.steps
+  const interval = duration / props.steps
 
   for (let i = 0; i < props.steps - 1; i++) {
     tl.to(textElement.value, {
@@ -60,7 +65,7 @@ function getRandomText(fromText: string, toText: string) {
     .join('')
 }
 
-defineExpose({ animate })
+defineExpose({ animate, $el: textElement })
 </script>
 
 <template>
