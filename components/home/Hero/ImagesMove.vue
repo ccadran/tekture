@@ -120,9 +120,11 @@ onUnmounted(() => {
   height: 80vh;
   width: 100vw;
   position: absolute;
+  top: 0;
+  z-index: 1;
   > .floating-image {
     position: absolute;
-    opacity: 0.5;
+    opacity: 0;
     width: 200px;
     aspect-ratio: 3/4;
     overflow: hidden;

@@ -9,24 +9,23 @@ const SHUFFLE_DURATION = 1
 onMounted(async () => {
   currentIndices.value = keyWords.map((_, i) => i)
   await nextTick()
-  const domElements = keyWordsRefs.value.map((componentRef) => componentRef.$el)
-  console.log(domElements)
+})
 
-  const keyWordsTl = gsap.timeline({ delay: 0.8 })
+function enterAnim() {
+  const domElements = keyWordsRefs.value.map((componentRef) => componentRef.$el)
+
+  const keyWordsTl = gsap.timeline()
 
   keyWordsTl.fromTo(
     domElements,
     { opacity: 0 },
     {
-      opacity: 0.8,
+      opacity: 0.4,
       stagger: {
-        amount: 1,
+        amount: 1.5,
         onStart() {
           const currentElement = this.targets()[0]
           const index = domElements.indexOf(currentElement)
-          console.log(domElements)
-
-          console.log(domElements[index].textContent)
 
           keyWordsRefs.value[index].animate({ fromText: domElements[index].textContent, toText: domElements[index].textContent, duration: 0.5, steps: 5 })
         },
@@ -36,7 +35,7 @@ onMounted(async () => {
       },
     }
   )
-})
+}
 
 let currentTextIndex = 0
 
@@ -57,6 +56,10 @@ function textShuffleLoop() {
     textShuffleLoop()
   }, SHUFFLE_DURATION * 1000)
 }
+
+defineExpose({
+  keywordsEnter: () => enterAnim,
+})
 </script>
 
 <template>
@@ -78,7 +81,7 @@ function textShuffleLoop() {
 <style lang="scss">
 .shuffle-keywords {
   position: absolute;
-  z-index: -1;
+
   height: 100vh;
   width: 100vw;
   display: flex;
@@ -88,6 +91,7 @@ function textShuffleLoop() {
     position: absolute;
     transform: translate(-50%, -50%);
     font-weight: 100;
+    opacity: 0;
     &:nth-of-type(1) {
       left: 6vw;
       top: 12vh;

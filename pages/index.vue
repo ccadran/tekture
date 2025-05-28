@@ -9,4 +9,8 @@
   </main>
 </template>
 
-<style></style>
+<style>
+.main {
+  background-color: white;
+}
+</style>

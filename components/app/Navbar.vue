@@ -4,13 +4,17 @@ import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin'
 gsap.registerPlugin(ScrambleTextPlugin)
 
 onMounted(() => {
-  const loaderNavTl = gsap.timeline({ delay: 0.8 })
+  enterAnim()
+})
+
+function enterAnim() {
+  const loaderNavTl = gsap.timeline({ delay: 1.25 })
 
   loaderNavTl
     .fromTo('.navbar .home', { opacity: 0 }, { opacity: 1 })
     .to('.navbar .home', { scrambleText: { text: 'TEXTURE', speed: 1 }, duration: 2 }, 0)
     .fromTo('.nav-link span', { y: '100%', opacity: 0 }, { y: '0%', opacity: 1, stagger: 0.15 }, 0.15)
-})
+}
 </script>
 
 <template>

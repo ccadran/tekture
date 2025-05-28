@@ -5,28 +5,52 @@ const title1 = ref<HTMLElement | null>(null)
 const title2 = ref<HTMLElement | null>(null)
 const baseline = ref<HTMLElement | null>(null)
 
+const imagesMoveRef = ref()
+const keywordsRef = ref()
+
 onMounted(() => {
   const loaderTl = gsap.timeline()
 
+  console.log(keywordsRef.value)
+
   //todo tl for baseline
+  const baselineTl = gsap.timeline()
+  baselineTl
+    .fromTo(baseline.value, { y: '-200%', opacity: 0 }, { y: '0%', opacity: 1, ease: 'power1.out' }, '>-0.15')
+    .to('.marker.-left', { left: '-16px' }, '>')
+    .to('.marker.-right', { right: '-16px' }, '<')
+    .fromTo('.baseline .content', { clipPath: 'inset( 0% 50% 0% 50%)' }, { clipPath: 'inset( 0% 0% 0% 0%)' }, '>-0.5')
+
+    .fromTo(
+      '.marker',
+      { opacity: 1 },
+      {
+        opacity: 0,
+        duration: 0.25,
+        repeat: 2,
+        yoyo: true,
+        ease: 'power1.inOut',
+        onComplete() {
+          gsap.to('.marker', { opacity: 1, duration: 0.25, ease: 'power1.inOut' })
+        },
+      },
+      '>'
+    )
 
   loaderTl
     .fromTo(title1.value, { left: '0%' }, { left: '50%' })
     .fromTo(title2.value, { left: '100%' }, { left: '50%' }, 0)
-    .fromTo(title1.value, { y: '-35%' }, { y: '0%', duration: 0.5, ease: 'power1.inOut' }, '>')
-    .fromTo(title2.value, { y: '35%' }, { y: '0%', duration: 0.5, ease: 'power1.inOut' }, '<')
-    .fromTo(baseline.value, { y: '-200%', opacity: 0 }, { y: '0%', opacity: 1 }, '>-0.15')
-    .to('.marker.-left', { left: '-16px' }, '>')
-    .to('.marker.-right', { right: '-16px' }, '<')
-    .fromTo('.baseline .content', { clipPath: 'inset( 0% 50% 0% 50%)' }, { clipPath: 'inset( 0% 0% 0% 0%)' }, '>-0.5')
+    .fromTo(title1.value, { y: '-35%' }, { y: '0%', duration: 0.5, ease: 'power1.inOut' }, 1)
+    .fromTo(title2.value, { y: '35%' }, { y: '0%', duration: 0.5, ease: 'power1.inOut' }, 1)
+    .add(baselineTl, 1.25)
+    .add(keywordsRef.value.keywordsEnter(), '<')
 })
 </script>
 
 <template>
-  <!-- <HomeHeroImagesMove /> -->
-  <HomeHeroKeywords />
-
   <section class="hero" ref="hero">
+    <HomeHeroImagesMove ref="imagesMoveRef" />
+    <HomeHeroKeywords ref="keywordsRef" />
     <div class="content">
       <div class="main-title-container">
         <h1 class="inner">TEKTURE</h1>
