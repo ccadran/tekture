@@ -11,9 +11,6 @@ const keywordsRef = ref()
 onMounted(() => {
   const loaderTl = gsap.timeline()
 
-  console.log(keywordsRef.value)
-
-  //todo tl for baseline
   const baselineTl = gsap.timeline()
   baselineTl
     .fromTo(baseline.value, { y: '-200%', opacity: 0 }, { y: '0%', opacity: 1, ease: 'power1.out' }, '>-0.15')
@@ -38,6 +35,7 @@ onMounted(() => {
     )
 
   loaderTl
+    .set('.content', { visibility: 'visible' })
     .fromTo(title1.value, { left: '0%' }, { left: '50%' })
     .fromTo(title2.value, { left: '100%' }, { left: '50%' }, 0)
     .fromTo(title1.value, { y: '-35%' }, { y: '0%', duration: 0.5, ease: 'power1.inOut' }, 1)
@@ -81,6 +79,7 @@ onMounted(() => {
     align-items: center;
     pointer-events: none;
     gap: 32px;
+    visibility: hidden;
     > .main-title-container {
       font-size: 124px;
       font-weight: 800;
