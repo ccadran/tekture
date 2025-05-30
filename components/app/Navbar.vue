@@ -11,6 +11,7 @@ function enterAnim() {
   const loaderNavTl = gsap.timeline({ delay: 1.25 })
 
   loaderNavTl
+    .set('.navbar', { visibility: 'visible' })
     .fromTo('.navbar .home', { opacity: 0 }, { opacity: 1 })
     .to('.navbar .home', { scrambleText: { text: 'TEXTURE', speed: 1 }, duration: 2 }, 0)
     .fromTo('.nav-link span', { y: '100%', opacity: 0 }, { y: '0%', opacity: 1, stagger: 0.15 }, 0.15)
@@ -19,7 +20,8 @@ function enterAnim() {
 
 <template>
   <nav class="navbar">
-    <a class="home" href="/">TEKTURE</a>
+    <NuxtLink @click="$router.back()" class="home-link">TEKTURE</NuxtLink>
+
     <ul class="nav-links">
       <li class="nav-link menu-item"><span>Works</span></li>
       <li class="nav-link menu-item"><span>About</span></li>
@@ -38,8 +40,9 @@ function enterAnim() {
   width: calc(100vw - 60px);
   left: 50%;
   transform: translateX(-50%);
-
-  > .home {
+  visibility: hidden;
+  z-index: 3;
+  > .home-link {
     font-size: 18px;
     font-weight: 800;
   }

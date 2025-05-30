@@ -43,7 +43,7 @@ export function useProjectPageAnimation({
       )
     })
 
-    const enterTl = gsap.timeline({ delay: 1 })
+    const enterTl = gsap.timeline({ delay: 0.5 })
     const images = imageRefs.value.map((el: HTMLElement) => el.querySelector('img'))
     enterTl
       .fromTo(focusedImage.value!, { scale: 1.3 }, { scale: 1 })

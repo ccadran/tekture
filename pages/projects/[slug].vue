@@ -63,6 +63,11 @@ onMounted(async () => {
 
 <template>
   <main class="main">
+    <NuxtLink @click="$router.back()" class="close-cta">
+      <img src="/icons/bracket.svg" alt="" />
+      <p class="menu-item">Close</p>
+      <img src="/icons/bracket.svg" alt="" />
+    </NuxtLink>
     <div ref="focusedContent" class="focused-content">
       <div ref="focusedImage" class="focused-image">
         <img :src="projectImages[currentFocusedImage]" alt="" />
@@ -109,6 +114,17 @@ onMounted(async () => {
 .main {
   height: 100vh;
   background-color: white;
+  > .close-cta {
+    display: flex;
+    position: absolute;
+    right: 30px;
+    top: 90px;
+    align-items: center;
+    gap: 2px;
+    img:nth-of-type(2) {
+      transform: rotate(180deg);
+    }
+  }
   > .focused-content {
     position: absolute;
     top: 50%;

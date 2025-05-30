@@ -14,6 +14,8 @@ onMounted(() => {
       start: 'top top',
       end: 'bottom bottom+=10%',
       scrub: 0.6,
+      // toggleActions: 'play pause resume reset',
+      // once: true,
     },
   })
 
@@ -85,6 +87,7 @@ onMounted(() => {
     > .inner {
       font-size: 18.5vw;
       font-weight: 800;
+      overflow: hidden;
     }
   }
   > .projects-intro-images {
