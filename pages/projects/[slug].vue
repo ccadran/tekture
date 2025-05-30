@@ -6,10 +6,13 @@ import type { Project } from '~/types'
 
 import { SplitText } from 'gsap/SplitText'
 import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin'
+
 gsap.registerPlugin(ScrambleTextPlugin)
 
 gsap.registerPlugin(SplitText)
+
 const route = useRoute()
+const router = useRouter()
 const currentProject = ref<Project>()
 const currentFocusedImage = ref<number>(-1)
 const currentFocusedSliderImage = ref<number>(-1)
@@ -18,6 +21,8 @@ const projectImages = ref<string[]>([])
 const imageRefs = shallowRef<HTMLElement[]>([])
 const focusedContent = ref<HTMLElement>()
 const focusedImage = ref<HTMLElement>()
+const root = ref<HTMLElement>()
+
 const splitedText = ref()
 const prevNavigation = ref()
 const nextNavigation = ref()
@@ -59,11 +64,23 @@ onMounted(async () => {
 
   enterAnim()
 })
+
+function leavePage() {
+  gsap.to('body .main', {
+    opacity: 0,
+  })
+  gsap.to('body .footer', {
+    opacity: 0,
+    onComplete() {
+      router.back()
+    },
+  })
+}
 </script>
 
 <template>
-  <main class="main">
-    <NuxtLink @click="$router.back()" class="close-cta">
+  <main class="main" ref="root">
+    <NuxtLink @click="leavePage" class="close-cta" ref="closeCta">
       <img src="/icons/bracket.svg" alt="" />
       <p class="menu-item">Close</p>
       <img src="/icons/bracket.svg" alt="" />
@@ -121,6 +138,7 @@ onMounted(async () => {
     top: 90px;
     align-items: center;
     gap: 2px;
+    opacity: 0;
     img:nth-of-type(2) {
       transform: rotate(180deg);
     }

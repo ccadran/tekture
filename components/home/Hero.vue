@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import gsap from 'gsap'
+
 const hero = ref<HTMLElement | null>(null)
 const title1 = ref<HTMLElement | null>(null)
 const title2 = ref<HTMLElement | null>(null)
@@ -9,6 +10,9 @@ const imagesMoveRef = ref()
 const keywordsRef = ref()
 
 onMounted(() => {
+  //prevent flash on back navigation caused by scrollTop before show last position
+  gsap.fromTo('body', { opacity: 0 }, { opacity: 1, delay: 0.1 })
+
   const loaderTl = gsap.timeline()
 
   const baselineTl = gsap.timeline()

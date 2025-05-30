@@ -86,7 +86,7 @@ function handleScrollToProject(index: number) {
 
   > .projects-navigation {
     position: absolute;
-    z-index: 10;
+    z-index: 1;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
