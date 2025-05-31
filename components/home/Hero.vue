@@ -10,10 +10,9 @@ const imagesMoveRef = ref()
 const keywordsRef = ref()
 
 onMounted(() => {
-  //prevent flash on back navigation caused by scrollTop before show last position
-  gsap.fromTo('body', { opacity: 0 }, { opacity: 1, delay: 0.1 })
+  // delay to prevent flash on back navigation caused by scrollTop before show last position
 
-  const loaderTl = gsap.timeline()
+  const loaderTl = gsap.timeline({ delay: 0.1 })
 
   const baselineTl = gsap.timeline()
   baselineTl
