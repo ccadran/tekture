@@ -66,11 +66,8 @@ onMounted(async () => {
 })
 
 function leavePage() {
-  gsap.to('body .main', {
-    opacity: 0,
-  })
-  gsap.to('body .footer', {
-    opacity: 0,
+  gsap.to('.main .transition-layer', {
+    opacity: 1,
     onComplete() {
       router.back()
     },
@@ -80,6 +77,7 @@ function leavePage() {
 
 <template>
   <main class="main" ref="root">
+    <div class="transition-layer"></div>
     <NuxtLink @click="leavePage" class="close-cta" ref="closeCta">
       <img src="/icons/bracket.svg" alt="" />
       <p class="menu-item">Close</p>

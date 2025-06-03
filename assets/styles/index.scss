@@ -25,3 +25,13 @@ h4 {
   font-size: 14px;
   font-weight: 700;
 }
+
+.transition-layer {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  background-color: white;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+}
