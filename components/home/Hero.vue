@@ -10,8 +10,6 @@ const imagesMoveRef = ref()
 const keywordsRef = ref()
 
 onMounted(() => {
-  // delay to prevent flash on back navigation caused by scrollTop before show last position
-
   const loaderTl = gsap.timeline({ delay: 0.1 })
 
   const baselineTl = gsap.timeline()
@@ -87,6 +85,9 @@ onMounted(() => {
       font-size: 124px;
       font-weight: 800;
       position: relative;
+      @media screen and (max-width: 760px) {
+        font-size: 10vw;
+      }
       > .inner {
         visibility: hidden;
       }
@@ -120,6 +121,12 @@ onMounted(() => {
       }
       > .content {
         clip-path: inset(0 50% 0 50%);
+      }
+      @media screen and (max-width: 760px) {
+        font-size: 12px;
+        > .marker {
+          scale: 0.75;
+        }
       }
     }
   }

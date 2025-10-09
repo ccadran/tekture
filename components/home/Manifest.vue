@@ -48,11 +48,11 @@ onMounted(() => {
           <p class="inner">Our focus is on creating innovative, sustainable designs that</p>
         </div>
         <div class="sentence">
-          <p class="inner">blend striking aesthetics with eco-friendly solutions, ensuring</p>
+          <p class="inner">blend striking aesthetics with eco-friendly solutions, ensuring everye</p>
         </div>
-        <div class="sentence">
-          <p class="inner">everye</p>
-        </div>
+        <!-- <div class="sentence">
+          <p class="inner"></p>
+        </div> -->
       </div>
     </div>
   </section>
@@ -63,14 +63,18 @@ onMounted(() => {
   height: 300vh;
   position: relative;
   margin-bottom: 50vh;
+  @media screen and (max-width: 760px) {
+    height: 200vh;
+  }
   > .manifest-container {
     height: 100vh;
-    width: 100vw;
+    width: 80vw;
     position: sticky;
     top: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 0 auto;
     > .manifest-content {
       position: absolute;
       display: flex;
@@ -82,6 +86,9 @@ onMounted(() => {
           font-size: 24px;
           text-align: center;
           line-height: 130%;
+          @media screen and (max-width: 760px) {
+            font-size: 12px;
+          }
         }
       }
     }

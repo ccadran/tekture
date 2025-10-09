@@ -116,6 +116,9 @@ defineExpose({
       right: 10vw;
       top: 50vh;
     }
+    @media screen and (max-width: 760px) {
+      font-size: 12px;
+    }
   }
 }
 </style>

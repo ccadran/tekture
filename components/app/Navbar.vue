@@ -50,6 +50,9 @@ function enterAnim() {
     display: flex;
     > .nav-link {
       margin-left: 32px;
+      @media screen and (max-width: 760px) {
+        margin-left: 12px;
+      }
       // overflow: hidden;
       > span {
         display: inline-block;

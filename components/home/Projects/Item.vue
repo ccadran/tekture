@@ -13,7 +13,6 @@ const props = withDefaults(defineProps<ProjectItem>(), {
 
 const leftImage = ref<HTMLElement>()
 const rightImage = ref<HTMLElement>()
-
 const isEven = computed(() => props.index % 2 === 0)
 
 function exitTransition(destination: string) {
