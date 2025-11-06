@@ -38,3 +38,30 @@ h4 {
   z-index: 10;
   opacity: 0;
 }
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+::view-transition-group(root) {
+  animation-duration: 0s;
+}
+
+::view-transition-old(project-*),
+::view-transition-new(project-*) {
+  animation: none;
+  opacity: 1 !important;
+}
+
+::view-transition-group(project-*) {
+  animation-duration: 0s;
+}
+
+html.no-view-transition {
+  view-transition-name: none !important;
+}
+
+html.no-view-transition * {
+  view-transition-name: none !important;
+}

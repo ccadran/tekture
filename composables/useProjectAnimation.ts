@@ -1,10 +1,10 @@
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
-gsap.registerPlugin(ScrollTrigger)
 
 import projectsData from '~/assets/data/projects.json'
 
 export function useProjectAnimation() {
+  // gsap.registerPlugin(ScrollTrigger)
   function getElement(index?: number) {
     const targetProject = document.querySelector(`.project--${index}`) as HTMLElement
     const projectsSection = document.querySelector('.projects') as HTMLElement

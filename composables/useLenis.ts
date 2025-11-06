@@ -16,7 +16,7 @@ export const useLenis = () => {
 
   onMounted(() => {
     if (typeof window !== 'undefined') {
-      gsap.registerPlugin(ScrollTrigger)
+      // gsap.registerPlugin(ScrollTrigger)
 
       const lenis = new Lenis({
         wheelMultiplier: 0.5,

@@ -2,10 +2,10 @@
 import gsap from 'gsap'
 import SplitType from 'split-type'
 import ScrollTrigger from 'gsap/ScrollTrigger'
-gsap.registerPlugin(ScrollTrigger)
 let images: HTMLElement[] = []
 
 onMounted(() => {
+  // gsap.registerPlugin(ScrollTrigger)
   const splitProjectsText = new SplitType('.projects-intro-content .inner', { types: 'chars' })
 
   const introProjectsTl = gsap.timeline({

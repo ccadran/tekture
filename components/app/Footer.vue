@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
-gsap.registerPlugin(ScrollTrigger)
 
 onMounted(() => {
+  // gsap.registerPlugin(ScrollTrigger)
   const footerTl = initFooterTl()
   ScrollTrigger.create({
     trigger: '.main',

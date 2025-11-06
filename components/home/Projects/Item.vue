@@ -45,12 +45,12 @@ function exitTransition(destination: string) {
     </div>
 
     <div class="left-images" :class="{ '-even': isEven }">
-      <div ref="leftImage" class="project-image" :class="isEven ? 'top' : 'bottom'">
+      <div ref="leftImage" class="project-image" :class="isEven ? 'top' : 'bottom'" :style="isEven ? { viewTransitionName: `project-${project.slug}` } : ''">
         <img :src="project.images[0]" alt="" />
       </div>
     </div>
     <div class="right-images" :class="{ '-even': isEven }">
-      <div ref="rightImage" class="project-image" :class="isEven ? 'bottom' : 'top'">
+      <div ref="rightImage" class="project-image" :class="isEven ? 'bottom' : 'top'" :style="!isEven ? { viewTransitionName: `project-${project.slug}` } : ''">
         <img :src="project.images[1]" alt="" />
       </div>
     </div>

@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import gsap from 'gsap'
 import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin'
-gsap.registerPlugin(ScrambleTextPlugin)
 
 onMounted(() => {
+  // gsap.registerPlugin(ScrambleTextPlugin)
   enterAnim()
 })
 

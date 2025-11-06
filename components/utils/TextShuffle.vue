@@ -17,7 +17,9 @@ const props = withDefaults(defineProps<Props>(), {
   steps: 10,
 })
 
-gsap.registerPlugin(TextPlugin)
+onMounted(() => {
+  // gsap.registerPlugin(TextPlugin)
+})
 
 const textElement = ref<HTMLElement | null>(null)
 const displayText = ref(props.from || '')

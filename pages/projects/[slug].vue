@@ -7,13 +7,9 @@ import type { Project } from '~/types'
 import { SplitText } from 'gsap/SplitText'
 import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin'
 
-gsap.registerPlugin(ScrambleTextPlugin)
-
-gsap.registerPlugin(SplitText)
-
 const route = useRoute()
 const router = useRouter()
-const currentProject = ref<Project>()
+// const currentProject = ref<Project>()
 const currentFocusedImage = ref<number>(-1)
 const currentFocusedSliderImage = ref<number>(-1)
 
@@ -29,6 +25,9 @@ const nextNavigation = ref()
 
 const projectTitle = ref()
 const currentProjectIndex = computed(() => projectsData.findIndex((project) => project.slug === route.params.slug))
+
+const currentProject = computed<Project | undefined>(() => projectsData.find((p) => p.slug === route.params.slug))
+
 const isEven = currentProjectIndex.value % 2 === 0
 
 const activeIndex = computed(() => {
@@ -49,12 +48,18 @@ const { enterAnim, nextImage, prevImage, changeActiveImage } = useProjectPageAni
   projectImages,
 })
 onMounted(async () => {
-  currentProject.value = projectsData[currentProjectIndex.value]
+  // gsap.registerPlugin(ScrambleTextPlugin)
+
+  // gsap.registerPlugin(SplitText)
+  // currentProject.value = projectsData[currentProjectIndex.value]
 
   // invert first two pictures
-  projectImages.value = [...currentProject.value!.images]
-  if (projectImages.value.length > 1 && !isEven) {
-    ;[projectImages.value[0], projectImages.value[1]] = [projectImages.value[1], projectImages.value[0]]
+  if (currentProject.value) {
+    projectImages.value = [...currentProject.value.images]
+
+    if (projectImages.value.length > 1 && !isEven) {
+      ;[projectImages.value[0], projectImages.value[1]] = [projectImages.value[1], projectImages.value[0]]
+    }
   }
 
   await nextTick()
@@ -65,11 +70,18 @@ onMounted(async () => {
   enterAnim()
 })
 
-function leavePage() {
+function leavePage(e: Event) {
+  e.preventDefault()
+
+  document.documentElement.classList.add('no-view-transition')
+
   gsap.to('.main .transition-layer', {
     opacity: 1,
     onComplete() {
       router.back()
+      setTimeout(() => {
+        document.documentElement.classList.remove('no-view-transition')
+      }, 100)
     },
   })
 }
@@ -84,7 +96,7 @@ function leavePage() {
       <img src="/icons/bracket.svg" alt="" />
     </NuxtLink>
     <div ref="focusedContent" class="focused-content">
-      <div ref="focusedImage" class="focused-image">
+      <div ref="focusedImage" class="focused-image" :style="{ viewTransitionName: `project-${currentProject.slug}` }">
         <img :src="projectImages[currentFocusedImage]" alt="" />
       </div>
       <div class="utils-project-informations">
