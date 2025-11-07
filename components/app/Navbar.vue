@@ -1,9 +1,7 @@
 <script lang="ts" setup>
 import gsap from 'gsap'
-import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin'
 
 onMounted(() => {
-  // gsap.registerPlugin(ScrambleTextPlugin)
   enterAnim()
 })
 
@@ -12,8 +10,8 @@ function enterAnim() {
 
   loaderNavTl
     .set('.navbar', { visibility: 'visible' })
-    .fromTo('.navbar .home', { opacity: 0 }, { opacity: 1 })
-    .to('.navbar .home', { scrambleText: { text: 'TEXTURE', speed: 1 }, duration: 2 }, 0)
+    .fromTo('.navbar .home-link', { opacity: 0 }, { opacity: 1 })
+    .to('.navbar .home-link', { scrambleText: { text: 'TEXTURE', speed: 1 }, duration: 2 }, 0)
     .fromTo('.nav-link span', { y: '100%', opacity: 0 }, { y: '0%', opacity: 1, stagger: 0.15 }, 0.15)
 }
 </script>

@@ -6,7 +6,6 @@ export function useProjectPageAnimation({
   focusedImage,
   focusedContent,
   currentFocusedSliderImage,
-  activeIndex,
   prevNavigation,
   nextNavigation,
   projectTitle,
@@ -18,7 +17,6 @@ export function useProjectPageAnimation({
   focusedImage: Ref
   focusedContent: Ref
   currentFocusedSliderImage: Ref
-  activeIndex: Ref
   prevNavigation: Ref
   nextNavigation: Ref
   projectTitle: Ref
@@ -45,6 +43,8 @@ export function useProjectPageAnimation({
 
     const enterTl = gsap.timeline({ delay: 0.5 })
     const images = imageRefs.value.map((el: HTMLElement) => el.querySelector('img'))
+    const activeIndexElement = document.querySelector('.index-container .index')
+
     enterTl
       .fromTo(focusedImage.value!, { scale: 1.3 }, { scale: 1 })
       .fromTo(
@@ -99,7 +99,7 @@ export function useProjectPageAnimation({
         0.75
       )
       .to(
-        activeIndex.value,
+        activeIndexElement,
         {
           scrambleText: {
             text: '1',

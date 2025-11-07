@@ -47,6 +47,8 @@ export function useProjectAnimation() {
 
   function projectOut(index: number) {
     const { targetProject } = getElement(index)
+    // console.log('________', targetProject, index)
+
     gsap
       .timeline()
       .to(targetProject, { opacity: 0, duration: 0.5, ease: 'power1.out' })

@@ -10,10 +10,12 @@ const activeProjectIndex = ref<number>(0)
 const projectsSection = ref<HTMLElement | null>(null)
 
 const navigationRef = ref()
+const scrollTriggerInstance = ref<ScrollTrigger | null>(null)
+const isMounted = ref(false)
 
 const { projectsEnter, projectIn, projectOut, moveMarkers, scrollToProject, wrapLinesWithInner } = useProjectAnimation()
 onMounted(async () => {
-  // gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
+  isMounted.value = true
   new SplitType('.description ', { types: 'lines' })
   new SplitType('.project-text .title ', { types: 'chars' })
 
@@ -30,7 +32,7 @@ function changeProjectOnScroll() {
   let lastStep = -1
   let step = 1 / projectsData.length
 
-  ScrollTrigger.create({
+  scrollTriggerInstance.value = ScrollTrigger.create({
     trigger: projectsSection.value,
     start: 'top top',
 
@@ -39,6 +41,7 @@ function changeProjectOnScroll() {
       const currentStep = Math.floor(self.progress / step)
       if (currentStep !== lastStep && currentStep < projectsData.length) {
         lastStep = currentStep
+        console.log('CHANGEEEE')
         changeProject(lastStep)
       }
     },
@@ -46,6 +49,8 @@ function changeProjectOnScroll() {
 }
 
 function changeProject(index: number) {
+  if (!isMounted.value) return
+
   if (index === activeProjectIndex.value) return
   projectOut(activeProjectIndex.value)
   projectIn(index, false, navigationRef)
@@ -56,6 +61,10 @@ function changeProject(index: number) {
 function handleScrollToProject(index: number) {
   scrollToProject(index)
 }
+
+onBeforeUnmount(() => {
+  isMounted.value = false
+})
 </script>
 
 <template>

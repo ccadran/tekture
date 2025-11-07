@@ -7,6 +7,7 @@
     <HomeProjectsIntro />
     <HomeProjects />
   </main>
+  <AppFooter />
 </template>
 
 <style>

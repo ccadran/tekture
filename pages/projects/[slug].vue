@@ -9,7 +9,6 @@ import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin'
 
 const route = useRoute()
 const router = useRouter()
-// const currentProject = ref<Project>()
 const currentFocusedImage = ref<number>(-1)
 const currentFocusedSliderImage = ref<number>(-1)
 
@@ -30,9 +29,9 @@ const currentProject = computed<Project | undefined>(() => projectsData.find((p)
 
 const isEven = currentProjectIndex.value % 2 === 0
 
-const activeIndex = computed(() => {
-  return document.querySelector('.index-container .index')
-})
+// const activeIndex = computed(() => {
+//   return document.querySelector('.index-container .index')
+// })
 
 const { enterAnim, nextImage, prevImage, changeActiveImage } = useProjectPageAnimation({
   splitedText,
@@ -40,7 +39,6 @@ const { enterAnim, nextImage, prevImage, changeActiveImage } = useProjectPageAni
   focusedImage,
   focusedContent,
   currentFocusedSliderImage,
-  activeIndex,
   prevNavigation,
   nextNavigation,
   projectTitle,
@@ -48,12 +46,6 @@ const { enterAnim, nextImage, prevImage, changeActiveImage } = useProjectPageAni
   projectImages,
 })
 onMounted(async () => {
-  // gsap.registerPlugin(ScrambleTextPlugin)
-
-  // gsap.registerPlugin(SplitText)
-  // currentProject.value = projectsData[currentProjectIndex.value]
-
-  // invert first two pictures
   if (currentProject.value) {
     projectImages.value = [...currentProject.value.images]
 
@@ -135,6 +127,7 @@ function leavePage(e: Event) {
       <p @click="nextImage" class="slider-navigation next"><UtilsTextShuffle from="next" to="next" :duration="0.5" :step="5" ref="nextNavigation" /></p>
     </div>
   </main>
+  <AppFooter />
 </template>
 
 <style lang="scss" scoped>
