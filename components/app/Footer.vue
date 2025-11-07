@@ -19,7 +19,6 @@ onMounted(() => {
       ScrollTrigger.create({
         trigger: '.main',
         start: 'bottom bottom-=1%',
-        markers: true,
         toggleActions: 'play none none reverse',
         onEnter() {
           if (!isMounted.value) return
@@ -33,7 +32,6 @@ onMounted(() => {
       ScrollTrigger.create({
         trigger: '.main',
         start: 'bottom bottom-=49%',
-        markers: true,
         onLeaveBack() {
           if (!isMounted.value) return
           footerTl.reverse()

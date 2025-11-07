@@ -10,6 +10,7 @@ const activeProjectIndex = ref<number>(0)
 const projectsSection = ref<HTMLElement | null>(null)
 
 const navigationRef = ref()
+const ctaEnter = ref<HTMLElement>()
 const scrollTriggerInstance = ref<ScrollTrigger | null>(null)
 const isMounted = ref(false)
 
@@ -26,10 +27,11 @@ onMounted(async () => {
   projectsEnter(activeProjectIndex.value)
   moveMarkers(activeProjectIndex.value)
   changeProjectOnScroll()
-})
 
-onBeforeUnmount(() => {
-  cleanup()
+  window.addEventListener('mousemove', (e) => {
+    ctaEnter.value.style.left = `${e.clientX}px`
+    ctaEnter.value.style.top = `${e.clientY}px`
+  })
 })
 
 function changeProjectOnScroll() {
@@ -69,11 +71,15 @@ function handleScrollToProject(index: number) {
 
 onBeforeUnmount(() => {
   isMounted.value = false
+  cleanup()
 })
 </script>
 
 <template>
   <section class="projects">
+    <div ref="ctaEnter" class="cta-enter">
+      <p>ENTER</p>
+    </div>
     <div class="project-layout">
       <nav class="projects-navigation">
         <div class="markers">
@@ -91,6 +97,13 @@ onBeforeUnmount(() => {
 .projects {
   height: 600vh;
   background-color: white;
+  .cta-enter {
+    position: fixed;
+    z-index: 999;
+    transform: translate(-50%, -80%);
+    padding: 10px;
+    cursor: pointer;
+  }
 }
 .project-layout {
   height: 100vh;
