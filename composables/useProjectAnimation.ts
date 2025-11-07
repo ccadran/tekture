@@ -3,6 +3,8 @@ import ScrollTrigger from 'gsap/ScrollTrigger'
 
 import projectsData from '~/assets/data/projects.json'
 
+const scrollTriggers = shallowRef<ScrollTrigger[]>([])
+
 export function useProjectAnimation() {
   // gsap.registerPlugin(ScrollTrigger)
   function getElement(index?: number) {
@@ -47,7 +49,6 @@ export function useProjectAnimation() {
 
   function projectOut(index: number) {
     const { targetProject } = getElement(index)
-    // console.log('________', targetProject, index)
 
     gsap
       .timeline()
@@ -60,10 +61,12 @@ export function useProjectAnimation() {
 
   function projectsEnter(index: number) {
     const { projectsSection, projectsContent, navMarkers } = getElement()
-    ScrollTrigger.create({
+    const enterTrigger = ScrollTrigger.create({
       trigger: projectsSection,
       start: 'top bottom-=10%',
       onEnter: () => {
+        console.log('START')
+
         window.lenis?.scrollTo(projectsContent, {
           offset: 0,
           duration: 1.2,
@@ -71,8 +74,9 @@ export function useProjectAnimation() {
         })
       },
     })
+    scrollTriggers.value.push(enterTrigger)
 
-    gsap
+    const tl = gsap
       .timeline({
         scrollTrigger: {
           trigger: projectsContent,
@@ -107,6 +111,9 @@ export function useProjectAnimation() {
         },
         '>-=0.5'
       )
+    if (tl.scrollTrigger) {
+      scrollTriggers.value.push(tl.scrollTrigger)
+    }
   }
 
   function moveMarkers(index: number) {
@@ -143,5 +150,9 @@ export function useProjectAnimation() {
     })
   }
 
-  return { projectIn, projectOut, projectsEnter, moveMarkers, scrollToProject, wrapLinesWithInner }
+  function cleanup() {
+    scrollTriggers.value.forEach((trigger) => trigger.kill())
+    scrollTriggers.value = []
+  }
+  return { projectIn, projectOut, projectsEnter, moveMarkers, scrollToProject, wrapLinesWithInner, cleanup }
 }

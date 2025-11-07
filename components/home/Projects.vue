@@ -13,7 +13,7 @@ const navigationRef = ref()
 const scrollTriggerInstance = ref<ScrollTrigger | null>(null)
 const isMounted = ref(false)
 
-const { projectsEnter, projectIn, projectOut, moveMarkers, scrollToProject, wrapLinesWithInner } = useProjectAnimation()
+const { projectsEnter, projectIn, projectOut, moveMarkers, scrollToProject, wrapLinesWithInner, cleanup } = useProjectAnimation()
 onMounted(async () => {
   isMounted.value = true
   new SplitType('.description ', { types: 'lines' })
@@ -28,6 +28,10 @@ onMounted(async () => {
   changeProjectOnScroll()
 })
 
+onBeforeUnmount(() => {
+  cleanup()
+})
+
 function changeProjectOnScroll() {
   let lastStep = -1
   let step = 1 / projectsData.length
@@ -35,13 +39,14 @@ function changeProjectOnScroll() {
   scrollTriggerInstance.value = ScrollTrigger.create({
     trigger: projectsSection.value,
     start: 'top top',
-
     end: 'bottom bottom',
+    onStart() {
+      console.log('start')
+    },
     onUpdate: (self) => {
       const currentStep = Math.floor(self.progress / step)
       if (currentStep !== lastStep && currentStep < projectsData.length) {
         lastStep = currentStep
-        console.log('CHANGEEEE')
         changeProject(lastStep)
       }
     },

@@ -66,7 +66,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
   isMounted.value = false
   scrollTriggers.value.forEach((trigger) => trigger.kill())
-  // Kill aussi celui créé par gsap.fromTo
   ScrollTrigger.getAll().forEach((trigger) => {
     if (trigger.trigger === document.querySelector('.main')) {
       trigger.kill()
