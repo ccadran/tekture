@@ -88,7 +88,7 @@ function leavePage(e: Event) {
       <img src="/icons/bracket.svg" alt="" />
     </NuxtLink>
     <div ref="focusedContent" class="focused-content">
-      <div ref="focusedImage" class="focused-image" :style="{ viewTransitionName: `project-${currentProject.slug}` }">
+      <div ref="focusedImage" class="focused-image" :style="{ viewTransitionName: `project-${currentProject?.slug}` }">
         <img :src="projectImages[currentFocusedImage]" alt="" />
       </div>
       <div class="utils-project-informations">

@@ -10,7 +10,7 @@ const activeProjectIndex = ref<number>(0)
 const projectsSection = ref<HTMLElement | null>(null)
 
 const navigationRef = ref()
-const ctaEnter = ref<HTMLElement>()
+const ctaEnter = ref<HTMLElement | null>(null)
 const scrollTriggerInstance = ref<ScrollTrigger | null>(null)
 const isMounted = ref(false)
 
@@ -29,8 +29,8 @@ onMounted(async () => {
   changeProjectOnScroll()
 
   window.addEventListener('mousemove', (e) => {
-    ctaEnter.value.style.left = `${e.clientX}px`
-    ctaEnter.value.style.top = `${e.clientY}px`
+    ctaEnter.value!.style.left = `${e.clientX}px`
+    ctaEnter.value!.style.top = `${e.clientY}px`
   })
 })
 
@@ -42,7 +42,8 @@ function changeProjectOnScroll() {
     trigger: projectsSection.value,
     start: 'top top',
     end: 'bottom bottom',
-    onStart() {
+
+    onEnter() {
       console.log('start')
     },
     onUpdate: (self) => {
