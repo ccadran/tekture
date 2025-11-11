@@ -39,7 +39,7 @@ function enterAnim() {
   left: 50%;
   transform: translateX(-50%);
   visibility: hidden;
-  z-index: 3;
+  z-index: 11;
   > .home-link {
     font-size: 18px;
     font-weight: 800;

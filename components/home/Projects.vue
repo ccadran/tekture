@@ -13,9 +13,12 @@ const ctaEnter = ref<HTMLElement | null>(null)
 const scrollTriggerInstance = ref<ScrollTrigger | null>(null)
 const isMounted = ref(false)
 const isProjectsVisible = ref<boolean>(false)
+const isClickUsed = ref<boolean>(true)
 const currentMouse = { x: '0', y: '0' }
+const projectItemsRefs = ref<any>([])
 
 const { projectsEnter, projectIn, projectOut, moveMarkers, scrollToProject, wrapLinesWithInner, cleanup } = useProjectAnimation()
+
 onMounted(async () => {
   isMounted.value = true
   new SplitType('.description ', { types: 'lines' })
@@ -54,12 +57,14 @@ onMounted(async () => {
 })
 
 function showCtaEnter() {
+  isClickUsed.value = true
   ctaEnter.value!.style.display = 'block'
   ctaEnter.value!.style.left = currentMouse.x
   ctaEnter.value!.style.top = currentMouse.y
   gsap.to(ctaEnter.value, { opacity: 1, duration: 0.75 })
 }
 function hideCtaEnter() {
+  isClickUsed.value = false
   gsap.to(ctaEnter.value, {
     opacity: 0,
     duration: 0.5,
@@ -77,10 +82,6 @@ function changeProjectOnScroll() {
     trigger: projectsSection.value,
     start: 'top top',
     end: 'bottom bottom',
-
-    onEnter() {
-      console.log('start')
-    },
     onUpdate: (self) => {
       const currentStep = Math.floor(self.progress / step)
       if (currentStep !== lastStep && currentStep < projectsData.length) {
@@ -105,6 +106,13 @@ function handleScrollToProject(index: number) {
   scrollToProject(index)
 }
 
+function handleProjectClick() {
+  if (isClickUsed.value) {
+    projectItemsRefs.value[activeProjectIndex.value].exitTransition(projectsData[activeProjectIndex.value].slug)
+    hideCtaEnter()
+  }
+}
+
 onBeforeUnmount(() => {
   isMounted.value = false
   cleanup()
@@ -116,7 +124,7 @@ onBeforeUnmount(() => {
     <div ref="ctaEnter" class="cta-enter">
       <p>ENTER</p>
     </div>
-    <div class="project-layout">
+    <div class="project-layout" @click="handleProjectClick">
       <nav class="projects-navigation" @mouseenter="hideCtaEnter" @mouseleave="showCtaEnter">
         <div class="markers">
           <img class="left" src="/icons/marker.svg" alt="" />
@@ -124,7 +132,17 @@ onBeforeUnmount(() => {
         </div>
         <HomeProjectsNavigation :projectsData="projectsData" @clicked="handleScrollToProject($event)" ref="navigationRef" />
       </nav>
-      <HomeProjectsItem v-for="(project, index) in projectsData" :project="project" :index="index" :activeProject="activeProjectIndex" />
+      <HomeProjectsItem
+        v-for="(project, index) in projectsData"
+        :project="project"
+        :index="index"
+        :activeProject="activeProjectIndex"
+        :ref="
+          (el) => {
+            if (el) projectItemsRefs[index] = el
+          }
+        "
+      />
     </div>
   </section>
 </template>

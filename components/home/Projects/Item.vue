@@ -2,7 +2,7 @@
 import gsap from 'gsap'
 import type { Project } from '~/types'
 
-interface ProjectItem {
+export interface ProjectItem {
   project: Project
   index: number
   activeProject: number
@@ -13,6 +13,7 @@ const props = withDefaults(defineProps<ProjectItem>(), {
 
 const leftImage = ref<HTMLElement>()
 const rightImage = ref<HTMLElement>()
+const projectText = ref<HTMLElement>()
 const isEven = computed(() => props.index % 2 === 0)
 
 function exitTransition(destination: string) {
@@ -22,25 +23,25 @@ function exitTransition(destination: string) {
     },
   })
 
+  extiTl.to(projectText.value!, { opacity: 0 }, 0).to('.projects-navigation', { opacity: 0 }, 0)
   if (isEven.value) {
     extiTl
-      .to(leftImage.value!, { height: '60vh', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', scale: 1.3, ease: 'power1.inOut' })
+      .to(leftImage.value!, { height: '60vh', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', scale: 1.3, ease: 'power1.inOut' }, 0)
       .to(rightImage.value!, { top: '50%', left: '50%', transform: 'translate(-50%,-50%)', ease: 'power1.inOut' }, 0)
   } else {
     extiTl
-      .to(rightImage.value!, { height: '60vh', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', scale: 1.3, ease: 'power1.inOut' })
+      .to(rightImage.value!, { height: '60vh', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', scale: 1.3, ease: 'power1.inOut' }, 0)
       .to(leftImage.value!, { top: '50%', left: '50%', transform: 'translate(-50%,-50%)', ease: 'power1.inOut' }, 0)
   }
 }
+
+defineExpose({ exitTransition })
 </script>
 
 <template>
   <div :class="['project-content', `project--${index}`]">
-    <div class="project-text">
+    <div class="project-text" ref="projectText">
       <h2 class="title">{{ project.name }}</h2>
-
-      <h4 @click="exitTransition(project.slug)">NAVIGUE</h4>
-
       <p class="description">{{ project.description }}</p>
     </div>
 
@@ -67,6 +68,7 @@ function exitTransition(destination: string) {
   width: 100%;
   opacity: 0;
   display: none;
+  z-index: 7;
   > .project-text {
     display: flex;
     flex-direction: column;
