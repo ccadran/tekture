@@ -18,7 +18,7 @@ defineExpose({
 </script>
 
 <template>
-  <ul>
+  <ul class="navigation-list">
     <li :class="'nav-item nav-project--' + index" v-for="(project, index) in props.projectsData" @click="emit('clicked', index)">
       <h4>
         <UtilsTextShuffle
@@ -37,4 +37,24 @@ defineExpose({
   </ul>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.navigation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: center;
+  align-items: center;
+  > .nav-item {
+    width: fit-content;
+    overflow: hidden;
+    opacity: 0.5;
+    transition: opacity 0.2s ease-in-out;
+    &.active {
+      opacity: 1;
+    }
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+</style>

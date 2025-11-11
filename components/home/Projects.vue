@@ -35,18 +35,9 @@ onMounted(async () => {
         isProjectsVisible.value = entry.isIntersecting
         if (!ctaEnter.value) return
         if (isProjectsVisible.value) {
-          ctaEnter.value.style.display = 'block'
-          ctaEnter.value.style.left = currentMouse.x
-          ctaEnter.value.style.top = currentMouse.y
-          gsap.to(ctaEnter.value, { opacity: 1, duration: 0.5 })
+          showCtaEnter()
         } else {
-          gsap.to(ctaEnter.value, {
-            opacity: 0,
-            duration: 0.5,
-            onComplete: () => {
-              ctaEnter.value!.style.display = 'none'
-            },
-          })
+          hideCtaEnter()
         }
       })
     },
@@ -61,6 +52,22 @@ onMounted(async () => {
     gsap.to(ctaEnter.value, { left: e.clientX, top: e.clientY, ease: 'power1.out', duration: 0.35 })
   })
 })
+
+function showCtaEnter() {
+  ctaEnter.value!.style.display = 'block'
+  ctaEnter.value!.style.left = currentMouse.x
+  ctaEnter.value!.style.top = currentMouse.y
+  gsap.to(ctaEnter.value, { opacity: 1, duration: 0.75 })
+}
+function hideCtaEnter() {
+  gsap.to(ctaEnter.value, {
+    opacity: 0,
+    duration: 0.5,
+    onComplete: () => {
+      ctaEnter.value!.style.display = 'none'
+    },
+  })
+}
 
 function changeProjectOnScroll() {
   let lastStep = -1
@@ -110,7 +117,7 @@ onBeforeUnmount(() => {
       <p>ENTER</p>
     </div>
     <div class="project-layout">
-      <nav class="projects-navigation">
+      <nav class="projects-navigation" @mouseenter="hideCtaEnter" @mouseleave="showCtaEnter">
         <div class="markers">
           <img class="left" src="/icons/marker.svg" alt="" />
           <img class="right" src="/icons/marker.svg" alt="" />
@@ -159,22 +166,6 @@ onBeforeUnmount(() => {
       transform: translateX(-50%);
       > .right {
         transform: rotate(180deg);
-      }
-    }
-    > ul {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      text-align: center;
-      align-items: center;
-      > .nav-item {
-        width: fit-content;
-        overflow: hidden;
-        opacity: 0.5;
-        transition: opacity 0.2s ease-in-out;
-        &.active {
-          opacity: 1;
-        }
       }
     }
   }
