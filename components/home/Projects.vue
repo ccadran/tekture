@@ -2,7 +2,6 @@
 import gsap from 'gsap'
 import SplitType from 'split-type'
 import ScrollTrigger from 'gsap/ScrollTrigger'
-import ScrollToPlugin from 'gsap/ScrollToPlugin'
 import projectsData from '~/assets/data/projects.json'
 
 const activeProjectIndex = ref<number>(0)
@@ -13,6 +12,8 @@ const navigationRef = ref()
 const ctaEnter = ref<HTMLElement | null>(null)
 const scrollTriggerInstance = ref<ScrollTrigger | null>(null)
 const isMounted = ref(false)
+const isProjectsVisible = ref<boolean>(false)
+const currentMouse = { x: '0', y: '0' }
 
 const { projectsEnter, projectIn, projectOut, moveMarkers, scrollToProject, wrapLinesWithInner, cleanup } = useProjectAnimation()
 onMounted(async () => {
@@ -28,9 +29,36 @@ onMounted(async () => {
   moveMarkers(activeProjectIndex.value)
   changeProjectOnScroll()
 
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        isProjectsVisible.value = entry.isIntersecting
+        if (!ctaEnter.value) return
+        if (isProjectsVisible.value) {
+          ctaEnter.value.style.display = 'block'
+          ctaEnter.value.style.left = currentMouse.x
+          ctaEnter.value.style.top = currentMouse.y
+          gsap.to(ctaEnter.value, { opacity: 1, duration: 0.5 })
+        } else {
+          gsap.to(ctaEnter.value, {
+            opacity: 0,
+            duration: 0.5,
+            onComplete: () => {
+              ctaEnter.value!.style.display = 'none'
+            },
+          })
+        }
+      })
+    },
+    { threshold: 0.1 }
+  )
+  observer.observe(projectsSection.value!)
+
   window.addEventListener('mousemove', (e) => {
-    ctaEnter.value!.style.left = `${e.clientX}px`
-    ctaEnter.value!.style.top = `${e.clientY}px`
+    currentMouse.x = `${e.clientX}px`
+    currentMouse.y = `${e.clientY}px`
+    if (!isProjectsVisible.value) return
+    gsap.to(ctaEnter.value, { left: e.clientX, top: e.clientY, ease: 'power1.out', duration: 0.35 })
   })
 })
 
@@ -99,11 +127,12 @@ onBeforeUnmount(() => {
   height: 600vh;
   background-color: white;
   .cta-enter {
+    opacity: 0;
     position: fixed;
     z-index: 999;
     transform: translate(-50%, -80%);
     padding: 10px;
-    cursor: pointer;
+    pointer-events: none;
   }
 }
 .project-layout {

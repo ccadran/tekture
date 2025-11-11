@@ -4,7 +4,6 @@ import ScrollTrigger from 'gsap/ScrollTrigger'
 import projectsData from '~/assets/data/projects.json'
 
 const scrollTriggers = shallowRef<ScrollTrigger[]>([])
-
 export function useProjectAnimation() {
   // gsap.registerPlugin(ScrollTrigger)
   function getElement(index?: number) {
@@ -66,7 +65,6 @@ export function useProjectAnimation() {
       start: 'top bottom-=10%',
       onEnter: () => {
         console.log('START')
-
         window.lenis?.scrollTo(projectsContent, {
           offset: 0,
           duration: 1.2,
