@@ -133,16 +133,21 @@ onBeforeUnmount(() => {
     transform: translate(-50%, -80%);
     padding: 10px;
     pointer-events: none;
+    mix-blend-mode: difference;
+    > p {
+      color: white;
+    }
   }
 }
 .project-layout {
   height: 100vh;
   position: sticky;
   top: 0;
+  cursor: pointer;
 
   > .projects-navigation {
     position: absolute;
-    z-index: 1;
+    z-index: 6;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
