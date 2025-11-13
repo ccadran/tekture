@@ -17,6 +17,9 @@ const imageRefs = shallowRef<HTMLElement[]>([])
 const focusedContent = ref<HTMLElement>()
 const focusedImage = ref<HTMLElement>()
 const root = ref<HTMLElement>()
+const ctaClose = ref<HTMLElement | null>(null)
+const isCtaCloseVisible = ref<boolean>(true)
+const currentMouse = { x: '0', y: '0' }
 
 const splitedText = ref()
 const prevNavigation = ref()
@@ -28,10 +31,6 @@ const currentProjectIndex = computed(() => projectsData.findIndex((project) => p
 const currentProject = computed<Project | undefined>(() => projectsData.find((p) => p.slug === route.params.slug))
 
 const isEven = currentProjectIndex.value % 2 === 0
-
-// const activeIndex = computed(() => {
-//   return document.querySelector('.index-container .index')
-// })
 
 const { enterAnim, nextImage, prevImage, changeActiveImage } = useProjectPageAnimation({
   splitedText,
@@ -59,11 +58,21 @@ onMounted(async () => {
 
   currentFocusedImage.value = 0
 
-  enterAnim()
+  enterAnim().then(() => showCtaClose())
+
+  window.addEventListener('mousemove', (e) => {
+    currentMouse.x = `${e.clientX}px`
+    currentMouse.y = `${e.clientY}px`
+    // console.log(ctaClose.value)
+
+    gsap.to(ctaClose.value, { left: e.clientX, top: e.clientY, ease: 'power1.out', duration: 0.35 })
+  })
 })
 
-function leavePage(e: Event) {
-  e.preventDefault()
+function leavePage(e?: Event) {
+  if (e) {
+    e.preventDefault()
+  }
 
   document.documentElement.classList.add('no-view-transition')
 
@@ -77,54 +86,80 @@ function leavePage(e: Event) {
     },
   })
 }
+
+function showCtaClose() {
+  isCtaCloseVisible.value = true
+  ctaClose.value!.style.display = 'block'
+  ctaClose.value!.style.left = currentMouse.x
+  ctaClose.value!.style.top = currentMouse.y
+  gsap.to(ctaClose.value, { opacity: 1, duration: 0.75, overwrite: 'auto' })
+}
+function hideCtaClose() {
+  isCtaCloseVisible.value = false
+  gsap.to(ctaClose.value, {
+    opacity: 0,
+    duration: 0.25,
+    overwrite: 'auto',
+    onComplete: () => {
+      ctaClose.value!.style.display = 'none'
+    },
+  })
+}
+
+function handleProjectClick() {
+  if (isCtaCloseVisible.value) {
+    leavePage()
+    hideCtaClose()
+  }
+}
 </script>
 
 <template>
   <main class="main" ref="root">
     <div class="transition-layer"></div>
-    <NuxtLink @click="leavePage" class="close-cta" ref="closeCta">
-      <img src="/icons/bracket.svg" alt="" />
-      <p class="menu-item">Close</p>
-      <img src="/icons/bracket.svg" alt="" />
-    </NuxtLink>
-    <div ref="focusedContent" class="focused-content">
-      <div ref="focusedImage" class="focused-image" :style="{ viewTransitionName: `project-${currentProject?.slug}` }">
-        <img :src="projectImages[currentFocusedImage]" alt="" />
-      </div>
-      <div class="utils-project-informations">
-        <p class="location">{{ currentProject?.location }}</p>
-        <img src="/icons/square.svg" alt="" />
-        <a :href="currentProject?.author.link" class="author">{{ currentProject?.author.name }}</a>
-      </div>
+    <div ref="ctaClose" class="cta-close">
+      <p>Close</p>
     </div>
-    <div class="project-informations">
-      <h1 class="project-name title" ref="projectTitle">
-        {{ currentProject?.name }}
-      </h1>
-      <div class="counter title">
-        <div class="index-container">
-          <div class="index-wrapper">
-            <span ref="activeIndex" class="index" v-for="i in projectImages.length" :key="i" :class="{ active: i - 1 === currentFocusedImage }">
-              {{ i }}
-            </span>
+    <div class="project-layout" @click="handleProjectClick">
+      <div ref="focusedContent" class="focused-content">
+        <div ref="focusedImage" class="focused-image" :style="{ viewTransitionName: `project-${currentProject?.slug}` }">
+          <img :src="projectImages[currentFocusedImage]" alt="" />
+        </div>
+        <div class="utils-project-informations">
+          <p class="location">{{ currentProject?.location }}</p>
+          <img src="/icons/square.svg" alt="" />
+          <a :href="currentProject?.author.link" class="author" @mouseenter="hideCtaClose" @mouseleave="showCtaClose">{{ currentProject?.author.name }}</a>
+        </div>
+      </div>
+      <div class="project-informations">
+        <h1 class="project-name title" ref="projectTitle">
+          {{ currentProject?.name }}
+        </h1>
+        <div class="counter title">
+          <div class="index-container">
+            <div class="index-wrapper">
+              <span ref="activeIndex" class="index" v-for="i in projectImages.length" :key="i" :class="{ active: i - 1 === currentFocusedImage }">
+                {{ i }}
+              </span>
+            </div>
+          </div>
+          <span class="length">/ {{ projectImages.length }}</span>
+        </div>
+      </div>
+      <div class="slider" @mouseenter="hideCtaClose" @mouseleave="showCtaClose">
+        <p @click="prevImage" class="slider-navigation prev"><UtilsTextShuffle from="prev" to="prev" :duration="0.5" :step="5" ref="prevNavigation" /></p>
+        <div class="slider-images">
+          <div
+            v-for="(image, index) in projectImages"
+            :ref="(el) => (imageRefs[index] = el as HTMLElement)"
+            :class="['image-slider', { active: index === currentFocusedSliderImage }]"
+            @click="changeActiveImage(index)"
+          >
+            <img :src="image" alt="" />
           </div>
         </div>
-        <span class="length">/ {{ projectImages.length }}</span>
+        <p @click="nextImage" class="slider-navigation next"><UtilsTextShuffle from="next" to="next" :duration="0.5" :step="5" ref="nextNavigation" /></p>
       </div>
-    </div>
-    <div class="slider">
-      <p @click="prevImage" class="slider-navigation prev"><UtilsTextShuffle from="prev" to="prev" :duration="0.5" :step="5" ref="prevNavigation" /></p>
-      <div class="slider-images">
-        <div
-          v-for="(image, index) in projectImages"
-          :ref="(el) => (imageRefs[index] = el as HTMLElement)"
-          :class="['image-slider', { active: index === currentFocusedSliderImage }]"
-          @click="changeActiveImage(index)"
-        >
-          <img :src="image" alt="" />
-        </div>
-      </div>
-      <p @click="nextImage" class="slider-navigation next"><UtilsTextShuffle from="next" to="next" :duration="0.5" :step="5" ref="nextNavigation" /></p>
     </div>
   </main>
   <AppFooter />
@@ -134,135 +169,138 @@ function leavePage(e: Event) {
 .main {
   height: 100vh;
   background-color: white;
-  > .close-cta {
-    display: flex;
-    position: absolute;
-    right: 30px;
-    top: 90px;
-    align-items: center;
-    gap: 2px;
+  cursor: pointer;
+  .cta-close {
     opacity: 0;
-    img:nth-of-type(2) {
-      transform: rotate(180deg);
+    position: fixed;
+    z-index: 999;
+    transform: translate(-50%, -80%);
+    padding: 10px;
+    pointer-events: none;
+    mix-blend-mode: difference;
+    > p {
+      color: white;
     }
   }
-  > .focused-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    width: 30%;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
-    > .focused-image {
-      height: 60vh;
-      aspect-ratio: 254/317;
-      transform: scale(1.3);
-
-      > img {
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
-      }
-    }
-    > .utils-project-informations {
-      display: none;
-      gap: 8px;
-      align-items: center;
-      font-size: 14px;
-      > .location {
-        font-style: italic;
-        font-weight: 300;
-      }
-      > .author {
-        text-decoration: underline;
-      }
-    }
-  }
-  > .project-informations {
-    position: absolute;
-    display: flex;
-    top: 50%;
-    transform: translateY(-50%);
+  .project-layout {
     width: 100%;
-    justify-content: space-between;
-    padding: 0 30px;
-    > .project-name {
-      flex-direction: column;
-    }
-    > .project-name,
-    .counter {
-      max-width: 20%;
-      display: flex;
-      opacity: 0;
-      > .index-container {
-        width: 40px;
-        overflow: hidden;
-        position: relative;
-        margin-right: 6px;
-        > .index-wrapper {
-          position: relative;
-          display: flex;
-          > .index {
-            width: 40px;
+    > .focused-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
 
-            text-align: center;
-            position: absolute;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-            &.active {
-              opacity: 1;
+      width: 30%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+      > .focused-image {
+        height: 60vh;
+        aspect-ratio: 254/317;
+        transform: scale(1.3);
+
+        > img {
+          height: 100%;
+          width: 100%;
+          object-fit: cover;
+        }
+      }
+      > .utils-project-informations {
+        display: none;
+        gap: 8px;
+        align-items: center;
+        font-size: 14px;
+        > .location {
+          font-style: italic;
+          font-weight: 300;
+        }
+        > .author {
+          text-decoration: underline;
+        }
+      }
+    }
+    > .project-informations {
+      position: absolute;
+      display: flex;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 100%;
+      justify-content: space-between;
+      padding: 0 30px;
+      > .project-name {
+        flex-direction: column;
+      }
+      > .project-name,
+      .counter {
+        max-width: 20%;
+        display: flex;
+        opacity: 0;
+        > .index-container {
+          width: 40px;
+          overflow: hidden;
+          position: relative;
+          margin-right: 6px;
+          > .index-wrapper {
+            position: relative;
+            display: flex;
+            > .index {
+              width: 40px;
+
+              text-align: center;
+              position: absolute;
+              opacity: 0;
+              transition: opacity 0.3s ease-in-out;
+              &.active {
+                opacity: 1;
+              }
             }
           }
         }
       }
     }
-  }
-  > .slider {
-    display: flex;
-    gap: 34px;
-    align-items: baseline;
-    height: 15vh;
-    bottom: 24px;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    justify-content: center;
-
-    > .slider-navigation {
-      font-weight: 600;
-      font-size: 18px;
-      width: 48px;
-      position: relative;
-      opacity: 0;
-
-      > span {
-        position: absolute;
-        bottom: 0;
-      }
-    }
-    > .slider-images {
+    > .slider {
       display: flex;
-      gap: 24px;
-      height: 100%;
-      > .image-slider {
-        transform: scale(0.8);
-        transition: transform 0.4s;
-        transform-origin: center bottom;
-        height: 100%;
-        aspect-ratio: 82/104;
-        overflow: hidden;
-        &.active {
-          transform: scale(1);
+      gap: 34px;
+      align-items: baseline;
+      height: 15vh;
+      bottom: 24px;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      justify-content: center;
+
+      > .slider-navigation {
+        font-weight: 600;
+        font-size: 18px;
+        width: 48px;
+        position: relative;
+        opacity: 0;
+
+        > span {
+          position: absolute;
+          bottom: 0;
         }
-        > img {
-          width: 100%;
+      }
+      > .slider-images {
+        display: flex;
+        gap: 24px;
+        height: 100%;
+        > .image-slider {
+          transform: scale(0.8);
+          transition: transform 0.4s;
+          transform-origin: center bottom;
           height: 100%;
-          object-fit: cover;
+          aspect-ratio: 82/104;
+          overflow: hidden;
+          &.active {
+            transform: scale(1);
+          }
+          > img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
         }
       }
     }

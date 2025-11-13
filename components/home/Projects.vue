@@ -13,7 +13,7 @@ const ctaEnter = ref<HTMLElement | null>(null)
 const scrollTriggerInstance = ref<ScrollTrigger | null>(null)
 const isMounted = ref(false)
 const isProjectsVisible = ref<boolean>(false)
-const isClickUsed = ref<boolean>(true)
+const isCtaEnterVisible = ref<boolean>(true)
 const currentMouse = { x: '0', y: '0' }
 const projectItemsRefs = ref<any>([])
 
@@ -56,24 +56,6 @@ onMounted(async () => {
   })
 })
 
-function showCtaEnter() {
-  isClickUsed.value = true
-  ctaEnter.value!.style.display = 'block'
-  ctaEnter.value!.style.left = currentMouse.x
-  ctaEnter.value!.style.top = currentMouse.y
-  gsap.to(ctaEnter.value, { opacity: 1, duration: 0.75 })
-}
-function hideCtaEnter() {
-  isClickUsed.value = false
-  gsap.to(ctaEnter.value, {
-    opacity: 0,
-    duration: 0.5,
-    onComplete: () => {
-      ctaEnter.value!.style.display = 'none'
-    },
-  })
-}
-
 function changeProjectOnScroll() {
   let lastStep = -1
   let step = 1 / projectsData.length
@@ -106,8 +88,27 @@ function handleScrollToProject(index: number) {
   scrollToProject(index)
 }
 
+function showCtaEnter() {
+  isCtaEnterVisible.value = true
+  ctaEnter.value!.style.display = 'block'
+  ctaEnter.value!.style.left = currentMouse.x
+  ctaEnter.value!.style.top = currentMouse.y
+  gsap.to(ctaEnter.value, { opacity: 1, duration: 0.75, overwrite: 'auto' })
+}
+function hideCtaEnter() {
+  isCtaEnterVisible.value = false
+  gsap.to(ctaEnter.value, {
+    opacity: 0,
+    duration: 0.25,
+    overwrite: 'auto',
+    onComplete: () => {
+      ctaEnter.value!.style.display = 'none'
+    },
+  })
+}
+
 function handleProjectClick() {
-  if (isClickUsed.value) {
+  if (isCtaEnterVisible.value) {
     projectItemsRefs.value[activeProjectIndex.value].exitTransition(projectsData[activeProjectIndex.value].slug)
     hideCtaEnter()
   }
@@ -132,6 +133,7 @@ onBeforeUnmount(() => {
         </div>
         <HomeProjectsNavigation :projectsData="projectsData" @clicked="handleScrollToProject($event)" ref="navigationRef" />
       </nav>
+      æ
       <HomeProjectsItem
         v-for="(project, index) in projectsData"
         :project="project"
@@ -163,27 +165,27 @@ onBeforeUnmount(() => {
       color: white;
     }
   }
-}
-.project-layout {
-  height: 100vh;
-  position: sticky;
-  top: 0;
-  cursor: pointer;
+  > .project-layout {
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    cursor: pointer;
 
-  > .projects-navigation {
-    position: absolute;
-    z-index: 6;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    > .markers {
+    > .projects-navigation {
       position: absolute;
-      display: flex;
-      justify-content: space-between;
+      z-index: 6;
       left: 50%;
-      transform: translateX(-50%);
-      > .right {
-        transform: rotate(180deg);
+      top: 50%;
+      transform: translate(-50%, -50%);
+      > .markers {
+        position: absolute;
+        display: flex;
+        justify-content: space-between;
+        left: 50%;
+        transform: translateX(-50%);
+        > .right {
+          transform: rotate(180deg);
+        }
       }
     }
   }

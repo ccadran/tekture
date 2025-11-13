@@ -139,7 +139,7 @@ export function useProjectPageAnimation({
         1.25
       )
       .fromTo(
-        '.close-cta',
+        '.cta-close',
         { opacity: 0 },
         {
           opacity: 1,
@@ -147,8 +147,10 @@ export function useProjectPageAnimation({
           ease: 'power1.inOut',
         },
 
-        1.45
+        1.05
       )
+
+    return enterTl
   }
   function nextImage() {
     const newImage = (currentFocusedImage.value + 1) % projectImages!.value.length
