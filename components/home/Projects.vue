@@ -3,6 +3,9 @@ import gsap from 'gsap'
 import SplitType from 'split-type'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import projectsData from '~/assets/data/projects.json'
+import { useUi } from '~/stores/ui'
+
+const uiStore = useUi()
 
 const activeProjectIndex = ref<number>(0)
 
@@ -14,7 +17,6 @@ const scrollTriggerInstance = ref<ScrollTrigger | null>(null)
 const isMounted = ref(false)
 const isProjectsVisible = ref<boolean>(false)
 const isCtaEnterVisible = ref<boolean>(true)
-const currentMouse = { x: '0', y: '0' }
 const projectItemsRefs = ref<any>([])
 
 const { projectsEnter, projectIn, projectOut, moveMarkers, scrollToProject, wrapLinesWithInner, cleanup } = useProjectAnimation()
@@ -49,8 +51,8 @@ onMounted(async () => {
   observer.observe(projectsSection.value!)
 
   window.addEventListener('mousemove', (e) => {
-    currentMouse.x = `${e.clientX}px`
-    currentMouse.y = `${e.clientY}px`
+    uiStore.mousePos.x = `${e.clientX}px`
+    uiStore.mousePos.y = `${e.clientY}px`
     if (!isProjectsVisible.value) return
     gsap.to(ctaEnter.value, { left: e.clientX, top: e.clientY, ease: 'power1.out', duration: 0.35 })
   })
@@ -91,8 +93,8 @@ function handleScrollToProject(index: number) {
 function showCtaEnter() {
   isCtaEnterVisible.value = true
   ctaEnter.value!.style.display = 'block'
-  ctaEnter.value!.style.left = currentMouse.x
-  ctaEnter.value!.style.top = currentMouse.y
+  ctaEnter.value!.style.left = uiStore.mousePos.x
+  ctaEnter.value!.style.top = uiStore.mousePos.y
   gsap.to(ctaEnter.value, { opacity: 1, duration: 0.75, overwrite: 'auto' })
 }
 function hideCtaEnter() {
@@ -133,7 +135,6 @@ onBeforeUnmount(() => {
         </div>
         <HomeProjectsNavigation :projectsData="projectsData" @clicked="handleScrollToProject($event)" ref="navigationRef" />
       </nav>
-      æ
       <HomeProjectsItem
         v-for="(project, index) in projectsData"
         :project="project"

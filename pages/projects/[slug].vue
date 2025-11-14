@@ -6,6 +6,9 @@ import type { Project } from '~/types'
 
 import { SplitText } from 'gsap/SplitText'
 import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin'
+import { useUi } from '~/stores/ui'
+
+const uiStore = useUi()
 
 const route = useRoute()
 const router = useRouter()
@@ -19,7 +22,6 @@ const focusedImage = ref<HTMLElement>()
 const root = ref<HTMLElement>()
 const ctaClose = ref<HTMLElement | null>(null)
 const isCtaCloseVisible = ref<boolean>(true)
-const currentMouse = { x: '0', y: '0' }
 
 const splitedText = ref()
 const prevNavigation = ref()
@@ -61,9 +63,8 @@ onMounted(async () => {
   enterAnim().then(() => showCtaClose())
 
   window.addEventListener('mousemove', (e) => {
-    currentMouse.x = `${e.clientX}px`
-    currentMouse.y = `${e.clientY}px`
-    // console.log(ctaClose.value)
+    uiStore.mousePos.x = `${e.clientX}px`
+    uiStore.mousePos.y = `${e.clientY}px`
 
     gsap.to(ctaClose.value, { left: e.clientX, top: e.clientY, ease: 'power1.out', duration: 0.35 })
   })
@@ -90,8 +91,8 @@ function leavePage(e?: Event) {
 function showCtaClose() {
   isCtaCloseVisible.value = true
   ctaClose.value!.style.display = 'block'
-  ctaClose.value!.style.left = currentMouse.x
-  ctaClose.value!.style.top = currentMouse.y
+  ctaClose.value!.style.left = uiStore.mousePos.x
+  ctaClose.value!.style.top = uiStore.mousePos.y
   gsap.to(ctaClose.value, { opacity: 1, duration: 0.75, overwrite: 'auto' })
 }
 function hideCtaClose() {

@@ -5,4 +5,5 @@ export default defineNuxtConfig({
   experimental: {
     viewTransition: true,
   },
+  modules: ['@pinia/nuxt'],
 })
