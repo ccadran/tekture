@@ -46,7 +46,7 @@ onMounted(async () => {
         }
       })
     },
-    { threshold: 0.1 }
+    { threshold: 0.16 }
   )
   observer.observe(projectsSection.value!)
 
