@@ -8,7 +8,8 @@
     "author": {
       "name": "joan arquitectes",
       "link": "https://andrea-joan.com/"
-    }
+    },
+    "date": "15/03/23"
   },
   {
     "name": "CENTRE POMPIDOU",
@@ -19,7 +20,8 @@
     "author": {
       "name": "joan arquitectes",
       "link": ""
-    }
+    },
+    "date": "22/07/24"
   },
   {
     "name": "23 DESIGN",
@@ -30,7 +32,8 @@
     "author": {
       "name": "joan arquitectes",
       "link": ""
-    }
+    },
+    "date": "08/11/22"
   },
   {
     "name": "ELARCH",
@@ -41,7 +44,8 @@
     "author": {
       "name": "joan arquitectes",
       "link": ""
-    }
+    },
+    "date": "30/05/23"
   },
   {
     "name": "STUSSY STORE",
@@ -52,6 +56,7 @@
     "author": {
       "name": "joan arquitectes",
       "link": "https://andrea-joan.com/"
-    }
+    },
+    "date": "12/01/24"
   }
 ]
