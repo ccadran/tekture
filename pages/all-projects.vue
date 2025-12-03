@@ -13,10 +13,10 @@ import projectsData from '~/assets/data/projects.json'
           {{ project.name }}
         </div>
         <div class="author-date">
-          <a class="author" :href="project.author.link"
-            ><p>{{ project.author.name }}</p></a
-          >
-          <p class="date">{{ project.date }}</p>
+          <p>
+            <a class="author" :href="project.author.link">{{ project.author.name }}</a
+            >, {{ project.date }}
+          </p>
         </div>
       </div>
     </div>
@@ -37,19 +37,30 @@ import projectsData from '~/assets/data/projects.json'
     position: absolute;
     bottom: 0;
     width: 100%;
+
     .project-data {
       display: flex;
       justify-content: space-between;
+      mix-blend-mode: difference;
+      color: white;
       .location {
         > p {
+          font-weight: 300;
+          font-size: 12px;
+          font-style: italic;
         }
       }
       .name {
+        font-size: 14px;
+        font-weight: 800;
       }
       .author-date {
+        font-size: 12px;
+        display: flex;
         .author {
-        }
-        .date {
+          color: white;
+          text-decoration: underline;
+          font-weight: 400;
         }
       }
     }
