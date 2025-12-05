@@ -23,7 +23,6 @@ export const useLenis = () => {
         lerp: 0.3,
       })
 
-      lenis.stop()
       window.lenis = lenis
       lenisInstance.value = lenis
 

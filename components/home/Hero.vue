@@ -10,6 +10,7 @@ const imagesMoveRef = ref()
 const keywordsRef = ref()
 
 onMounted(() => {
+  window.lenis?.stop()
   const loaderTl = gsap.timeline({
     delay: 0.1,
     onComplete() {
