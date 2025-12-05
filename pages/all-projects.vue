@@ -1,9 +1,23 @@
 <script lang="ts" setup>
 import projectsData from '~/assets/data/projects.json'
+import ScrollTrigger from 'gsap/ScrollTrigger'
+
+const stickyContainer = ref<HTMLElement | null>(null)
+
+onMounted(() => {
+  const scrollTrigger = ScrollTrigger.create({
+    trigger: stickyContainer.value,
+    start: 'top top',
+    end: 'bottom bottom',
+    onUpdate: (self) => {
+      console.log(self)
+    },
+  })
+})
 </script>
 
 <template>
-  <div class="main">
+  <div class="main" ref="stickyContainer">
     <div class="project-container">
       <div class="projects-list">
         <div class="project-data" v-for="project in projectsData">
@@ -40,9 +54,13 @@ import projectsData from '~/assets/data/projects.json'
     position: sticky;
     height: 100svh;
     .projects-list {
+      background-color: white;
       position: fixed;
       bottom: 0;
       width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
 
       .project-data {
         display: flex;
@@ -59,6 +77,7 @@ import projectsData from '~/assets/data/projects.json'
         .name {
           font-size: 14px;
           font-weight: 800;
+          opacity: 60%;
         }
         .author-date {
           font-size: 12px;
