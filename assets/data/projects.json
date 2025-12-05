@@ -3,7 +3,7 @@
     "name": "BNIM",
     "slug": "bnim",
     "description": "Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.",
-    "images": ["/images/3.jpg", "/images/2.jpg", "/images/1.jpg", "/images/4.jpg", "/images/5.jpg", "/images/6.jpg", "/images/7.jpg"],
+    "images": ["/images/3.jpg", "/images/2.jpg", "/images/3.jpg", "/images/1.jpg", "/images/4.jpg", "/images/5.jpg", "/images/6.jpg", "/images/7.jpg"],
     "location": "Tarragona, Spain",
     "author": {
       "name": "joan arquitectes",
@@ -15,7 +15,7 @@
     "name": "CENTRE POMPIDOU",
     "slug": "centre-pompidou",
     "description": "2Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.",
-    "images": ["/images/3.jpg", "/images/4.jpg"],
+    "images": ["/images/3.jpg", "/images/4.jpg", "/images/3.jpg"],
     "location": "Tarragona, Spain",
     "author": {
       "name": "joan arquitectes",
@@ -27,7 +27,7 @@
     "name": "23 DESIGN",
     "slug": "23-design",
     "description": "3Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.",
-    "images": ["/images/5.jpg", "/images/6.jpg"],
+    "images": ["/images/5.jpg", "/images/6.jpg", "/images/5.jpg"],
     "location": "Tarragona, Spain",
     "author": {
       "name": "joan arquitectes",
@@ -39,7 +39,7 @@
     "name": "ELARCH",
     "slug": "elarch",
     "description": "4Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.",
-    "images": ["/images/7.jpg", "/images/8.jpg"],
+    "images": ["/images/7.jpg", "/images/8.jpg", "/images/7.jpg"],
     "location": "Tarragona, Spain",
     "author": {
       "name": "joan arquitectes",
@@ -51,7 +51,7 @@
     "name": "STUSSY STORE",
     "slug": "stussy-store",
     "description": "5Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.",
-    "images": ["/images/9.jpg", "/images/10.jpg"],
+    "images": ["/images/9.jpg", "/images/10.jpg", "/images/9.jpg"],
     "location": "Tarragona, Spain",
     "author": {
       "name": "joan arquitectes",

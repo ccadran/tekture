@@ -67,7 +67,40 @@ import projectsData from '~/assets/data/projects.json'
   }
 
   .projects-assets {
-    display: none;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    > .project-asset {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      > .l-image {
+        width: 15%;
+        img {
+          object-fit: cover;
+        }
+      }
+      > .main-image {
+        width: 50%;
+
+        max-height: 60%;
+
+        > img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+      > .r-image {
+        width: 15%;
+        img {
+          object-fit: cover;
+        }
+      }
+    }
   }
 }
 </style>
