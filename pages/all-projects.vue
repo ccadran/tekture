@@ -7,16 +7,15 @@ const projectsContainer = ref<HTMLElement | null>(null)
 const projectDataRefs = ref<HTMLElement[]>([])
 const projectAssetsRefs = ref<HTMLElement[]>([])
 const projectNumber = ref<number>(0)
-const targetProject = ref<number>(0)
-const scrollTriggerInstance = ref<ScrollTrigger | null>(null)
+const projectDataHeight = ref<number>(0)
 
 onMounted(() => {
   projectNumber.value = projectsData.length
   stickyContainer.value!.style.height = window.innerHeight * (projectNumber.value + 1) + 'px'
+  setProjectsDataAbsolute()
   animateProjectsOnScroll()
 
   //After entry anim
-  setProjectsDataAbsolute()
 })
 
 function animateProjectsOnScroll() {
@@ -36,7 +35,7 @@ function animateProjectsOnScroll() {
 
   scrollTriggerStops.forEach((step, index) => {
     gsap.to(projectDataRefs.value[index], {
-      top: 0,
+      top: (projectDataHeight.value + 4) * index,
       scrollTrigger: {
         trigger: stickyContainer.value,
         start: step.start,
@@ -49,7 +48,11 @@ function animateProjectsOnScroll() {
 
 function setProjectsDataAbsolute() {
   projectDataRefs.value.forEach((projectData) => {
-    projectData.style.top = projectData.getBoundingClientRect().top + 'px'
+    const rect = projectData.getBoundingClientRect()
+    projectDataHeight.value = rect.height + 4
+    console.log(rect.height)
+
+    projectData.style.top = rect.top + 'px'
     projectData.style.position = 'absolute'
     projectData.style.width = '100%'
   })
