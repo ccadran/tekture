@@ -13,19 +13,15 @@ const scrollTriggerInstance = ref<ScrollTrigger | null>(null)
 onMounted(() => {
   projectNumber.value = projectsData.length
   stickyContainer.value!.style.height = window.innerHeight * (projectNumber.value + 1) + 'px'
+  animateProjectsOnScroll()
 
-  const scrollTrigger = ScrollTrigger.create({
-    trigger: stickyContainer.value,
-    start: 'top top',
-    end: 'bottom bottom',
-    onUpdate: (self) => {
-      console.log(self)
-    },
-  })
-  const arrayTest = []
+  //After entry anim
+  setProjectsDataAbsolute()
+})
+
+function animateProjectsOnScroll() {
+  const scrollTriggerStops = []
   const sectionHeight = window.innerHeight
-  console.log(sectionHeight, stickyContainer.value?.clientHeight)
-  console.log(projectNumber.value)
 
   for (let i = 0; i < projectNumber.value; i++) {
     const start = 0 + sectionHeight * i
@@ -34,20 +30,11 @@ onMounted(() => {
       start,
       end,
     }
-    arrayTest.push(object)
+    scrollTriggerStops.push(object)
   }
-  console.log(arrayTest)
-  //After entry anim
-  projectDataRefs.value.forEach((projectData) => {
-    projectData.style.top = projectData.getBoundingClientRect().top + 'px'
-    projectData.style.position = 'absolute'
-    projectData.style.width = '100%'
-  })
+  console.log(scrollTriggerStops)
 
-  console.log(projectDataRefs.value[0].getBoundingClientRect().top)
-  changeProjectOnScroll()
-
-  arrayTest.forEach((step, index) => {
+  scrollTriggerStops.forEach((step, index) => {
     gsap.to(projectDataRefs.value[index], {
       top: 0,
       scrollTrigger: {
@@ -58,32 +45,13 @@ onMounted(() => {
       },
     })
   })
-})
+}
 
-function changeProjectOnScroll() {
-  let lastStep = -1
-  let step = 1 / (projectNumber.value + 1)
-
-  scrollTriggerInstance.value = ScrollTrigger.create({
-    trigger: stickyContainer.value,
-    start: 'top top',
-    end: 'bottom bottom',
-    onUpdate: (self) => {
-      const rawStep = Math.floor(self.progress / step)
-      const currentProjectIndex = Math.min(rawStep, projectNumber.value)
-
-      // gsap.to(projectDataRefs.value[0], {
-      //   transform: 'translateY(100%)',
-      //   scrollTrigger: {
-      //     start: `${stickyContainer.value?.clientHeight}`,
-      //   },
-      // })
-      console.log(currentProjectIndex)
-
-      if (currentProjectIndex !== lastStep) {
-        lastStep = currentProjectIndex
-      }
-    },
+function setProjectsDataAbsolute() {
+  projectDataRefs.value.forEach((projectData) => {
+    projectData.style.top = projectData.getBoundingClientRect().top + 'px'
+    projectData.style.position = 'absolute'
+    projectData.style.width = '100%'
   })
 }
 </script>
