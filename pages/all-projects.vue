@@ -158,13 +158,14 @@ function setProjectsDataAbsolute() {
       width: 100vw;
       position: fixed;
       top: 0;
-      display: none;
+      // display: none;
       > .project-asset {
         position: absolute;
         height: 100%;
         width: 100%;
         display: flex;
         justify-content: space-between;
+        align-items: center;
         > .l-image {
           width: 15%;
           img {
@@ -173,8 +174,7 @@ function setProjectsDataAbsolute() {
         }
         > .main-image {
           width: 50%;
-
-          max-height: 60%;
+          height: 60%;
 
           > img {
             width: 100%;

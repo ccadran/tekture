@@ -2,10 +2,12 @@
 import gsap from 'gsap'
 import SplitType from 'split-type'
 import ScrollTrigger from 'gsap/ScrollTrigger'
-import projectsData from '~/assets/data/projects.json'
+import projectsDataJson from '~/assets/data/projects.json'
 import { useUi } from '~/stores/ui'
 
 const uiStore = useUi()
+
+const projectsData = ref(projectsDataJson)
 
 const activeProjectIndex = ref<number>(0)
 
@@ -60,7 +62,7 @@ onMounted(async () => {
 
 function changeProjectOnScroll() {
   let lastStep = -1
-  let step = 1 / projectsData.length
+  let step = 1 / projectsData.value.length
 
   scrollTriggerInstance.value = ScrollTrigger.create({
     trigger: projectsSection.value,
@@ -68,7 +70,7 @@ function changeProjectOnScroll() {
     end: 'bottom bottom',
     onUpdate: (self) => {
       const currentStep = Math.floor(self.progress / step)
-      if (currentStep !== lastStep && currentStep < projectsData.length) {
+      if (currentStep !== lastStep && currentStep < projectsData.value.length) {
         lastStep = currentStep
         changeProject(lastStep)
       }
@@ -111,7 +113,7 @@ function hideCtaEnter() {
 
 function handleProjectClick() {
   if (isCtaEnterVisible.value) {
-    projectItemsRefs.value[activeProjectIndex.value].exitTransition(projectsData[activeProjectIndex.value].slug)
+    projectItemsRefs.value[activeProjectIndex.value].exitTransition(projectsData.value[activeProjectIndex.value].slug)
     hideCtaEnter()
   }
 }
