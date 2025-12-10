@@ -85,7 +85,9 @@ function setProjectsDataAbsolute() {
 
     projectData.style.top = rect.top + 'px'
     projectData.style.position = 'absolute'
-    projectData.style.width = '100%'
+    projectData.style.width = 'calc(100% - 60px)'
+    projectData.style.left = '50%'
+    projectData.style.transform = 'translateX(-50%)'
   })
 }
 </script>
@@ -158,6 +160,7 @@ function setProjectsDataAbsolute() {
       justify-content: end;
       gap: 4px;
       z-index: 100;
+
       position: fixed;
       mix-blend-mode: difference;
 
@@ -165,6 +168,7 @@ function setProjectsDataAbsolute() {
         display: flex;
         justify-content: space-between;
         color: white;
+        width: calc(100% - 60px);
         .location {
           > p {
             font-weight: 300;
@@ -212,13 +216,14 @@ function setProjectsDataAbsolute() {
     }
     .projects-assets {
       height: 100vh;
-      width: 100vw;
+      width: 100%;
       position: fixed;
       top: 0;
       > .project-asset {
         position: absolute;
         height: 100%;
         width: 100%;
+        padding: 0 30px;
         display: flex;
         justify-content: space-between;
         align-items: center;
