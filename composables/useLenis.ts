@@ -4,7 +4,6 @@ import Lenis from 'lenis'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-// Étendre l'interface Window pour typer window.lenis
 declare global {
   interface Window {
     lenis?: Lenis

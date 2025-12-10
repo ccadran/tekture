@@ -15,7 +15,7 @@ console.log(projectsData)
 
 onMounted(() => {
   projectNumber.value = projectsData.value.length
-  stickyContainer.value!.style.height = window.innerHeight * (projectNumber.value + 1) + 'px'
+  stickyContainer.value!.style.height = window.innerHeight * 1.5 * (projectNumber.value + 1) + 'px'
   setProjectsDataAbsolute()
   animateProjectsOnScroll()
   //After entry anim
@@ -23,7 +23,7 @@ onMounted(() => {
 
 function animateProjectsOnScroll() {
   const scrollTriggerStops = []
-  const sectionHeight = window.innerHeight
+  const sectionHeight = window.innerHeight * 1.5
 
   for (let i = 0; i < projectNumber.value; i++) {
     const start = 0 + sectionHeight * i
@@ -36,6 +36,10 @@ function animateProjectsOnScroll() {
   }
 
   scrollTriggerStops.forEach((step, index) => {
+    const lImage = projectAssetsRefs.value[index].querySelector('.l-image')
+    const rImage = projectAssetsRefs.value[index].querySelector('.r-image')
+    console.log(rImage, lImage)
+
     gsap.to(projectDataRefs.value[index], {
       top: projectDataHeight.value * index,
       scrollTrigger: {
@@ -45,6 +49,32 @@ function animateProjectsOnScroll() {
         scrub: true,
       },
     })
+    gsap.fromTo(
+      lImage,
+      { transform: 'translateY(100vh)' },
+      {
+        transform: 'translateY(-100vh)',
+        scrollTrigger: {
+          trigger: stickyContainer.value,
+          start: step.start,
+          end: step.end,
+          scrub: true,
+        },
+      }
+    )
+    gsap.fromTo(
+      rImage,
+      { transform: 'translateY(140vh)' },
+      {
+        transform: 'translateY(-100vh)',
+        scrollTrigger: {
+          trigger: stickyContainer.value,
+          start: step.start,
+          end: step.end,
+          scrub: true,
+        },
+      }
+    )
   })
 }
 
@@ -87,6 +117,11 @@ function setProjectsDataAbsolute() {
           </div>
         </div>
       </div>
+      <div class="projects-main-assets">
+        <div class="main-asset" v-for="project in projectsData">
+          <img :src="project.images[0]" alt="" />
+        </div>
+      </div>
       <div class="projects-assets">
         <div
           class="project-asset"
@@ -98,7 +133,6 @@ function setProjectsDataAbsolute() {
           "
         >
           <div class="l-image"><img :src="project.images[1]" alt="" /></div>
-          <div class="main-image"><img :src="project.images[0]" alt="" /></div>
           <div class="r-image"><img :src="project.images[2]" alt="" /></div>
         </div>
       </div>
@@ -111,23 +145,25 @@ function setProjectsDataAbsolute() {
   height: 600vh;
   .projects-container {
     background-color: white;
-    position: sticky;
     height: 100svh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+
     .projects-list {
-      background-color: white;
-      position: fixed;
-      bottom: 0;
       width: 100%;
       height: 100%;
       display: flex;
       flex-direction: column;
       justify-content: end;
       gap: 4px;
+      z-index: 100;
+      position: fixed;
+      mix-blend-mode: difference;
 
       .project-data {
         display: flex;
         justify-content: space-between;
-        mix-blend-mode: difference;
         color: white;
         .location {
           > p {
@@ -139,7 +175,8 @@ function setProjectsDataAbsolute() {
         .name {
           font-size: 14px;
           font-weight: 800;
-          opacity: 60%;
+
+          // opacity: 60%;
         }
         .author-date {
           font-size: 12px;
@@ -152,13 +189,32 @@ function setProjectsDataAbsolute() {
         }
       }
     }
+    .projects-main-assets {
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      top: 0;
 
+      .main-asset {
+        width: 50%;
+        height: 60%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        > img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+      }
+    }
     .projects-assets {
       height: 100vh;
       width: 100vw;
       position: fixed;
       top: 0;
-      // display: none;
       > .project-asset {
         position: absolute;
         height: 100%;
@@ -170,16 +226,6 @@ function setProjectsDataAbsolute() {
           width: 15%;
           img {
             object-fit: cover;
-          }
-        }
-        > .main-image {
-          width: 50%;
-          height: 60%;
-
-          > img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
           }
         }
         > .r-image {
