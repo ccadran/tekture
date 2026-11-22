@@ -11,8 +11,8 @@ import { useUi } from '~/stores/ui'
 const uiStore = useUi()
 
 const route = useRoute()
-const router = useRouter()
-const currentFocusedImage = ref<number>(-1)
+const { leave } = usePageTransition()
+const currentFocusedImage = ref<number>(0)
 const currentFocusedSliderImage = ref<number>(-1)
 
 const projectImages = ref<string[]>([])
@@ -21,7 +21,19 @@ const focusedContent = ref<HTMLElement>()
 const focusedImage = ref<HTMLElement>()
 const root = ref<HTMLElement>()
 const ctaClose = ref<HTMLElement | null>(null)
-const isCtaCloseVisible = ref<boolean>(true)
+
+// Le CTA "Close" est visible (et le clic actif) seulement quand l'anim d'entrée est finie,
+// qu'on ne survole pas un élément interactif et qu'on n'est pas déjà en train de sortir.
+const isEnterDone = ref(false)
+const isHoveringUi = ref(false)
+// La navbar vit dans app.vue (hors de la page) : on écoute son hover à la main
+const isHoveringNav = ref(false)
+const isLeaving = ref(false)
+const canClose = computed(() => isEnterDone.value && !isHoveringUi.value && !isHoveringNav.value && !isLeaving.value)
+
+const onNavEnter = () => (isHoveringNav.value = true)
+const onNavLeave = () => (isHoveringNav.value = false)
+let navbarEl: HTMLElement | null = null
 
 const splitedText = ref()
 const prevNavigation = ref()
@@ -33,6 +45,24 @@ const currentProjectIndex = computed(() => projectsData.findIndex((project) => p
 const currentProject = computed<Project | undefined>(() => projectsData.find((p) => p.slug === route.params.slug))
 
 const isEven = currentProjectIndex.value % 2 === 0
+
+// Images prêtes dès le premier rendu (et pas dans onMounted) : la view transition
+// capture le nouvel état au `page:finish`, l'image focus doit déjà avoir sa src.
+if (currentProject.value) {
+  const images = [...currentProject.value.images]
+  if (images.length > 1 && !isEven) {
+    ;[images[0], images[1]] = [images[1], images[0]]
+  }
+  projectImages.value = images
+}
+
+// Top-level await => le <Suspense> de NuxtPage attend que l'image soit décodée
+// avant de déclencher `page:finish`, donc pas de frame vide pendant la transition.
+if (import.meta.client && projectImages.value[0]) {
+  const img = new Image()
+  img.src = projectImages.value[0]
+  await img.decode().catch(() => {})
+}
 
 const { enterAnim, nextImage, prevImage, changeActiveImage } = useProjectPageAnimation({
   splitedText,
@@ -47,81 +77,95 @@ const { enterAnim, nextImage, prevImage, changeActiveImage } = useProjectPageAni
   projectImages,
 })
 onMounted(async () => {
-  if (currentProject.value) {
-    projectImages.value = [...currentProject.value.images]
-
-    if (projectImages.value.length > 1 && !isEven) {
-      ;[projectImages.value[0], projectImages.value[1]] = [projectImages.value[1], projectImages.value[0]]
-    }
-  }
-
   await nextTick()
   splitedText.value = new SplitText('.project-name', { type: 'words', autoSplit: true, wordsClass: 'word++' })
 
-  currentFocusedImage.value = 0
+  if (mouse.known) placeCta()
 
-  enterAnim().then(() => showCtaClose())
+  window.addEventListener('mousemove', onMouseMove)
 
-  window.addEventListener('mousemove', (e) => {
-    uiStore.mousePos.x = `${e.clientX}px`
-    uiStore.mousePos.y = `${e.clientY}px`
+  navbarEl = document.querySelector('.navbar')
+  navbarEl?.addEventListener('mouseenter', onNavEnter)
+  navbarEl?.addEventListener('mouseleave', onNavLeave)
+  isHoveringNav.value = !!navbarEl?.matches(':hover')
 
-    gsap.to(ctaClose.value, { left: e.clientX, top: e.clientY, ease: 'power1.out', duration: 0.35 })
+  enterAnim().then(() => {
+    isEnterDone.value = true
   })
 })
 
-function leavePage(e?: Event) {
-  if (e) {
-    e.preventDefault()
+onBeforeUnmount(() => {
+  window.removeEventListener('mousemove', onMouseMove)
+  navbarEl?.removeEventListener('mouseenter', onNavEnter)
+  navbarEl?.removeEventListener('mouseleave', onNavLeave)
+  gsap.killTweensOf(ctaClose.value)
+})
+
+// Position souris connue ? (le store garde celle de la home ; vaut '0' si on arrive directement sur la page)
+const mouse = {
+  x: parseFloat(uiStore.mousePos.x),
+  y: parseFloat(uiStore.mousePos.y),
+  known: uiStore.mousePos.x.endsWith('px'),
+}
+// Le CTA ne suit la souris en douceur que lorsqu'il est affiché.
+// Tant qu'il est caché, il est collé instantanément à la souris (gsap.set) :
+// au moment du fade-in il est déjà au bon endroit, il ne "voyage" jamais depuis le coin.
+let isCtaShown = false
+
+// Place le CTA sous la souris sans durée (et coupe un éventuel suivi en cours)
+function placeCta() {
+  if (!ctaClose.value) return
+  gsap.killTweensOf(ctaClose.value, 'left,top')
+  gsap.set(ctaClose.value, { left: mouse.x, top: mouse.y })
+}
+
+function onMouseMove(e: MouseEvent) {
+  uiStore.mousePos.x = `${e.clientX}px`
+  uiStore.mousePos.y = `${e.clientY}px`
+  mouse.x = e.clientX
+  mouse.y = e.clientY
+
+  if (!mouse.known) {
+    mouse.known = true
+    placeCta()
+    if (canClose.value) showCtaClose()
+    return
   }
 
-  document.documentElement.classList.add('no-view-transition')
-
-  gsap.to('.main .transition-layer', {
-    opacity: 1,
-    onComplete() {
-      router.back()
-      setTimeout(() => {
-        document.documentElement.classList.remove('no-view-transition')
-      }, 100)
-    },
-  })
+  if (!isCtaShown) {
+    placeCta()
+    return
+  }
+  gsap.to(ctaClose.value, { left: mouse.x, top: mouse.y, ease: 'power1.out', duration: 0.35, overwrite: 'auto' })
 }
 
 function showCtaClose() {
-  isCtaCloseVisible.value = true
-  ctaClose.value!.style.display = 'block'
-  ctaClose.value!.style.left = uiStore.mousePos.x
-  ctaClose.value!.style.top = uiStore.mousePos.y
+  if (!mouse.known || !ctaClose.value) return
+  placeCta()
+  isCtaShown = true
   gsap.to(ctaClose.value, { opacity: 1, duration: 0.75, overwrite: 'auto' })
 }
 function hideCtaClose() {
-  isCtaCloseVisible.value = false
-  gsap.to(ctaClose.value, {
-    opacity: 0,
-    duration: 0.25,
-    overwrite: 'auto',
-    onComplete: () => {
-      ctaClose.value!.style.display = 'none'
-    },
-  })
+  if (!ctaClose.value) return
+  isCtaShown = false
+  gsap.to(ctaClose.value, { opacity: 0, duration: 0.25, overwrite: 'auto' })
 }
 
-function handleProjectClick() {
-  if (isCtaCloseVisible.value) {
-    leavePage()
-    hideCtaClose()
-  }
+watch(canClose, (visible) => (visible ? showCtaClose() : hideCtaClose()))
+
+function handleClose() {
+  if (!canClose.value) return
+  isLeaving.value = true
+  leave()
 }
 </script>
 
 <template>
-  <main class="main" ref="root">
-    <div class="transition-layer"></div>
+  <main class="main" ref="root" @click="handleClose">
     <div ref="ctaClose" class="cta-close">
       <p>Close</p>
     </div>
-    <div class="project-layout" @click="handleProjectClick">
+    <div class="project-layout">
       <div ref="focusedContent" class="focused-content">
         <div ref="focusedImage" class="focused-image" :style="{ viewTransitionName: `project-${currentProject?.slug}` }">
           <img :src="projectImages[currentFocusedImage]" alt="" />
@@ -129,7 +173,7 @@ function handleProjectClick() {
         <div class="utils-project-informations">
           <p class="location">{{ currentProject?.location }}</p>
           <img src="/icons/square.svg" alt="" />
-          <a :href="currentProject?.author.link" class="author" @mouseenter="hideCtaClose" @mouseleave="showCtaClose">{{ currentProject?.author.name }}</a>
+          <a :href="currentProject?.author.link" class="author" @mouseenter="isHoveringUi = true" @mouseleave="isHoveringUi = false">{{ currentProject?.author.name }}</a>
         </div>
       </div>
       <div class="project-informations">
@@ -147,7 +191,7 @@ function handleProjectClick() {
           <span class="length">/ {{ projectImages.length }}</span>
         </div>
       </div>
-      <div class="slider" @mouseenter="hideCtaClose" @mouseleave="showCtaClose">
+      <div class="slider" @mouseenter="isHoveringUi = true" @mouseleave="isHoveringUi = false">
         <p @click="prevImage" class="slider-navigation prev"><UtilsTextShuffle from="prev" to="prev" :duration="0.5" :step="5" ref="prevNavigation" /></p>
         <div class="slider-images">
           <div
