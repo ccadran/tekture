@@ -12,6 +12,13 @@ declare global {
 
 export const useLenis = () => {
   const lenisInstance = ref<Lenis | null>(null)
+  const nuxtApp = useNuxtApp()
+
+  // À chaque changement de page, on recalcule tout de suite les dimensions de Lenis
+  // (sinon pendant 250ms il garde la hauteur de l'ancienne page et bloque/borne le scroll).
+  nuxtApp.hook('page:finish', () => {
+    window.lenis?.resize()
+  })
 
   onMounted(() => {
     if (typeof window !== 'undefined') {

@@ -11,9 +11,8 @@ html.lenis body {
   overscroll-behavior: contain;
 }
 
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
+// Pas d'overflow: hidden sur `.lenis-stopped` : ça faisait disparaître la scrollbar (décalage de layout).
+// lenis.stop() bloque déjà molette + touch ; clavier et drag de scrollbar sont gérés dans Projects.vue.
 
 .lenis.lenis-smooth iframe {
   pointer-events: none;
