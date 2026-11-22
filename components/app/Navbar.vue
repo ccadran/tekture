@@ -21,7 +21,9 @@ function enterAnim() {
     <NuxtLink @click="$router.back()" class="home-link">TEKTURE</NuxtLink>
 
     <ul class="nav-links">
-      <li class="nav-link menu-item"><span>Works</span></li>
+      <li class="nav-link menu-item">
+        <NuxtLink to="/projects"><span>Works</span></NuxtLink>
+      </li>
       <li class="nav-link menu-item"><span>About</span></li>
       <li class="nav-link menu-item"><span>Contact</span></li>
     </ul>
@@ -52,7 +54,7 @@ function enterAnim() {
         margin-left: 12px;
       }
       // overflow: hidden;
-      > span {
+      span {
         display: inline-block;
       }
     }
