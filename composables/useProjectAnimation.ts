@@ -58,21 +58,38 @@ export function useProjectAnimation() {
     navItemActive?.classList.remove('active')
   }
 
-  function projectsEnter(index: number) {
+  /**
+   * @param isRestoring retour depuis une page projet : pas d'intro, le projet `index` est affiché
+   * directement (le scroll est restauré par Nuxt juste après le montage).
+   */
+  function projectsEnter(index: number, isRestoring = false) {
     const { projectsSection, projectsContent, navMarkers } = getElement()
+    // Le saut de scroll de la restauration déclenche onEnter : on l'ignore pour ne pas re-snapper
+    let ignoreNextEnter = isRestoring
     const enterTrigger = ScrollTrigger.create({
       trigger: projectsSection,
       start: 'top bottom-=10%',
       onEnter: () => {
-        console.log('START')
+        if (ignoreNextEnter) {
+          ignoreNextEnter = false
+          return
+        }
         window.lenis?.scrollTo(projectsContent, {
           offset: 0,
           duration: 1.2,
           lock: true,
         })
       },
+      onLeaveBack: () => {
+        ignoreNextEnter = false
+      },
     })
     scrollTriggers.value.push(enterTrigger)
+
+    if (isRestoring) {
+      projectIn(index, true).progress(1)
+      return
+    }
 
     const tl = gsap
       .timeline({
@@ -112,6 +129,7 @@ export function useProjectAnimation() {
     if (tl.scrollTrigger) {
       scrollTriggers.value.push(tl.scrollTrigger)
     }
+    return tl
   }
 
   function moveMarkers(index: number) {
@@ -123,19 +141,6 @@ export function useProjectAnimation() {
     const currentNavItemWidth = currentNavItem!.width
 
     gsap.to(navMarkers, { top: relativeTop, width: currentNavItemWidth + 40 })
-  }
-
-  function scrollToProject(index: number) {
-    const { projectsSection } = getElement()
-    const sectionStart = projectsSection.offsetTop
-    const totalScrollable = projectsSection.scrollHeight - window.innerHeight
-    const step = totalScrollable / projectsData.length + 1
-    const targetScroll = sectionStart + step * index
-
-    window.lenis!.scrollTo(targetScroll, {
-      lock: true,
-      immediate: true,
-    })
   }
 
   function wrapLinesWithInner() {
@@ -152,5 +157,5 @@ export function useProjectAnimation() {
     scrollTriggers.value.forEach((trigger) => trigger.kill())
     scrollTriggers.value = []
   }
-  return { projectIn, projectOut, projectsEnter, moveMarkers, scrollToProject, wrapLinesWithInner, cleanup }
+  return { projectIn, projectOut, projectsEnter, moveMarkers, wrapLinesWithInner, cleanup }
 }
