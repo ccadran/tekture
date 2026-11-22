@@ -31,6 +31,8 @@ h4 {
 
 .transition-layer {
   position: fixed;
+  top: 0;
+  left: 0;
   height: 100vh;
   width: 100vw;
   background-color: white;
@@ -56,12 +58,4 @@ h4 {
 
 ::view-transition-group(project-*) {
   animation-duration: 0s;
-}
-
-html.no-view-transition {
-  view-transition-name: none !important;
-}
-
-html.no-view-transition * {
-  view-transition-name: none !important;
 }
