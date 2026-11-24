@@ -1,19 +1,19 @@
 <script lang="ts" setup>
-import gsap from 'gsap'
+const route = useRoute()
+const { leave } = usePageTransition()
 
-onMounted(() => {
-  enterAnim()
-})
-
-function enterAnim() {
-  const loaderNavTl = gsap.timeline({ delay: 1.25 })
-
-  loaderNavTl
-    .set('.navbar', { visibility: 'visible' })
-    .fromTo('.navbar .home-link', { opacity: 0 }, { opacity: 1 })
-    .to('.navbar .home-link', { scrambleText: { text: 'TEXTURE', speed: 1 }, duration: 2 }, 0)
-    .fromTo('.nav-link span', { y: '100%', opacity: 0 }, { y: '0%', opacity: 1, stagger: 0.15 }, 0.15)
+// Navigation avec le calque blanc (fade-in -> changement de page -> fade-out)
+function goTo(path: string) {
+  if (route.path === path) return
+  leave(path)
 }
+
+// Anim d'entrée selon la page d'arrivée (voir composables/useNavbarAnimation.ts)
+onMounted(() => {
+  if (route.path === '/') navbarHomeEnter()
+  else if (route.meta.navbarEnter !== 'page') navbarEnterTimeline()
+  // sinon : la page joue l'anim dans sa propre timeline
+})
 </script>
 
 <template>
@@ -22,7 +22,8 @@ function enterAnim() {
 
     <ul class="nav-links">
       <li class="nav-link menu-item">
-        <NuxtLink to="/projects"><span>Works</span></NuxtLink>
+        <!-- <a> simple (pas NuxtLink) : sinon le RouterLink navigue avant notre @click.prevent -->
+        <a href="/projects" @click.prevent="goTo('/projects')"><span>Works</span></a>
       </li>
       <li class="nav-link menu-item"><span>About</span></li>
       <li class="nav-link menu-item"><span>Contact</span></li>
