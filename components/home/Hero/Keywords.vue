@@ -83,13 +83,18 @@ defineExpose({
   position: absolute;
 
   height: 100vh;
-  width: 100vw;
+  // 100% et pas 100vw : 100vw inclut la scrollbar => overflow-x
+  width: 100%;
   display: flex;
   justify-content: space-around;
   align-items: center;
   > .keyword {
     position: absolute;
     transform: translate(-50%, -50%);
+    // Largeur réelle du mot : sinon, collé au bord droit, la boîte (shrink-to-fit) est plus étroite
+    // que le mot et celui-ci déborde de la page (overflow-x)
+    width: max-content;
+    white-space: nowrap;
     font-weight: 100;
     opacity: 0;
     &:nth-of-type(1) {
@@ -116,8 +121,46 @@ defineExpose({
       right: 10vw;
       top: 50vh;
     }
-    @media screen and (max-width: 760px) {
-      font-size: 12px;
+  }
+}
+
+// ---------- Mobile ----------
+// Positions de la maquette 320 x 568, converties en centre du mot (le mot est centré par translate -50%)
+@media screen and (max-width: 760px) {
+  .shuffle-keywords > .keyword {
+    font-size: 8px;
+    font-weight: 200;
+    right: auto;
+    bottom: auto;
+    // innovation
+    &:nth-of-type(1) {
+      left: 46vw;
+      top: 5.8vh;
+    }
+    // expertise
+    &:nth-of-type(2) {
+      left: 10.2vw;
+      top: 18.9vh;
+    }
+    // sustainable
+    &:nth-of-type(3) {
+      left: 74.6vw;
+      top: 31.6vh;
+    }
+    // results
+    &:nth-of-type(4) {
+      left: 90.4vw;
+      top: 59.1vh;
+    }
+    // Strategy
+    &:nth-of-type(5) {
+      left: 24.5vw;
+      top: 80.8vh;
+    }
+    // fondation
+    &:nth-of-type(6) {
+      left: 60.9vw;
+      top: 95.9vh;
     }
   }
 }

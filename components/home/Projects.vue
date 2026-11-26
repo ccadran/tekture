@@ -76,10 +76,26 @@ onMounted(async () => {
   )
   observer.observe(projectsSection.value!)
 
+  // Le CTA ne doit pas passer au-dessus des liens du footer.
+  // ⚠️ Le footer est sticky (bottom: 0, z-index: -1) : il est toujours "dans" le viewport, un IntersectionObserver ne marche pas.
+  // Il est réellement révélé quand le bas de la section projets remonte au-dessus du bas de l'écran.
+  window.addEventListener('scroll', checkFooterReveal, { passive: true })
+
   window.addEventListener('mousemove', onMouseMove)
 })
 
 let observer: IntersectionObserver | null = null
+const isFooterVisible = ref(false)
+
+function checkFooterReveal() {
+  if (!projectsSection.value) return
+  const revealed = projectsSection.value.getBoundingClientRect().bottom < window.innerHeight - 40
+  if (revealed === isFooterVisible.value) return
+  isFooterVisible.value = revealed
+  if (!ctaEnter.value) return
+  if (revealed) hideCtaEnter()
+  else if (isProjectsVisible.value) showCtaEnter()
+}
 
 function onMouseMove(e: MouseEvent) {
   uiStore.mousePos.x = `${e.clientX}px`
@@ -264,6 +280,7 @@ function changeProject(index: number) {
 }
 
 function showCtaEnter() {
+  if (isFooterVisible.value) return
   isCtaEnterVisible.value = true
   ctaEnter.value!.style.display = 'block'
   ctaEnter.value!.style.left = uiStore.mousePos.x
@@ -299,6 +316,7 @@ onBeforeUnmount(() => {
   // Sinon Lenis reste stoppé (overflow hidden) sur la page suivante
   unlockSection()
   observer?.disconnect()
+  window.removeEventListener('scroll', checkFooterReveal)
   window.removeEventListener('mousemove', onMouseMove)
   window.removeEventListener('wheel', onWheel)
   window.removeEventListener('keydown', onKeyDown)
@@ -371,6 +389,25 @@ onBeforeUnmount(() => {
           transform: rotate(180deg);
         }
       }
+    }
+  }
+}
+
+// Pas de souris (tactile) : pas de CTA qui suit le curseur, on tape directement sur le projet
+@media (hover: none) {
+  .projects .cta-enter {
+    visibility: hidden;
+  }
+}
+
+// ---------- Mobile ----------
+@media screen and (max-width: 760px) {
+  .projects > .project-layout > .projects-navigation {
+    // Sous l'image (voir la colonne dans Projects/Item.vue)
+    top: calc(50% + 175px);
+    transform: translateX(-50%);
+    > .markers > img {
+      width: 4.25px;
     }
   }
 }

@@ -165,6 +165,8 @@ function handleClose() {
     <div ref="ctaClose" class="cta-close">
       <p>Close</p>
     </div>
+    <!-- Mobile / tactile : bouton fixe en haut à droite (le "Close" qui suit la souris n'existe pas sans souris) -->
+    <button class="btn-close" :class="{ 'is-visible': canClose }" type="button" aria-label="Close">Close</button>
     <div class="project-layout">
       <div ref="focusedContent" class="focused-content">
         <div ref="focusedImage" class="focused-image" :style="{ viewTransitionName: `project-${currentProject?.slug}` }">
@@ -173,7 +175,9 @@ function handleClose() {
         <div class="utils-project-informations">
           <p class="location">{{ currentProject?.location }}</p>
           <img src="/icons/square.svg" alt="" />
-          <a :href="currentProject?.author.link" class="author" @mouseenter="isHoveringUi = true" @mouseleave="isHoveringUi = false">{{ currentProject?.author.name }}</a>
+          <a :href="currentProject?.author.link" class="author" @mouseenter="isHoveringUi = true" @mouseleave="isHoveringUi = false">{{
+            currentProject?.author.name
+          }}</a>
         </div>
       </div>
       <div class="project-informations">
@@ -243,6 +247,7 @@ function handleClose() {
       > .focused-image {
         height: 60vh;
         aspect-ratio: 254/317;
+        // Zoom d'entrée (1.3 -> 1) : desktop/tablette seulement, annulé en mobile
         transform: scale(1.3);
 
         > img {
@@ -347,6 +352,156 @@ function handleClose() {
             object-fit: cover;
           }
         }
+      }
+    }
+  }
+}
+
+// Bouton "Close" fixe : seulement sur mobile / tactile (sinon c'est le "Close" qui suit le curseur)
+.main .btn-close {
+  display: none;
+  position: fixed;
+  // 24px sous la navbar (bas de la navbar mobile = 18px), 20px du bord droit
+  top: calc(18px + 24px);
+  right: 20px;
+  z-index: 20;
+  padding: 0;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 400;
+  color: black;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s;
+  text-transform: uppercase;
+  &.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+// Pas de souris (tactile) : pas de "Close" qui suit le curseur, bouton fixe à la place
+@media (hover: none) {
+  .main .cta-close {
+    visibility: hidden;
+  }
+  .main .btn-close {
+    display: block;
+  }
+}
+@media screen and (max-width: 760px) {
+  .main {
+    // Garde-fou : aucun débordement horizontal (l'image fait 100vw - 40px)
+    // (position relative : sinon les enfants en absolute ne sont pas rognés)
+    position: relative;
+    overflow-x: clip;
+  }
+  .main .btn-close {
+    display: block;
+  }
+}
+
+// ---------- Mobile (maquette 320 x 568) ----------
+// Image 242 x 324 centrée (11px sous le centre), titre 15px au-dessus, infos 6px en dessous,
+// prev/next + miniatures en bas.
+// ⚠️ Taille de l'image synchronisée avec getSlugImageSize() (composables/useBreakpoints.ts)
+@media screen and (max-width: 760px) {
+  .main .project-layout {
+    // Largeur de l'image : écran - 40px (20px de marge de chaque côté), plafonnée pour que sa hauteur
+    // reste <= 66vh (ne jamais toucher le titre ni prev/next sur les écrans larges/courts)
+    --image-w: min(calc(100vw - 40px), 49.3vh);
+    --image-h: calc(var(--image-w) * 324 / 242);
+    > .focused-content {
+      width: auto;
+      gap: 0;
+      > .focused-image {
+        // Hauteur explicite : avec height auto + aspect-ratio, l'img (height 100%) étire le cadre
+        width: var(--image-w);
+        height: var(--image-h);
+        transform: none;
+        aspect-ratio: auto;
+      }
+      // Hors flux : n'influence pas le centrage de l'image.
+      // Centré avec left/right + justify (pas de translate CSS : GSAP l'écrase en animant y)
+      > .utils-project-informations {
+        position: absolute;
+        top: calc(100% + 6px);
+        left: 0;
+        right: 0;
+        justify-content: center;
+        gap: 5.35px;
+        font-size: 9.36px;
+        white-space: nowrap;
+        > img {
+          width: 3.34px;
+        }
+      }
+    }
+    > .project-informations {
+      // Bas du titre = haut de l'image (centre à 50% + 11px) - 15px, quelle que soit sa taille
+      top: auto;
+      bottom: calc(50% + var(--image-h) / 2 + 4px);
+      transform: none;
+      justify-content: center;
+      padding: 0 12px;
+      > .project-name {
+        display: block;
+        max-width: none;
+        font-size: 32px;
+        text-align: center;
+      }
+      > .counter {
+        display: none;
+      }
+    }
+    > .slider {
+      // Miniatures 26.5 x 33.3 (active 33.6 x 42.3), 11px entre elles, à 12px du bas
+      bottom: 12px;
+      height: 42.33px;
+      gap: 0;
+      align-items: flex-end;
+      > .slider-navigation {
+        // prev / next aux bords (marges 12), 8px au-dessus des miniatures
+        position: absolute;
+        top: -18px;
+        width: auto;
+        font-size: 10px;
+        line-height: 1;
+        &.prev {
+          left: calc(12px - (100vw - 100%) / 2);
+        }
+        &.next {
+          right: calc(12px - (100vw - 100%) / 2);
+        }
+        > span {
+          position: static;
+        }
+      }
+      > .slider-images {
+        // gap de layout : 11px visibles - 2 x 3.35px de réduction (scale 0.8 des inactives)
+        gap: 4.3px;
+      }
+    }
+  }
+}
+
+// ---------- Tablette (sans maquette) ----------
+@media screen and (min-width: 761px) and (max-width: 1024px) {
+  .main .project-layout {
+    > .project-informations {
+      > .project-name,
+      .counter {
+        font-size: 40px;
+      }
+    }
+    > .slider {
+      height: 80px;
+      gap: 20px;
+      > .slider-images {
+        gap: 12px;
       }
     }
   }

@@ -9,13 +9,38 @@ const baseline = ref<HTMLElement | null>(null)
 const imagesMoveRef = ref()
 const keywordsRef = ref()
 
+// Blocage du scroll pendant l'intro.
+// ⚠️ Hero est monté AVANT que app.vue crée Lenis (onMounted enfant → parent) : on attend qu'il existe.
+let introPlaying = true
+let rafId = 0
+const stopLenisWhenReady = () => {
+  if (!introPlaying) return
+  if (window.lenis) window.lenis.stop()
+  else rafId = requestAnimationFrame(stopLenisWhenReady)
+}
+// Lenis stoppé ne bloque que molette + touch : on bloque aussi clavier et drag de scrollbar
+const onKey = (e: KeyboardEvent) => {
+  if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '].includes(e.key)) e.preventDefault()
+}
+const onScroll = () => window.scrollTo(0, 0)
+const endIntro = () => {
+  introPlaying = false
+  cancelAnimationFrame(rafId)
+  window.removeEventListener('keydown', onKey)
+  window.removeEventListener('scroll', onScroll)
+  window.lenis?.start()
+}
+
+onBeforeUnmount(endIntro)
+
 onMounted(() => {
-  window.lenis?.stop()
+  window.scrollTo(0, 0)
+  stopLenisWhenReady()
+  window.addEventListener('keydown', onKey)
+  window.addEventListener('scroll', onScroll)
   const loaderTl = gsap.timeline({
     delay: 0.1,
-    onComplete() {
-      window.lenis?.start()
-    },
+    onComplete: endIntro,
   })
 
   const baselineTl = gsap.timeline()
@@ -91,8 +116,18 @@ onMounted(() => {
       font-size: 124px;
       font-weight: 800;
       position: relative;
+      // ⚠️ les h1 ont le font-size: 2em du navigateur : la taille réelle est fixée sur les h1 en mobile/tablet
       @media screen and (max-width: 760px) {
-        font-size: 10vw;
+        line-height: 0.8;
+        > h1 {
+          // Maquette : 54px sur 320 => TEKTURE ≈ 76% de la largeur
+          font-size: 16.875vw;
+        }
+      }
+      @media screen and (min-width: 761px) and (max-width: 1024px) {
+        > h1 {
+          font-size: 17vw;
+        }
       }
       > .inner {
         visibility: hidden;
@@ -129,11 +164,26 @@ onMounted(() => {
         clip-path: inset(0 50% 0 50%);
       }
       @media screen and (max-width: 760px) {
-        font-size: 12px;
+        font-size: 10px;
+        font-weight: 600;
+        gap: 3.4px;
         > .marker {
-          scale: 0.75;
+          // triangles de la maquette : 5.2px de large en mobile (12px en desktop)
+          width: 4.5px;
         }
       }
+    }
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .hero {
+    // Pas de souris en mobile : pas d'images qui suivent le curseur (absentes de la maquette)
+    .mousemove-images {
+      display: none;
+    }
+    > .content {
+      gap: 13px;
     }
   }
 }

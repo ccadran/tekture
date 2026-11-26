@@ -18,15 +18,14 @@ onMounted(() => {
 
 <template>
   <nav class="navbar">
-    <NuxtLink @click="$router.back()" class="home-link">TEKTURE</NuxtLink>
+    <!-- <a> simple : le logo renvoie sur la home (avec le calque blanc) -->
+    <a href="/" class="home-link" @click.prevent="goTo('/')">TEKTURE</a>
 
     <ul class="nav-links">
       <li class="nav-link menu-item">
         <!-- <a> simple (pas NuxtLink) : sinon le RouterLink navigue avant notre @click.prevent -->
         <a href="/projects" @click.prevent="goTo('/projects')"><span>Works</span></a>
       </li>
-      <li class="nav-link menu-item"><span>About</span></li>
-      <li class="nav-link menu-item"><span>Contact</span></li>
     </ul>
   </nav>
 </template>
@@ -58,6 +57,17 @@ onMounted(() => {
       span {
         display: inline-block;
       }
+    }
+  }
+}
+
+// ---------- Mobile (maquette : top 8, marges 12, TEKTURE 10px, liens 8px gap 12) ----------
+@media screen and (max-width: 760px) {
+  .navbar {
+    top: 8px;
+    width: calc(100% - 24px);
+    > .home-link {
+      font-size: 10px;
     }
   }
 }

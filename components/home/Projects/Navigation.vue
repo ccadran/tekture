@@ -44,8 +44,10 @@ defineExpose({
   gap: 12px;
   text-align: center;
   align-items: center;
+  width: 100%;
   > .nav-item {
-    width: fit-content;
+    width: 100%;
+    text-align: center;
     overflow: hidden;
     opacity: 0.5;
     transition: opacity 0.2s ease-in-out;
@@ -54,6 +56,18 @@ defineExpose({
     }
     &:hover {
       opacity: 0.7;
+    }
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .navigation-list {
+    gap: 6.4px;
+    > .nav-item {
+      opacity: 0.6;
+      > h4 {
+        font-size: 10px;
+      }
     }
   }
 }

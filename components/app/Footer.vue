@@ -110,10 +110,10 @@ function initFooterTl() {
 
 <template>
   <footer class="footer">
-    <p class="location">Prinsengracht 315 . 1016 GZ Amsterdam</p>
+    <p class="location">Fictive project by <a href="https://clariocadran.com/" target="_blank">Clario Cadran</a></p>
     <div class="contact">
       <img class="marker" src="/icons/marker.svg" alt="" />
-      <h4>Contact us</h4>
+      <a href="https://clariocadran.com/" target="_blank"> <h4>Contact us</h4></a>
       <img class="marker" src="/icons/marker.svg" alt="" />
     </div>
     <h2 class="title">TEKTURE</h2>
@@ -135,6 +135,9 @@ function initFooterTl() {
   > .location {
     font-size: 18px;
     font-weight: 400;
+    > a {
+      text-decoration: underline;
+    }
   }
   > .contact {
     display: flex;
@@ -152,6 +155,28 @@ function initFooterTl() {
     font-weight: 800;
     line-height: 70%;
     transform-origin: bottom;
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .footer {
+    height: 30vh;
+    > .location {
+      font-size: 10px;
+      line-height: 0.8;
+    }
+    > .contact {
+      gap: 6.7px;
+      > h4 {
+        font-size: 12px;
+      }
+      > img {
+        width: 5.3px;
+      }
+    }
+    > .title {
+      font-size: 19.7vw;
+    }
   }
 }
 </style>

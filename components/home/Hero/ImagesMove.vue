@@ -1,15 +1,8 @@
 <script lang="ts" setup>
 import gsap from 'gsap'
+import projectsData from '~/assets/data/projects.json'
 
-const images = ref([
-  { id: 1, src: '/images/1.jpg' },
-  { id: 2, src: '/images/2.jpg' },
-  { id: 3, src: '/images/3.jpg' },
-  { id: 4, src: '/images/4.jpg' },
-  { id: 5, src: '/images/5.jpg' },
-  { id: 6, src: '/images/6.jpg' },
-  { id: 7, src: '/images/7.jpg' },
-])
+const images = ref(projectsData.map((project, i) => ({ id: i + 1, src: project.images[0] })))
 
 const imageContainerRef = ref<HTMLElement | null>(null)
 const imageRefs = ref<HTMLImageElement[]>([])

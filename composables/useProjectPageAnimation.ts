@@ -34,7 +34,8 @@ export function useProjectPageAnimation({
           duration: 1,
           scrambleText: {
             text: word.textContent as string,
-            tweenLength: true,
+            // Longueur fixe : sinon la largeur du mot varie pendant l'anim et les mots se décalent
+            tweenLength: false,
           },
         },
         0
@@ -46,7 +47,8 @@ export function useProjectPageAnimation({
     const activeIndexElement = document.querySelector('.index-container .index')
 
     enterTl
-      .fromTo(focusedImage.value!, { scale: 1.3 }, { scale: 1 })
+      // Zoom d'entrée de l'image focus : pas en mobile
+      .fromTo(focusedImage.value!, { scale: isMobile() ? 1 : 1.3 }, { scale: 1 })
       .fromTo(
         focusedContent.value!,
         {
@@ -54,8 +56,9 @@ export function useProjectPageAnimation({
           top: '50%',
         },
         {
-          transform: 'translate(-50%,-30%)',
-          top: '30%',
+          // Desktop : l'image remonte vers le haut. Mobile : elle reste centrée
+          // (maquette : centre de l'image 11px sous le centre de l'écran)
+          ...(isMobile() ? { transform: 'translate(-50%,-50%)', top: 'calc(50% + 11px)' } : { transform: 'translate(-50%,-30%)', top: '30%' }),
           onComplete() {
             gsap.set('.utils-project-informations', { display: 'flex' })
           },

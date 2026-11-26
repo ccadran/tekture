@@ -24,15 +24,14 @@ function exitTransition(destination: string) {
   })
 
   extiTl.to(projectText.value!, { opacity: 0 }, 0).to('.projects-navigation', { opacity: 0 }, 0)
-  if (isEven.value) {
-    extiTl
-      .to(leftImage.value!, { height: '60vh', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', scale: 1.3, ease: 'power1.inOut' }, 0)
-      .to(rightImage.value!, { top: '50%', left: '50%', transform: 'translate(-50%,-50%)', ease: 'power1.inOut' }, 0)
-  } else {
-    extiTl
-      .to(rightImage.value!, { height: '60vh', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', scale: 1.3, ease: 'power1.inOut' }, 0)
-      .to(leftImage.value!, { top: '50%', left: '50%', transform: 'translate(-50%,-50%)', ease: 'power1.inOut' }, 0)
-  }
+
+  // L'image principale prend exactement la taille de l'image focus du slug (selon le breakpoint)
+  const mainImage = isEven.value ? leftImage.value! : rightImage.value!
+  const { width, height, scale } = getSlugImageSize()
+  const otherImage = isEven.value ? rightImage.value! : leftImage.value!
+  extiTl
+    .to(mainImage, { width, height, top: '50%', left: '50%', xPercent: -50, yPercent: -50, x: 0, y: 0, scale, ease: 'power1.inOut' }, 0)
+    .to(otherImage, { top: '50%', left: '50%', xPercent: -50, yPercent: -50, x: 0, y: 0, ease: 'power1.inOut' }, 0)
 }
 
 defineExpose({ exitTransition })
@@ -135,6 +134,63 @@ defineExpose({ exitTransition })
     }
     &.-even {
       z-index: -1;
+    }
+  }
+}
+
+// ---------- Mobile (maquette 320 x 568) ----------
+// Colonne centrée verticalement : texte (63px) / 39 / image (295px) / 39 / menu (85px) = 521px
+// => haut de la colonne à 50% - 261px
+@media screen and (max-width: 760px) {
+  .project-content {
+    > .project-text {
+      gap: 4px;
+      max-width: none;
+      margin-top: calc(50vh - 261px);
+      > .title {
+        font-size: 32px;
+      }
+      > .description {
+        width: 242px;
+        font-size: 8px;
+      }
+    }
+    // Une seule image en mobile : la principale (.top), centrée sous le texte
+    // (pas de transform CSS : l'anim de sortie anime xPercent/yPercent)
+    .project-image.top {
+      top: calc(50% - 159px);
+      left: calc(50% - 127px);
+      right: auto;
+      width: 254px;
+      height: 295px;
+      aspect-ratio: auto;
+    }
+    .project-image.bottom {
+      display: none;
+    }
+  }
+}
+
+// ---------- Tablette (sans maquette) : images réduites et rapprochées des bords, texte plus étroit ----------
+@media screen and (min-width: 761px) and (max-width: 1024px) {
+  .project-content {
+    > .project-text {
+      max-width: 420px;
+      > .title {
+        font-size: 40px;
+      }
+    }
+    .project-image.top {
+      height: 220px;
+    }
+    .project-image.bottom {
+      height: 190px;
+    }
+    > .left-images .project-image {
+      left: 30px;
+    }
+    > .right-images .project-image {
+      right: 30px;
     }
   }
 }

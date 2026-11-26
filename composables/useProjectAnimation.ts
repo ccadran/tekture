@@ -140,11 +140,13 @@ export function useProjectAnimation() {
     const relativeTop = currentNavItem!.top - projectsNavRect!.top
     const currentNavItemWidth = currentNavItem!.width
 
-    gsap.to(navMarkers, { top: relativeTop, width: currentNavItemWidth + 40 })
+    // Écart marqueurs <-> nom : 2 x (largeur marqueur + gap) => desktop 2 x (8 + 12), mobile 2 x (4.25 + 5.3)
+    const markersSpace = isMobile() ? 19 : 40
+    gsap.to(navMarkers, { top: relativeTop, width: currentNavItemWidth + markersSpace })
   }
 
   function wrapLinesWithInner() {
-    const lineElements = document.querySelectorAll('.line')
+    const lineElements = document.querySelectorAll('.description .line')
 
     lineElements.forEach((line) => {
       const content = line.innerHTML

@@ -1,62 +1,149 @@
 [
   {
-    "name": "BNIM",
-    "slug": "bnim",
-    "description": "Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.",
-    "images": ["/images/3.jpg", "/images/2.jpg", "/images/3.jpg", "/images/1.jpg", "/images/4.jpg", "/images/5.jpg", "/images/6.jpg", "/images/7.jpg"],
-    "location": "Tarragona, Spain",
+    "name": "COMPORTA HOUSE",
+    "slug": "comporta-house-aurora-arquitectos",
+    "description": "Completed in 2026 in Comporta, Portugal. Images by do mal o menos. The house is located in the village of Carvalhal, on the Alentejo coast in southern Portugal. Here, long sandy beaches extend inland into flat...",
+    "images": [
+      "/images/comporta-house-aurora-arquitectos/1.webp",
+      "/images/comporta-house-aurora-arquitectos/2.webp",
+      "/images/comporta-house-aurora-arquitectos/3.webp",
+      "/images/comporta-house-aurora-arquitectos/4.webp",
+      "/images/comporta-house-aurora-arquitectos/5.webp",
+      "/images/comporta-house-aurora-arquitectos/6.webp",
+      "/images/comporta-house-aurora-arquitectos/7.webp",
+      "/images/comporta-house-aurora-arquitectos/8.webp"
+    ],
+    "location": "Comporta, Portugal",
     "author": {
-      "name": "joan arquitectes",
-      "link": "https://andrea-joan.com/"
+      "name": "Aurora Arquitectos",
+      "link": "https://www.archdaily.com/office/aurora-arquitectos"
     },
-    "date": "15/03/23"
+    "date": "11/11/26"
   },
   {
-    "name": "CENTRE POMPIDOU",
-    "slug": "centre-pompidou",
-    "description": "2Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.",
-    "images": ["/images/3.jpg", "/images/4.jpg", "/images/3.jpg"],
-    "location": "Tarragona, Spain",
+    "name": "CASA TRANQUILO",
+    "slug": "casa-tranquilo-dado",
+    "description": "Completed in 2024 in Verla Canca, India. Images by Ar. Ekansh Goel © Studio Recall. Casa Tranquilo is a 10,000 sq. ft. villa in Verla Canca, North Goa, set within dense forest. Our inspiration was not a building or a style but a...",
+    "images": [
+      "/images/casa-tranquilo-dado/1.webp",
+      "/images/casa-tranquilo-dado/2.webp",
+      "/images/casa-tranquilo-dado/3.webp",
+      "/images/casa-tranquilo-dado/4.webp",
+      "/images/casa-tranquilo-dado/5.webp",
+      "/images/casa-tranquilo-dado/6.webp",
+      "/images/casa-tranquilo-dado/7.webp",
+      "/images/casa-tranquilo-dado/8.webp"
+    ],
+    "location": "Verla Canca, India",
     "author": {
-      "name": "joan arquitectes",
-      "link": ""
+      "name": "DADO",
+      "link": "https://www.archdaily.com/office/dado"
     },
-    "date": "22/07/24"
+    "date": "13/11/26"
   },
   {
-    "name": "23 DESIGN",
-    "slug": "23-design",
-    "description": "3Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.",
-    "images": ["/images/5.jpg", "/images/6.jpg", "/images/5.jpg"],
-    "location": "Tarragona, Spain",
+    "name": "HEATHSIDE HOUSE",
+    "slug": "heathside-house-manea-kella",
+    "description": "Completed in 2025 in London, United Kingdom. Images by French + Tye. London-based studio Manea Kella has transformed an Edwardian terrace in the Dartmouth Park Conservation Area, returning a neglected house to its...",
+    "images": [
+      "/images/heathside-house-manea-kella/1.webp",
+      "/images/heathside-house-manea-kella/2.webp",
+      "/images/heathside-house-manea-kella/3.webp",
+      "/images/heathside-house-manea-kella/4.webp",
+      "/images/heathside-house-manea-kella/5.webp",
+      "/images/heathside-house-manea-kella/6.webp",
+      "/images/heathside-house-manea-kella/7.webp",
+      "/images/heathside-house-manea-kella/8.webp"
+    ],
+    "location": "London, United Kingdom",
     "author": {
-      "name": "joan arquitectes",
-      "link": ""
+      "name": "Manea Kella",
+      "link": "https://www.archdaily.com/office/manea-kella"
     },
-    "date": "08/11/22"
+    "date": "15/11/26"
   },
   {
-    "name": "ELARCH",
-    "slug": "elarch",
-    "description": "4Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.",
-    "images": ["/images/7.jpg", "/images/8.jpg", "/images/7.jpg"],
-    "location": "Tarragona, Spain",
+    "name": "CASA AMIGÓ",
+    "slug": "casa-amigo-estudio-travertino",
+    "description": "Completed in 2025 in Barcelona, Spain. Images by David Zarzoso. Some renovations update spaces; others reorganize how they are lived in. Casa Amigó belongs to the second group. Located in Barcelona's Sant...",
+    "images": [
+      "/images/casa-amigo-estudio-travertino/1.webp",
+      "/images/casa-amigo-estudio-travertino/2.webp",
+      "/images/casa-amigo-estudio-travertino/3.webp",
+      "/images/casa-amigo-estudio-travertino/4.webp",
+      "/images/casa-amigo-estudio-travertino/5.webp",
+      "/images/casa-amigo-estudio-travertino/6.webp",
+      "/images/casa-amigo-estudio-travertino/7.webp",
+      "/images/casa-amigo-estudio-travertino/8.webp"
+    ],
+    "location": "Barcelona, Spain",
     "author": {
-      "name": "joan arquitectes",
-      "link": ""
+      "name": "Estudio Travertino",
+      "link": "https://www.archdaily.com/office/estudio-travertino"
     },
-    "date": "30/05/23"
+    "date": "22/11/26"
   },
   {
-    "name": "STUSSY STORE",
-    "slug": "stussy-store",
-    "description": "5Qui fugiat qui amet excepteur occaecat in esse eiusmod officia ullamco ad aliqua ex.",
-    "images": ["/images/9.jpg", "/images/10.jpg", "/images/9.jpg"],
-    "location": "Tarragona, Spain",
+    "name": "NOVOHRADSKÉ FARMHOUSE",
+    "slug": "farmhouse-in-novohradske-hory-reconstruction-jan-vranovsky",
+    "description": "Completed in 2026 in Czechia. Images by Jan Vranovský. The reconstruction of a century-old farmhouse in the Czech Republic addresses the former disconnect between its living quarters and the surrounding...",
+    "images": [
+      "/images/farmhouse-in-novohradske-hory-reconstruction-jan-vranovsky/1.webp",
+      "/images/farmhouse-in-novohradske-hory-reconstruction-jan-vranovsky/2.webp",
+      "/images/farmhouse-in-novohradske-hory-reconstruction-jan-vranovsky/3.webp",
+      "/images/farmhouse-in-novohradske-hory-reconstruction-jan-vranovsky/4.webp",
+      "/images/farmhouse-in-novohradske-hory-reconstruction-jan-vranovsky/5.webp",
+      "/images/farmhouse-in-novohradske-hory-reconstruction-jan-vranovsky/6.webp",
+      "/images/farmhouse-in-novohradske-hory-reconstruction-jan-vranovsky/7.webp",
+      "/images/farmhouse-in-novohradske-hory-reconstruction-jan-vranovsky/8.webp"
+    ],
+    "location": "Novohradské hory, Czech Republic",
     "author": {
-      "name": "joan arquitectes",
-      "link": "https://andrea-joan.com/"
+      "name": "Jan Vranovský",
+      "link": "https://www.archdaily.com/office/jan-vranovsky"
     },
-    "date": "12/01/24"
+    "date": "23/11/26"
+  },
+  {
+    "name": "S HOUSE",
+    "slug": "s-house-l2c-arquitetura",
+    "description": "Completed in 2026 in Braga, Portugal. Images by Ivo Tavares Studio. Before the house, there was a wooded slope, the rock, a cork oak, and the view over the valley. The land was not just theplace to build. It was the...",
+    "images": [
+      "/images/s-house-l2c-arquitetura/1.webp",
+      "/images/s-house-l2c-arquitetura/2.webp",
+      "/images/s-house-l2c-arquitetura/3.webp",
+      "/images/s-house-l2c-arquitetura/4.webp",
+      "/images/s-house-l2c-arquitetura/5.webp",
+      "/images/s-house-l2c-arquitetura/6.webp",
+      "/images/s-house-l2c-arquitetura/7.webp",
+      "/images/s-house-l2c-arquitetura/8.webp"
+    ],
+    "location": "Braga, Portugal",
+    "author": {
+      "name": "L2C Arquitetura",
+      "link": "https://www.archdaily.com/office/l2c-arquitetura"
+    },
+    "date": "25/11/26"
+  },
+  {
+    "name": "HOUSE Y",
+    "slug": "house-y-monotrum",
+    "description": "Completed in 2024 in Tokyo, Japan. Images by Yoshiro Masuda. A renovation project that transforms the client's childhood home into a residence for a couple and their two cats. The original house was designed to...",
+    "images": [
+      "/images/house-y-monotrum/1.webp",
+      "/images/house-y-monotrum/2.webp",
+      "/images/house-y-monotrum/3.webp",
+      "/images/house-y-monotrum/4.webp",
+      "/images/house-y-monotrum/5.webp",
+      "/images/house-y-monotrum/6.webp",
+      "/images/house-y-monotrum/7.webp",
+      "/images/house-y-monotrum/8.webp"
+    ],
+    "location": "Tokyo, Japan",
+    "author": {
+      "name": "monotrum",
+      "link": "https://www.archdaily.com/office/monotrum"
+    },
+    "date": "26/11/26"
   }
 ]

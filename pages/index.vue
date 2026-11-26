@@ -3,7 +3,7 @@
 <template>
   <main class="main">
     <HomeHero />
-    <HomeManifest />
+    <!-- <HomeManifest /> -->
     <HomeProjectsIntro />
     <HomeProjects />
   </main>
