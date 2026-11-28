@@ -27,7 +27,7 @@ const { projectsEnter, projectIn, projectOut, moveMarkers, wrapLinesWithInner, c
 onMounted(async () => {
   isMounted.value = true
   new SplitType('.description ', { types: 'lines' })
-  new SplitType('.project-text .title ', { types: 'chars' })
+  new SplitType('.project-text .title ', { types: 'words, chars' })
 
   wrapLinesWithInner()
 

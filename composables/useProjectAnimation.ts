@@ -134,15 +134,22 @@ export function useProjectAnimation() {
 
   function moveMarkers(index: number) {
     const { projectsNav, navMarkers } = getElement(index)
-    const currentNavItem = document.querySelector(`.nav-project--${index}`)?.getBoundingClientRect()
 
     const projectsNavRect = projectsNav.getBoundingClientRect()
-    const relativeTop = currentNavItem!.top - projectsNavRect!.top
-    const currentNavItemWidth = currentNavItem!.width
+    // Largeur réelle du texte (le <li> fait 100% de la nav, pas la largeur du nom)
+    const title = document.querySelector(`.nav-project--${index} h4`)
+    const range = document.createRange()
+    range.selectNodeContents(title!)
+    const textRect = range.getBoundingClientRect()
+    const textWidth = textRect.width
 
-    // Écart marqueurs <-> nom : 2 x (largeur marqueur + gap) => desktop 2 x (8 + 12), mobile 2 x (4.25 + 5.3)
-    const markersSpace = isMobile() ? 19 : 40
-    gsap.to(navMarkers, { top: relativeTop, width: currentNavItemWidth + markersSpace })
+    // Marqueurs toujours à 12px (5.3px en mobile) du texte de chaque côté
+    const markerWidth = navMarkers.querySelector('img')?.getBoundingClientRect().width ?? 8
+    const gap = isMobile() ? 5.3 : 12
+    // Centrage vertical sur le texte
+    const centerY = textRect.top - projectsNavRect.top + textRect.height / 2
+    const top = centerY - navMarkers.getBoundingClientRect().height / 2
+    gsap.to(navMarkers, { top, width: textWidth + 2 * (markerWidth + gap) })
   }
 
   function wrapLinesWithInner() {
